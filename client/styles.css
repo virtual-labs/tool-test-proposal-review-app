@@ -151,3 +151,14 @@ footer {text-align:center; margin-top:24px;}
 #root {min-height:100vh;}
 [hidden] {display:none !important;}
 @media(max-width:650px){.stats{grid-template-columns:1fr !important;} .brand{flex-wrap:wrap;} .brand .row-actions{width:100%;} main{padding:0 16px 24px;} .card{padding:18px;} .admin-filters{grid-template-columns:1fr;}}
+/* Keep dialogs usable on short/mobile viewports and keyboard focus visible. */
+dialog { max-height:85dvh; overflow-y:auto; }
+dialog::backdrop { background:#16313280; }
+dialog li { margin:12px 0; }
+dialog textarea { min-height:180px; }
+#userGuideDialog, #loginHelpGuide { max-width:760px; }
+#rankingEditor table { min-width:1000px; }
+.admin-table [data-column="Rank / Reviewer Total"] { padding-right:6px; }
+.admin-table [data-column="Justification"] { padding-left:6px; }
+[data-column="Updated / Submitted"] { width:1%; white-space:nowrap; }
+@media(max-width:650px){.ranking-heading { align-items:flex-start; } #rankingToolbar .review-download-toolbar { gap:8px; } dialog { padding:20px; }}

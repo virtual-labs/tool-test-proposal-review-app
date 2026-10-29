@@ -75,6 +75,10 @@ The detailed local checklist is `MANUAL_CONFIGURATION.md`, intentionally exclude
 - Account status and active role are rechecked through Sheets on authenticated application requests. Role switching rotates the session without extending its original expiry. Logout revokes the current session.
 - Old password-authentication sessions use a different Redis namespace and cannot authenticate to the OTP application.
 
+## Restored interface features
+
+The React app includes the finalized ranking guidelines, justification dialogs, role-specific user guides, login troubleshooting, filtered ranking totals, serial-number columns and unranked-first sorting. Admin/PIC monitoring uses Reviewed and Pending cards; pending includes saved drafts while draft answers remain private. See [the parity report](docs/apps-script-parity-review.md) for details and verification.
+
 ## Verification
 
 ```sh

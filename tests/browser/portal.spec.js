@@ -23,7 +23,9 @@ test('React OTP login, drafts, final review, manual and automatic rankings, PDF,
   await page.locator('#submitBtn').click();await expect(page.locator('#notice')).toContainText('submitted successfully');
   await page.locator('#rankingBtn').click();await expect(page.locator('#rankingPage')).toBeVisible();
   await page.getByRole('combobox',{name:'Rank for Test Lab',exact:true}).selectOption('1');
+  await page.getByRole('button',{name:'Add',exact:true}).click();
   await page.getByRole('textbox',{name:'Justification for Test Lab',exact:true}).fill('Clear academic value');
+  await page.getByRole('dialog').getByRole('button',{name:'Submit',exact:true}).click();
   await page.locator('#submitRanksBottom').click();await expect(page.getByText('Your rankings have been saved.',{exact:true})).toBeVisible();
   await page.locator('#autoRankProposalsBtn').click();await expect(page.getByText('Rankings generated and saved.',{exact:true})).toBeVisible();
   await page.getByRole('button',{name:'View Review',exact:true}).click();await expect(page.locator('#viewPage')).toBeVisible();

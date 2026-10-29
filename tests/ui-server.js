@@ -17,6 +17,9 @@ const server=await createPortalServer(handler,{beforeRequest:async(req,res)=>{
     coordination.data.clear();coordination.limits.clear();outbox.length=0;
     const fresh=new MemorySheets();sheets.data=fresh.data;res.end('reset');return true;
   }
+  if(url.pathname==='/__test/clear-limits'&&req.method==='POST'){
+    for(const key of coordination.data.keys())if(key.startsWith('otp-cooldown:'))coordination.data.delete(key);coordination.limits.clear();res.end('cleared');return true;
+  }
   if(url.pathname==='/__test/expire'&&req.method==='POST'){
     for(const key of coordination.data.keys())if(key.startsWith('session:'))coordination.data.delete(key);
     res.end('expired');return true;

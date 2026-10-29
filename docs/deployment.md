@@ -41,3 +41,8 @@ Redis locks do not coordinate manual spreadsheet edits or the old portal. The ex
 Back up Sheets. Disable old-portal writes before allowing the new application to use the same live spreadsheet. Configure production-specific services and the exact final origin, then rerun smoke tests. OTP sessions use a separate Redis namespace from previous password sessions; users sign in again.
 
 For rollback, stop new writes first, preserve records saved since cutover, then reopen the old portal. Do not restore an old spreadsheet backup over new submissions without reconciliation. Reverting code does not undo data changes.
+
+
+## Feature parity release
+
+The restored Apps Script interface features require deploying the React bundle and Node API together. No new environment variables or spreadsheet columns are required, and the email-only Apps Script relay is unchanged. After deployment verify Admin/PIC cards and filters, reviewer progress, rank totals/columns, unranked-first sorting, guideline dialogs, justification Add/View/Edit and read-only View, all-ranks removal, and Help/role guides. See [parity report](apps-script-parity-review.md).

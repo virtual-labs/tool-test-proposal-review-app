@@ -48,3 +48,8 @@ Diagnostic update: lint, build and 20 backend tests passed locally. Existing fiv
 ### Users heading whitespace fix
 
 A read-only live check confirmed Users headings contained trailing spaces in Name, Email and Status. The Sheets adapter now trims surrounding whitespace on row-one headings only, leaves record values unchanged and queues no normalization writes. Duplicate nonempty headings after normalization fail closed. Live Users read passes with all four login headings recognized and zero writes queued. Lint, build and 21 backend tests passed. Updated code is local and must be deployed; full live OTP delivery/login remains unverified.
+
+
+## Apps Script feature parity restoration — 29 October 2026
+
+See [feature comparison and implementation](apps-script-parity-review.md) for P01–P14. Validation: lint and production build passed; 23 backend/unit tests and nine local Edge browser workflows passed. Coverage includes dialog staging/cancel/save/removal, literal HTML-like text, read-only views by role, filtered counts, Admin reviewer exclusions, PIC pending drafts, rank sorting, serial numbers, guideline colors/alignment, mobile overflow, modal focus and opening scroll position. An initial focus-return failure was repaired before rerunning. No production deployment or live acceptance run was performed for this feature update.

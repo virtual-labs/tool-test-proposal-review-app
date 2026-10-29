@@ -94,3 +94,11 @@ test('submission confirmations use the relay; mail failure preserves saved revie
     const db=await x.sheets.snapshot('data',['Completed Reviews']);assert.equal(db.getSheetByName('Completed Reviews').getDataRange().getValues().length,2);
   }
 });
+
+test('Admin reviewer progress excludes administrators/assistants; PIC pending includes private drafts',async()=>{
+ const x=await setup();await x.portal.execute('saveDraft',['cookie',{proposalId:'P1',draftVersion:'',clarity:4}],session);
+ const admin=await x.portal.execute('getAdminData',['cookie',{}],{...session,email:'admin@example.com',activeRole:'Admin'});
+ assert.ok(admin.reviewers.every(r=>!['Admin','Assistant Reviewer'].includes(r.role)));assert.equal(admin.all.draft.length,0);assert.ok(admin.all.pending.some(r=>r.id==='P1'));
+ const pic=await x.portal.execute('getAdminData',['cookie',{status:'pending'}],{...session,activeRole:'PIC'});
+ assert.equal(pic.all.total,1);assert.equal(pic.all.pending[0].id,'P1');assert.equal(pic.all.draft.length,0);assert.equal(pic.all.pending[0].answers,undefined);
+});

@@ -488,7 +488,7 @@ function getAdminUsers(token, filters) {
 function getAdminData(token, filters) {
   const db = readDb_(), user = user_(db, token);
   if (!['Admin','PIC'].includes(user.role)) throw new Error('ADMIN_REQUIRED: Administrator or PIC access is required.');
-  const source = snapshot_(db, user).map(entry=>user.role==='Admin' && entry.summary.state==='draft'?Object.assign({},entry,{summary:Object.assign({},entry.summary,{state:'pending'})}):entry);
+  const source = snapshot_(db, user).map(entry=>['Admin','PIC'].includes(user.role) && entry.summary.state==='draft'?Object.assign({},entry,{summary:Object.assign({},entry.summary,{state:'pending'})}):entry);
   source.forEach(function (entry) {
     entry.summary.institute = text_(user.role==='PIC'?entry.proposal['Institute Name']:(entry.review ? entry.review['Institute Name'] : entry.proposal['Institute Name']));
   });
@@ -526,7 +526,7 @@ function getAdminData(token, filters) {
   const domains = domainNames.map(name => Object.assign({name: name || 'Domain not configured'},
     board_(entries.filter(e => normalized_(e.summary.domain) === normalized_(name)))));
   const roster = table_(db, CONFIG.REVIEWERS_SHEET, HEADERS.Reviewers).rows;
-  const reviewers = roster.filter(r=>(user.role!=='Admin'||role_(r.Role)!=='Assistant Reviewer') && (user.role!=='PIC'||sameInstitute_(r['Institute Name'],user))).map(r => {
+  const reviewers = roster.filter(r=>(user.role!=='Admin'||!['Admin','Assistant Reviewer'].includes(role_(r.Role))) && (user.role!=='PIC'||sameInstitute_(r['Institute Name'],user))).map(r => {
     const who = {email: normalized_(r.Email), name: text_(r.Name), assignmentNameUnique: roster.filter(other => normalized_(other.Name) === normalized_(r.Name)).length === 1};
     const assigned = entries.filter(e => assigned_(e.proposal, who));
     const reviewed = entries.filter(e => e.summary.state === 'reviewed' &&
