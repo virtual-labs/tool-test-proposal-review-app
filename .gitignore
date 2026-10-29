@@ -1,0 +1,12 @@
+node_modules/
+dist/
+MANUAL_CONFIGURATION.md
+.env*
+!.env.example
+.vercel/
+test-results/
+playwright-report/
+*.log
+coverage/
+*-credentials.json
+service-account*.json

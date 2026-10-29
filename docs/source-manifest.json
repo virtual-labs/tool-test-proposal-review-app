@@ -1,0 +1,6 @@
+{
+  "src/appscript/Code.gs": "81c3592f049e5f0ca8b1c65740ddf1653da3ea1d9d41392c297de4fd32c51cb4",
+  "src/appscript/index.html": "9a7f549ad8b158cd35609b6cde53548de2700dbbd9e3c3be23cde0f5ccd315ef",
+  "src/cloudflare/api-worker/worker.js": "a08c287aa97713509f4469c30ef92003194aef9674641158180d54b382407fe6",
+  "src/cloudflare/portal/index.html": "179de7142eb1d779f609ad4a0f1554be11fd984636d3d3f2d8750b1addaf8c23"
+}
