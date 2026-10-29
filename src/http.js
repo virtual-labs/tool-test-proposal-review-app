@@ -5,6 +5,7 @@ import { Auth } from './auth.js';
 import { Portal } from './service.js';
 import { createDomain } from './domain.js';
 import { PortalError } from './errors.js';
+import { diagnostic } from './diagnostics.js';
 
 export function securityHeaders(res,{development=false}={}) {
   res.setHeader('Cache-Control','no-store');
@@ -38,6 +39,7 @@ export function createHandler(dependencies) {
   return async function handler(req,res){
     securityHeaders(res);res.setHeader('Content-Type','application/json; charset=utf-8');
     const send=(status,body)=>{res.statusCode=status;res.end(JSON.stringify(body));};
+    let stage='request';
     try{
       if(req.method!=='POST'){res.setHeader('Allow','POST');throw new PortalError('Use POST.',405);}
       if(!/^application\/json(?:;|$)/i.test(req.headers['content-type']||''))throw new PortalError('Use application/json.',415);
@@ -47,8 +49,10 @@ export function createHandler(dependencies) {
       if(!dependencies && body.action==='session' && !/\b(?:__Host-)?vl_session=/.test(req.headers.cookie||'')){
         send(200,{ok:true,result:{authenticated:false}});return;
       }
+      stage='configuration';
       const settings=dependencies?.settings || config();
       if(req.headers.origin!==settings.origin)throw new PortalError('Request origin is not allowed.',403);
+      stage='services';
       const sheets=dependencies?.sheets || new Sheets(settings);
       const coordination=dependencies?.coordination || new Coordination(settings);
       const auth=dependencies?.auth || new Auth(settings,sheets,coordination);
@@ -57,9 +61,11 @@ export function createHandler(dependencies) {
       const ip=process.env.VERCEL?String(req.headers['x-forwarded-for']||'unknown').split(',')[0].trim():req.socket?.remoteAddress||'local';
       let result;
       if(action==='requestOtp'){
+        stage='otp-request';
         if(args.length!==1)throw new PortalError('Email is required.');
-        result=await auth.requestOtp(args[0],ip,email=>portal.registeredUser(email));
+        result=await auth.requestOtp(args[0],ip,async email=>{stage='google-sheets-user-lookup';const user=await portal.registeredUser(email);stage='otp-request';return user;});
       }else if(action==='verifyOtp'){
+        stage='otp-verification';
         if(args.length!==3)throw new PortalError('Email, challenge, and code are required.');
         const issued=await auth.verifyOtp(args[0],args[1],args[2],ip,email=>portal.registeredUser(email));
         await auth.logout(token);
@@ -85,7 +91,7 @@ export function createHandler(dependencies) {
       send(200,{ok:true,result});
     }catch(error){
       const status=error instanceof PortalError?error.status:500;
-      if(status===500)console.error('PORTAL_SERVER_ERROR',{category:'internal',name:error.name});
+      if(status===500)console.error('PORTAL_SERVER_ERROR',diagnostic(error,stage));
       send(status,{ok:false,error:status===500?'The portal is unavailable. Ask the administrator to check server configuration and service access.':error.message});
     }
   };

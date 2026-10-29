@@ -36,3 +36,10 @@ Updated and verified locally on 29 October 2026.
 The test-only inbox is defined exclusively in tests/ui-server.js. Production imports never include it; no fixed code or login bypass exists. OTP codes are never returned by the real API or logged by the application.
 
 The implementation is local, uncommitted and unpushed. Vercel configuration is prepared but nothing has been deployed. No live spreadsheets, sender accounts or existing deployments were modified. Follow the ignored MANUAL_CONFIGURATION.md checklist for manual setup, then execute the live acceptance checks in docs/deployment.md.
+
+
+### Login failure diagnostics
+
+If Vercel logs PORTAL_SERVER_ERROR, inspect stage, name, optional code, missingVariable and upstreamStatus. Raw messages, stacks, request bodies, OTPs and credentials are deliberately excluded. configuration indicates environment validation; ERR_INVALID_URL indicates a URL setting cannot be parsed. otp-request includes Redis coordination; google-sheets-user-lookup indicates Google authentication, Sheets access or Users schema. A TypeError alone does not establish a cause. After deploying updated code, retry once and inspect the new entry. Check URL values for surrounding quotes or whitespace, and redeploy after changing environment variables.
+
+Diagnostic update: lint, build and 20 backend tests passed locally. Existing five browser workflows passed before this logging-only update; they were not rerun for it. The production login root cause remains unverified until the new deployment logs are available.
