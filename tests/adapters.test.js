@@ -45,3 +45,10 @@ test('server configuration requires OTP and mail secrets and rejects unsafe orig
   assert.throws(()=>config({...base,MAIL_RELAY_SECRET:base.OTP_SECRET}));
   assert.throws(()=>config({...base,APP_ORIGIN:'http://portal.example'}),/HTTPS/);
 });
+
+test('Sheets normalizes heading whitespace without altering records or writing; ambiguous headings fail closed',()=>{
+ const db=new SheetSnapshot(payload({Users:[['Name ',' Email','Status\u00a0','Role'],[' Reviewer ','user@example.com','Active','LDC']]}));
+ const values=db.getSheetByName('Users').getDataRange().getValues();
+ assert.deepEqual(values[0],['Name','Email','Status','Role']);assert.equal(values[1][0],' Reviewer ');assert.equal(db.pending.length,0);
+ assert.throws(()=>new SheetSnapshot(payload({Users:[['Email','Email ']]})),/Duplicate spreadsheet headings/);
+});

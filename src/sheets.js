@@ -41,9 +41,15 @@ class Sheet {
       for(const [j,cell] of (row?.values||[]).entries()) {
         if(!Object.keys(cell.userEnteredValue||{}).length && !Object.keys(cell.effectiveValue||{}).length && !cell.formattedValue)continue;
         const c=(block.startColumn||0)+j;this.cells[r] ||= [];this.values[r] ||= [];
-        this.cells[r][c]=cell;this.values[r][c]=cellValue(cell,zone);
+        this.cells[r][c]=cell;
+        const value=cellValue(cell,zone);
+        // Existing spreadsheet headings may contain accidental surrounding spaces.
+        // Normalize only the header row, without queuing writes or trimming user data.
+        this.values[r][c]=r===0&&typeof value==='string'?value.trim():value;
       }
     }
+    const headings=(this.values[0]||[]).filter(value=>value!=='');
+    if(new Set(headings).size!==headings.length)throw new Error('Duplicate spreadsheet headings after whitespace normalization');
   }
   getLastColumn(){return this.values.reduce((max,row)=>Math.max(max,row?.length||0),0);}
   getLastRow(){return this.values.length;}

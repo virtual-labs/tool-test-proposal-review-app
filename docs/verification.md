@@ -43,3 +43,8 @@ The implementation is local, uncommitted and unpushed. Vercel configuration is p
 If Vercel logs PORTAL_SERVER_ERROR, inspect stage, name, optional code, missingVariable and upstreamStatus. Raw messages, stacks, request bodies, OTPs and credentials are deliberately excluded. configuration indicates environment validation; ERR_INVALID_URL indicates a URL setting cannot be parsed. otp-request includes Redis coordination; google-sheets-user-lookup indicates Google authentication, Sheets access or Users schema. A TypeError alone does not establish a cause. After deploying updated code, retry once and inspect the new entry. Check URL values for surrounding quotes or whitespace, and redeploy after changing environment variables.
 
 Diagnostic update: lint, build and 20 backend tests passed locally. Existing five browser workflows passed before this logging-only update; they were not rerun for it. The production login root cause remains unverified until the new deployment logs are available.
+
+
+### Users heading whitespace fix
+
+A read-only live check confirmed Users headings contained trailing spaces in Name, Email and Status. The Sheets adapter now trims surrounding whitespace on row-one headings only, leaves record values unchanged and queues no normalization writes. Duplicate nonempty headings after normalization fail closed. Live Users read passes with all four login headings recognized and zero writes queued. Lint, build and 21 backend tests passed. Updated code is local and must be deployed; full live OTP delivery/login remains unverified.
