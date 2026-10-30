@@ -123,7 +123,7 @@
     th { background: #f0f5f2; } tr:last-child td { border-bottom: 0; }
     #domainFilter { max-width: 320px; margin-bottom: 16px; }
     @media (max-width: 650px) { .stats { grid-template-columns: 1fr; gap: 10px; } .stat { padding: 16px; } .stat strong { font-size: 27px; } .brand { gap: 12px; flex-wrap: wrap; } .brand img { width: 55px; height: 52px; } .brand h1 { font-size: 19px; } }
-  
+
     dialog { max-width: 480px; width: calc(100% - 40px); border: 1px solid #cdded7; border-radius: 18px; padding: 28px; color: #253b43; background: #fcfdfb; }
     #userGuideDialog, #loginHelpGuide { max-width: 760px; max-height: 85vh; overflow-y: auto; }
     dialog::backdrop { background: #16372b66; }
@@ -140,25 +140,18 @@
     td { overflow-wrap: anywhere; }
     #viewPage { max-width: 900px; margin: auto; }
     #viewBackBtn { margin: 0 0 18px; }
-  .row-actions { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-.row-actions button, .row-actions a { width:auto; margin-top:8px; }
-.role-picker {max-width:240px; margin-bottom:20px;}
-.sort-column {width:auto; margin:0; padding:0; background:transparent; color:inherit; font-weight:700; text-align:left;}
-.review-text {white-space:pre-wrap; overflow-wrap:anywhere;}
-.rank-reason {min-width:200px; min-height:75px;}
-.rank-select {min-width:110px;}
-footer {text-align:center; margin-top:24px;}
-#root {min-height:100vh;}
-[hidden] {display:none !important;}
-@media(max-width:650px){.stats{grid-template-columns:1fr !important;} .brand{flex-wrap:wrap;} .brand .row-actions{width:100%;} main{padding:0 16px 24px;} .card{padding:18px;} .admin-filters{grid-template-columns:1fr;}}
-/* Keep dialogs usable on short/mobile viewports and keyboard focus visible. */
+
+/* React layout adapters; colours and typography above match both original portals. */
+.row-actions { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.row-actions button, .row-actions a { width:auto; }
+.brand-copy { min-width:0; }
+.brand-actions { display:contents; }
+.role-picker { max-width:220px; margin-bottom:20px; }
+#root { min-height:100vh; }
+[hidden] { display:none !important; }
 dialog { max-height:85dvh; overflow-y:auto; }
-dialog::backdrop { background:#16313280; }
-dialog li { margin:12px 0; }
 dialog textarea { min-height:180px; }
-#userGuideDialog, #loginHelpGuide { max-width:760px; }
-#rankingEditor table { min-width:1000px; }
-.admin-table [data-column="Rank / Reviewer Total"] { padding-right:6px; }
-.admin-table [data-column="Justification"] { padding-left:6px; }
 [data-column="Submitted on"] { width:1%; white-space:nowrap; }
-@media(max-width:650px){.ranking-heading { align-items:flex-start; } #rankingToolbar .review-download-toolbar { gap:8px; } dialog { padding:20px; }}
+@media(max-width:650px){ .stats { grid-template-columns:1fr !important; } .admin-filters { grid-template-columns:1fr; } dialog { padding:20px; } }
+
+@media(max-width:650px){ .brand-copy { flex:1 0 calc(100% - 67px); } .brand-actions { display:flex; flex-wrap:wrap; gap:10px; width:100%; } .brand-actions button { margin-top:0; } }
