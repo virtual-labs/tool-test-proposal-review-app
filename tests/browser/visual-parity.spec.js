@@ -1,7 +1,6 @@
 import {test,expect} from '@playwright/test';
 import {readFileSync} from 'node:fs';
-const source=readFileSync('../src/appscript/index.html','utf8');
-const referenceCss=source.match(/<style>([\s\S]*?)<\/style>/)[1];
+const referenceCss=readFileSync(new URL('./fixtures/original-portal.css',import.meta.url),'utf8');
 async function login(page,email){await page.goto('/');await page.locator('#email').fill(email);await page.locator('#sendBtn').click();await expect(page.locator('#otpForm')).toBeVisible();const {code}=await(await page.request.get('/__test/mailbox?email='+encodeURIComponent(email))).json();await page.locator('#otp').fill(code);await page.locator('#verifyBtn').click();await expect(page.locator('#appNav')).toBeVisible();}
 test('original portal visual tokens and all role screens at desktop and mobile widths',async({page,request,context})=>{
  test.setTimeout(180000);
