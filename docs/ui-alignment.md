@@ -22,3 +22,6 @@ An initial screenshot test timed out with the reference tab in front; bringing t
 
 ## Approval and next handoff
 No additional design approval required: supplied source is the reference. Next action is deploy the updated React app and smoke-check with production role accounts.
+
+## Screenshot follow-up
+PIC summary cards now precede the filter panel. Restored institute-specific instructions, filter help, result counts and Count / Total Proposals captions. Rank monitoring groups cards, filters and results inside one Reviewer Rankings panel, with Domain and Status for PIC. Browser checks cover vertical placement and resetting the Status filter. Build, lint and all 10 browser tests passed; desktop captures were inspected against the supplied screenshots.

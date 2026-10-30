@@ -155,3 +155,6 @@ dialog textarea { min-height:180px; }
 @media(max-width:650px){ .stats { grid-template-columns:1fr !important; } .admin-filters { grid-template-columns:1fr; } dialog { padding:20px; } }
 
 @media(max-width:650px){ .brand-copy { flex:1 0 calc(100% - 67px); } .brand-actions { display:flex; flex-wrap:wrap; gap:10px; width:100%; } .brand-actions button { margin-top:0; } }
+
+/* Filter values use the original normal weight; labels remain bold. */
+.admin-filters select { font-weight:400; }

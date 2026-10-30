@@ -21,15 +21,21 @@ test('Help, role guides, Admin filters/progress and directory columns match requ
  await page.getByRole('button',{name:'Administrator User Guide',exact:true}).click();await expect(dialog).toHaveAccessibleName('Administrator User Guide');await expect(dialog).toContainText('Proposal Dashboard');await expect(dialog).toContainText('User Dashboard');await expect(dialog).not.toContainText('Saved Draft Proposals');await page.keyboard.press('Escape');
  await page.locator('#usersBtn').click();await expect(page.getByRole('table',{name:'Users & roles',exact:true}).locator('th').first()).toHaveText('S.No.');
  await page.locator('#proposalDashboardBtn').click();const proposals=page.getByRole('table',{name:'Proposal directory',exact:true});await expect(proposals.locator('th')).toHaveText(['S.No.','Proposal ID ↕','Proposal Name ↕','Institute ↕','Domain ↕','Status ↕','Proposal Document']);await expect(page.getByRole('combobox',{name:'Status',exact:true})).toBeVisible();
- await page.locator('#rankingBtn').click();const ranks=page.getByRole('table',{name:'Rank monitoring',exact:true});await expect(ranks.locator('th[data-column="Overall Rating"]')).toBeVisible();await expect(page.locator('#rankingPage .stats strong')).toHaveText(['0 / 0','0 / 0']);await expect(page.locator('#rankingPage .stats')).toContainText('matching selected filters');
+ await page.locator('#rankingBtn').click();const ranks=page.getByRole('table',{name:'Rank monitoring',exact:true});await expect(ranks.locator('th[data-column="Overall Rating"]')).toBeVisible();await expect(page.locator('#rankingPage .stats strong')).toHaveText(['0 / 0','0 / 0']);await expect(page.locator('#rankingPage .stats')).toContainText('Count / Total Proposals');
 });
 
 test('PIC hides draft controls and includes drafts when filtering pending; guide agrees',async({page})=>{
  await login(page,'ldc@example.com');await page.getByRole('button',{name:'Start Review',exact:true}).click();await page.locator('#clarity').selectOption('4');page.once('dialog',d=>d.accept());await page.locator('#saveDraftBtn').click();await expect(page.locator('#notice')).toContainText('Draft saved');
- await page.locator('#roleSelector').selectOption('PIC');await expect(page.locator('#adminTitle')).toHaveText('PIC Dashboard');await expect(page.getByRole('button',{name:/Saved Draft Proposals/})).toHaveCount(0);await expect(page.getByRole('combobox',{name:'Status',exact:true}).locator('option')).toHaveText(['All statuses','reviewed','pending']);
+ await page.locator('#roleSelector').selectOption('PIC');await expect(page.locator('#adminTitle')).toHaveText('PIC Dashboard');
+ const cards=await page.locator('#adminPage .stats').boundingBox(),filters=await page.locator('#adminFilterPanel').boundingBox();expect(cards.y+cards.height).toBeLessThan(filters.y);
+ await expect(page.locator('#adminFilterPanel')).toContainText('Use Domain and Status to narrow the proposals shown for your institute.');await expect(page.getByRole('button',{name:/Saved Draft Proposals/})).toHaveCount(0);await expect(page.getByRole('combobox',{name:'Status',exact:true}).locator('option')).toHaveText(['All statuses','reviewed','pending']);
  await page.getByRole('combobox',{name:'Status',exact:true}).selectOption('pending');await page.getByRole('button',{name:/^Pending Proposals/}).click();await expect(page.getByRole('table',{name:'Proposals',exact:true})).toContainText('Test Lab');
  await page.getByRole('button',{name:'PIC User Guide',exact:true}).click();await expect(page.getByRole('dialog')).not.toContainText('Saved Draft Proposals');await page.keyboard.press('Escape');
  await page.locator('#rankingBtn').click();await expect(page.getByRole('table',{name:'Rank monitoring',exact:true}).locator('th[data-column="Overall Rating"]')).toBeVisible();await expect(page.locator('#rankingPage option[value=draft]')).toHaveCount(0);
+ await expect(page.locator('#adminRankingArea h2')).toHaveText('Reviewer Rankings');
+ const rankCards=await page.locator('#adminRankingArea .stats').boundingBox(),rankFilters=await page.locator('#rankFilterPanel').boundingBox();expect(rankCards.y+rankCards.height).toBeLessThan(rankFilters.y);
+ await page.getByRole('combobox',{name:'Status',exact:true}).selectOption('pending');await expect(page.locator('#rankingPage .stats strong')).toHaveText(['0 / 0','0 / 0']);
+ await page.getByRole('button',{name:'Clear filters',exact:true}).click();await expect(page.getByRole('combobox',{name:'Status',exact:true})).toHaveValue('');
 });
 
 test('justification stages, cancels, saves, persists, displays read-only and can be removed with all ranks',async({page})=>{
