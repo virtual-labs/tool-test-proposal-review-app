@@ -15,7 +15,7 @@ test('React OTP login, drafts, final review, manual and automatic rankings, PDF,
   const errors=[];page.on('pageerror',error=>errors.push(error.message));page.on('dialog',dialog=>dialog.accept());
   await login(page,'ldc@example.com');await expect(page.locator('#dashboardPage')).toBeVisible();
   await expect(page.locator('input[type=password]')).toHaveCount(0);
-  await expect(page.getByRole('columnheader',{name:'Updated / Submitted'})).toHaveCount(0);
+  await expect(page.getByRole('columnheader',{name:'Submitted on'})).toHaveCount(0);
   await page.getByRole('button',{name:'Start Review',exact:true}).click();await expect(page.locator('#reviewPage')).toBeVisible();
   for(const field of ['clarity','academicRelevance','pedagogicalNeed','quality','experimentDesign','jobRelevance','userExperience','overallRating'])await page.locator(`#${field}`).selectOption('5');
   await page.locator('#reviewerComments').fill('Browser-tested React review');await page.locator('#saveDraftBtn').click();
@@ -24,7 +24,7 @@ test('React OTP login, drafts, final review, manual and automatic rankings, PDF,
   await expect(page.getByRole('button',{name:/Saved Draft Proposals/})).toHaveCount(0);
   await page.getByRole('button',{name:/Pending Proposals/}).click();
   await expect(page.getByRole('cell',{name:'Test Lab',exact:true})).toBeVisible();
-  await expect(page.getByRole('columnheader',{name:'Updated / Submitted'})).toHaveCount(0);
+  await expect(page.getByRole('columnheader',{name:'Submitted on'})).toHaveCount(0);
   await page.locator('#workspaceBtn').click();await page.getByRole('button',{name:/Saved Draft Proposals/}).click();
   await page.getByRole('button',{name:'Resume Draft',exact:true}).click();await expect(page.locator('#reviewerComments')).toHaveValue('Browser-tested React review');
   await page.locator('#submitBtn').click();await expect(page.locator('#notice')).toContainText('submitted successfully');

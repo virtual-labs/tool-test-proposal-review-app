@@ -160,5 +160,5 @@ dialog textarea { min-height:180px; }
 #rankingEditor table { min-width:1000px; }
 .admin-table [data-column="Rank / Reviewer Total"] { padding-right:6px; }
 .admin-table [data-column="Justification"] { padding-left:6px; }
-[data-column="Updated / Submitted"] { width:1%; white-space:nowrap; }
+[data-column="Submitted on"] { width:1%; white-space:nowrap; }
 @media(max-width:650px){.ranking-heading { align-items:flex-start; } #rankingToolbar .review-download-toolbar { gap:8px; } dialog { padding:20px; }}
