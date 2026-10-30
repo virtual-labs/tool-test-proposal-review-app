@@ -17,3 +17,9 @@ export function Filters({values,onChange,options={},fields=['domain','institute'
   return <div className="card"><div className="admin-filters">{fields.map(key=><label key={key}>{names[key]}<select aria-label={names[key]} value={values[key]||''} disabled={busy} onChange={e=>onChange({...values,[key]:e.target.value})}><option value="">All {key==='status'?'statuses':names[key].toLowerCase()+'s'}</option>{(options[key==='status'?'statuses':key+'s']||[]).map(o=><option key={o.value??o} value={o.value??o}>{o.label??o}</option>)}</select></label>)}</div><button className="secondary compact" disabled={busy} onClick={()=>onChange({})}>Clear filters</button></div>;
 }
 export function Cards({items,selected,onSelect}){return <div className="stats" style={{gridTemplateColumns:`repeat(${Math.min(items.length,3)}, minmax(0, 1fr))`}}>{items.map((item,i)=><button type="button" key={item.key} className={`stat ${['mint','peach','red'][i%3]}`} aria-pressed={selected===item.key} onClick={()=>onSelect(item.key)}><span>{item.label}</span><strong>{item.count}{item.total==null?'':` / ${item.total}`}</strong>{item.hint&&<small>{item.hint}</small>}</button>)}</div>;}
+
+export function DisplayDate({value}){
+  const full=String(value||'—');
+  const date=full.match(/^(\d{1,2} [A-Za-z]{3} \d{4})(?:,|$)/)?.[1]||full;
+  return <span title={full}>{date}</span>;
+}

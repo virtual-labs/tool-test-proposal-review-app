@@ -1,27 +1,27 @@
 import React,{useState} from 'react';
-import {Table,Cards,Filters,Link} from './Common.jsx';
+import {Table,Cards,Filters,Link,DisplayDate} from './Common.jsx';
 import {Justification} from './Dialog.jsx';
 import {useResource} from '../hooks.js';
 
-export function ProposalTable({rows,scope='personal',onOpen,onView,onDownload,busy=false,extra=[],defaultSort}){
+export function ProposalTable({rows,scope='personal',onOpen,onView,onDownload,busy=false,extra=[],defaultSort,showDate=true}){
   const [selected,setSelected]=useState([]);
   const allowed=rows.filter(r=>r.downloadable).map(r=>r.id),ids=selected.filter(id=>allowed.includes(id));
   const columns=[...(allowed.length?[{key:'select',label:<input type="checkbox" className="review-check" aria-label="Select all reviews in this list" checked={!!allowed.length&&allowed.every(id=>ids.includes(id))} onChange={e=>setSelected(e.target.checked?allowed:[])}/>,sortable:false,render:r=>r.downloadable?<input className="review-check" type="checkbox" aria-label={`Select review ${r.id}`} checked={ids.includes(r.id)} onChange={e=>setSelected(e.target.checked?[...selected,r.id]:selected.filter(id=>id!==r.id))}/>:null}]:[]),
     {key:'id',label:'Proposal ID'},{key:'name',label:'Proposal Name'},
     ...(scope!=='personal'?[{key:'reviewer',label:'Reviewer',render:r=>r.reviewer||(r.assignedReviewers||[]).join(', ')||'Not assigned'}]:[]),
     ...(scope==='admin'?[{key:'domain',label:'Domain'},{key:'institute',label:'Institute'}]:[]),
-    ...extra,{key:'date',label:'Updated / Submitted',sort:r=>r.order||r.updatedAt||r.submittedAt,render:r=>r.submittedAt||r.updatedAt||'—'},
+    ...extra,...(showDate?[{key:'date',label:'Updated / Submitted',sort:r=>r.order||r.updatedAt||r.submittedAt,render:r=><DisplayDate value={r.submittedAt||r.updatedAt}/>}]:[]),
     {key:'actions',label:'Action',sortable:false,render:r=><div className="row-actions">{r.state==='reviewed'?scope==='domain'?null:<button disabled={busy} className="view-action" onClick={()=>onView(r.id)}>View Review</button>:scope==='personal'?<button disabled={busy} className="view-action" onClick={()=>onOpen(r.id)}>{r.state==='draft'?'Resume Draft':'Start Review'}</button>:null}</div>}];
   return <>{allowed.length>0&&<div className="review-download-toolbar"><button className="secondary compact" disabled={busy||!ids.length} onClick={async()=>{await onDownload(ids);setSelected([]);}}>Download Selected Reviews</button><button className="secondary compact" onClick={()=>setSelected(allowed)}>Select All</button><button className="secondary compact" onClick={()=>setSelected([])}>Clear Selection</button><span>{ids.length} selected</span></div>}<Table serialNumbers className={scope==='admin'||scope==='monitor'?'admin-table':''} defaultSort={defaultSort} columns={columns} rows={rows} label="Proposals"/></>;
 }
 
 export function Board({board,scope='personal',...props}){
   const [category,setCategory]=useState(scope==='personal'?'pending':'reviewed');
-  const categories=scope==='domain'?['reviewed','draft','pending','ranked']:['reviewed','draft','pending'];
+  const categories=scope==='domain'?['reviewed','pending','ranked']:['reviewed','draft','pending'];
   const titles={reviewed:'Reviewed Proposals',draft:'Saved Draft Proposals',pending:'Pending Proposals',ranked:'Ranked Proposals'};
-  const combined=scope==='admin'?{...board,pending:[...(board.pending||[]),...(board.draft||[])]}:board;
+  const combined=['admin','domain'].includes(scope)?{...board,pending:[...(board.pending||[]),...(board.draft||[])]}:board;
   const visibleCategories=['admin','monitor'].includes(scope)?['reviewed','pending']:categories;
-  return <><Cards selected={category} onSelect={setCategory} items={visibleCategories.map(key=>({key,label:titles[key],count:(combined[key]||[]).length,total:board.total,hint:['admin','monitor'].includes(scope)?'Count / Total Proposals matching selected filters':undefined}))}/><section className="card"><h2>{titles[category]}</h2><ProposalTable key={category} rows={combined[category]||[]} scope={scope} defaultSort={scope==='domain'&&['reviewed','ranked'].includes(category)?{key:'rank',direction:1}:undefined} extra={scope==='domain'&&['reviewed','ranked'].includes(category)?[{key:'rank',label:'Rank',emptyFirst:true,render:r=>r.rank??'-'},{key:'justification',label:'Justification',sortable:false,render:r=><Justification name={r.name} value={r.justification} busy={props.busy}/>}]:[]} {...props}/></section></>;
+  return <><Cards selected={category} onSelect={setCategory} items={visibleCategories.map(key=>({key,label:titles[key],count:(combined[key]||[]).length,total:board.total,hint:['admin','monitor'].includes(scope)?'Count / Total Proposals matching selected filters':undefined}))}/><section className="card"><h2>{titles[category]}</h2><ProposalTable key={category} rows={combined[category]||[]} scope={scope} showDate={category!=='pending'} defaultSort={scope==='domain'&&['reviewed','ranked'].includes(category)?{key:'rank',direction:1}:undefined} extra={scope==='domain'&&['reviewed','ranked'].includes(category)?[{key:'rank',label:'Rank',emptyFirst:true,render:r=>r.rank??'-'},{key:'justification',label:'Justification',sortable:false,render:r=><Justification name={r.name} value={r.justification} busy={props.busy}/>}]:[]} {...props}/></section></>;
 }
 
 export function AssistantWorkspace({app,onOpen,onView,busy}){
