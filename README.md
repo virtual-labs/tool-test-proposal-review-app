@@ -75,9 +75,9 @@ The detailed local checklist is `MANUAL_CONFIGURATION.md`, intentionally exclude
 - Account status and active role are rechecked through Sheets on authenticated application requests. Role switching rotates the session without extending its original expiry. Logout revokes the current session.
 - Old password-authentication sessions use a different Redis namespace and cannot authenticate to the OTP application.
 
-## Restored interface features
+## Current interface features
 
-The React app includes the finalized ranking guidelines, justification dialogs, role-specific user guides, login troubleshooting, filtered ranking totals, serial-number columns and unranked-first sorting. Admin/PIC monitoring uses Reviewed and Pending cards; pending includes saved drafts while draft answers remain private. See [the parity report](docs/apps-script-parity-review.md) for details and verification.
+The React app includes the finalized ranking guidelines, justification dialogs, role-specific user guides, login troubleshooting, filtered ranking totals, serial-number columns and unranked-first sorting. Admin/PIC monitoring uses Reviewed and Pending cards; pending includes saved drafts while draft answers remain private. See [current features and role access](docs/current-features.md) for the latest behaviour, date/import guidance and PDF permissions. The [parity report](docs/apps-script-parity-review.md) records the original migration gaps.
 
 ## Verification
 
@@ -89,7 +89,7 @@ npm run test:ui
 
 `test:ui` builds the React production bundle, then runs headless browser tests against a local fixture server. Tests use fabricated users, spreadsheets, Redis and a test-only mail inbox. **The real application has no inbox endpoint, fixed OTP, or development login bypass.**
 
-Edge is the default browser. For Chrome set `PLAYWRIGHT_CHANNEL=chrome`; install the chosen browser if needed. The CI workflow installs Chrome. Screenshots and browser artifacts are written under ignored `test-results/`.
+Edge is the default browser. For Chrome set `PLAYWRIGHT_CHANNEL=chrome`; install the chosen browser if needed. The CI workflow installs Chrome. Screenshots and browser artifacts are written under ignored `test-results/`. The visual reference is committed at `tests/browser/fixtures/original-portal.css` and resolved relative to the test file; CI does not need the sibling Apps Script project.
 
 This project uses JavaScript/JSX; no TypeScript typecheck is configured. See `docs/verification.md` for observed results and remaining external checks.
 
@@ -110,4 +110,4 @@ Official references: [React with Vite](https://react.dev/learn/build-a-react-app
 - A failed confirmation email does not undo a saved review. There is no automatic email retry queue.
 - Email OTP is single-factor authentication, not MFA. Mailbox access controls account access.
 - PDFKit's built-in fonts have limited non-Latin support. Visually validate real names and multilingual/long comments before release; embed licensed Unicode fonts if required.
-- Source provenance hashes for the untouched original application are in `docs/source-manifest.json`.
+- Historical source provenance hashes are in `docs/source-manifest.json`; they record migration-time inputs, not an automatic verification of later sibling-project changes.

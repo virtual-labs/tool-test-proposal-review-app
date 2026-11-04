@@ -8,7 +8,7 @@ The local manual checklist is MANUAL_CONFIGURATION.md, intentionally ignored by 
 
 ## Preview deployment
 
-1. Review and push the repository when authorized; this implementation has not been pushed.
+1. Review and push the intended commit. Confirm its GitHub Actions result and Vercel deployment rather than treating local test success as release evidence.
 2. Import in Vercel, framework **Other**, install `npm ci`, build `npm run build`, output directory **dist**, Node.js 22 or 24.
 3. Set the variables listed in README.md for Preview. Use a test copy of the spreadsheet and dedicated test Redis. Follow apps-script-email/README.md to authorize and deploy a separate test MailApp relay. Set MAIL_RELAY_URL, matching MAIL_RELAY_SECRET and a distinct random OTP_SECRET.
 4. Set APP_ORIGIN to the exact HTTPS preview origin and redeploy after changes. Origins are not implicitly trusted.
@@ -46,3 +46,11 @@ For rollback, stop new writes first, preserve records saved since cutover, then 
 ## Feature parity release
 
 The restored Apps Script interface features require deploying the React bundle and Node API together. No new environment variables or spreadsheet columns are required, and the email-only Apps Script relay is unchanged. After deployment verify Admin/PIC cards and filters, reviewer progress, rank totals/columns, unranked-first sorting, guideline dialogs, justification Add/View/Edit and read-only View, all-ranks removal, and Help/role guides. See [parity report](apps-script-parity-review.md).
+
+## Current release acceptance and domain changes
+
+Use [current features](current-features.md) as the screen/role checklist. Check reviewer names for all authorized viewers; Updated on for drafts; Submitted on for completed proposals; no date column on pending; date hover timestamps; no Domain Action/draft card; PIC cards above filters; PIC ranking Status filter and Reviewer Rankings panel; numbered view/PDF ratings and representative PDF layout.
+
+A project display-name change alone needs no application changes if the canonical URL stays unchanged. If the URL changes, confirm the assigned HTTPS domain in Vercel, set the matching environment's APP_ORIGIN to that exact origin without trailing slash, redeploy and test OTP. The API trusts only one exact origin. Redirect old links to the canonical domain where appropriate; users sign in again on a different hostname. Sheets, Redis and email-relay credentials need no change solely for a domain rename.
+
+The requested vlabs-proposal-review.vercel.app domain has not been verified as configured in this documentation audit. Do not assume it is active or replace a working environment value until the domain is confirmed.

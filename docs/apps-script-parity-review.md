@@ -2,6 +2,8 @@
 
 Reviewed 29 October 2026; implementation completed locally on the same date. The comparison below records the original gaps. P01–P14 are now addressed in the React/Node code; live deployment remains a separate step.
 
+For current behaviour and verification, use [current features](current-features.md) and [verification](verification.md). The observations and test counts below are historical, not outstanding tasks.
+
 ## Sources and scope
 
 - Read the requested changes in **Virtual Labs — Testing Environment Setup** (chat `01a1439b-ae82-7232-b668-beea008dcc9f`), including the later corrections that superseded earlier automatic-ranking and formatting requests.
@@ -12,7 +14,7 @@ Reviewed 29 October 2026; implementation completed locally on the same date. The
 
 ## Original missing or partial changes (now implemented)
 
-| ID | Area / latest requested behavior | Current React/Node behavior | Evidence / required correction |
+| ID | Area / latest requested behavior | React/Node behaviour at initial audit | Correction identified at initial audit |
 |---|---|---|---|
 | P01 | LDC Ranking Guidelines button/dialog with seven finalized points, bold point headings, red button references and blue italic references | No Ranking Guidelines button/dialog; only a short introductory paragraph | `client/components/Ranking.jsx`, RankEditor. Restore the approved content and dialog. Styling rules retained in CSS do not create the missing UI. |
 | P02 | Generate Rankings aligned right beneath Ranking Guidelines, inline with selection/download buttons | Generate Rankings is the first toolbar button; the guideline anchor is absent | `Ranking.jsx`, RankEditor toolbar. Restore the requested placement outside the scrolling table. |
@@ -29,7 +31,7 @@ Reviewed 29 October 2026; implementation completed locally on the same date. The
 | P13 | Updated role-specific user guides; Administrator User Guide label and title; Admin guide includes Proposal/User dashboards | Help and User Guide buttons open the same generic component. Header button says Administrator User Guide, but guide title becomes Admin User Guide. Detailed role workflows are absent | `App.jsx:64`, `Common.jsx:20`; original HTML role guide content. Restore separate Help and role-guide content with matching title. |
 | P14 | Content-specific column spacing, compact Rank/Justification gap and nonwrapping Domain values | React Table emits neither `data-column` attributes nor the original table-specific class/IDs used by many copied CSS selectors | `Common.jsx:13`, `client/styles.css`. Restore applicable styling hooks or replace selectors. This is a confirmed styling-hook omission; exact pixel/layout impact needs a visual comparison after content corrections. |
 
-## Changes already carried over
+## Already implemented at initial audit
 
 - Admin navigation order: Review Dashboard, Proposal Dashboard, Rank Dashboard, User Dashboard.
 - Admin User Dashboard Name (email), domain/institute/role/status filtering; Admin domain displays Not applicable and Assistant Reviewer domain is retained.
@@ -42,7 +44,7 @@ Reviewed 29 October 2026; implementation completed locally on the same date. The
 - Assistant draft/handoff workflows, role-based permissions, stale-write protection and OTP authentication exist.
 - Dashboard/filter resource hooks fetch the requested view without re-fetching initial data merely because a tab/filter changed; backend uses one request-local Sheets snapshot. This does not establish a measured live speed improvement.
 
-## Verification
+## Historical baseline verification
 
 - `npm test`: 21 passed, 0 failed.
 - `npm run test:ui`: production build passed; five Edge browser workflows passed against fabricated Sheets/Redis/mail fixtures.
@@ -50,7 +52,7 @@ Reviewed 29 October 2026; implementation completed locally on the same date. The
 - An additional exploratory browser audit was attempted using local fixtures; its first run stopped on an incorrect accessible-name selector, and a retry encountered a browser resource error. A further retry stalled and was stopped. These are audit-tool failures, not established application defects. Source findings above do not depend on those runs.
 - No live email was sent, no spreadsheet was changed, and no deployment was performed by this review.
 
-## Suggested implementation sequence
+## Historical implementation sequence (completed)
 
 1. Correct Admin/PIC card/filter behavior and reviewer-progress eligibility/order.
 2. Restore ranking sorting, totals, rating/serial columns, justification dialogs and toolbar alignment.
@@ -60,7 +62,7 @@ Reviewed 29 October 2026; implementation completed locally on the same date. The
 Do not reintroduce retired password authentication, a required Rankings sheet, or the earlier automatic-on-load ranking behavior when restoring these features.
 
 
-## Implementation and verification update
+## Historical implementation and verification update — 29 October 2026
 
 - P01/P02: restored the seven-point Ranking Guidelines dialog, red button references/blue italics, and right-aligned Generate Rankings toolbar beneath the guideline button.
 - P03/P04: justification Add/View/Edit stages changes in a dialog; Cancel/Escape discards dialog edits; Save Rankings persists them. Read-only View dialogs are used by Admin, PIC and LDC domain tables. Full text remains available in submitted reviews and PDFs.

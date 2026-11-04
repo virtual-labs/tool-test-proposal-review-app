@@ -48,3 +48,7 @@ Official references: [Web app deployment](https://developers.google.com/apps-scr
 - [ ] Matching relay URL and secret configured privately in Node.
 - [ ] Real OTP and confirmation delivery tested; account quota reviewed.
 
+
+## Application UI and domain changes
+
+Reviewed against the relay source on 4 November 2026: the UI, reviewer-name display, date headings and PDF formatting changes do not change this email-only service. Changing the portal hostname requires updating Node APP_ORIGIN and redeploying the application; it does not by itself require changing MAIL_RELAY_URL, MAIL_RELAY_SECRET or the relay deployment. See [current application features](../docs/current-features.md).
