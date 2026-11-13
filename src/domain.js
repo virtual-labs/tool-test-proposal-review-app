@@ -316,6 +316,28 @@ function sameDomain_(domain, user) {
   return !!normalized_(user.domain) && normalized_(domain) === normalized_(user.domain);
 }
 
+function getSummaryData(token, filters) {
+  const db=readDb_();user_(db,token);
+  const proposals=table_(db,CONFIG.PROPOSALS_SHEET,HEADERS.Proposals).rows.filter(p=>text_(p['Proposal ID']));
+  const ids=new Set();
+  for(const p of proposals){const id=text_(p['Proposal ID']);if(ids.has(id))throw new Error('Duplicate Proposal ID. Contact the administrator.');ids.add(id);}
+  const reviewed=new Set(table_(db,CONFIG.REVIEWS_SHEET,HEADERS.Reviews).rows.map(r=>text_(r['Proposal ID'])).filter(Boolean));
+  const rows=proposals.filter(p=>matchesSet({id:text_(p['Proposal ID'])},filters?.set));
+  const group=column=>{
+    const groups=new Map();
+    for(const p of rows){
+      const label=text_(p[column])||'Not configured',key=normalized_(label);
+      if(!groups.has(key))groups.set(key,{name:label,labs:0,experiments:0,missingExperiments:0,reviewed:0,pending:0});
+      const row=groups.get(key);row.labs++;
+      const raw=text_(p['No. of Experiments']),count=Number(raw);
+      if(raw && Number.isSafeInteger(count) && count>=0)row.experiments+=count;else row.missingExperiments++;
+      if(reviewed.has(text_(p['Proposal ID']))||normalized_(p.Status)==='reviewed')row.reviewed++;else row.pending++;
+    }
+    return [...groups.values()].sort((a,b)=>a.name.localeCompare(b.name));
+  };
+  return {domains:group('Domain'),institutes:group('Institute Name')};
+}
+
 function getInitialData(token) {
   const db = readDb_(), user = user_(db, token);
   if(user.role==='Assistant Reviewer')return assistantInitialData_(db,user);
@@ -1088,5 +1110,5 @@ function getAdminRankings(token, filters) {
   return { rows:result, unrankedRows:unranked, filterOptions:{domains:options('domain'),institutes:options('institute'),reviewers:Array.from(people.values()).sort((a,b)=>a.label.localeCompare(b.label))} };
 }
 
-return { getInitialData, getProposal, getReview, downloadReview, getAdminProposals, getAdminUsers, getAdminData, saveDraft, getAssistantReview, submitToLdc, submitReview, getRankingData, saveRankJustification, autoRankProposals, saveRankings, getAdminRankings, currentUser: () => user_(db), headers: HEADERS };
+return { getSummaryData, getInitialData, getProposal, getReview, downloadReview, getAdminProposals, getAdminUsers, getAdminData, saveDraft, getAssistantReview, submitToLdc, submitReview, getRankingData, saveRankJustification, autoRankProposals, saveRankings, getAdminRankings, currentUser: () => user_(db), headers: HEADERS };
 }

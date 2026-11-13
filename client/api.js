@@ -1,4 +1,4 @@
-const READS=new Set(['getInitialData','getAdminData','getAdminUsers','getAdminProposals','getAdminRankings','getRankingData','session']);
+const READS=new Set(['getSummaryData','getInitialData','getAdminData','getAdminUsers','getAdminProposals','getAdminRankings','getRankingData','session']);
 export async function rpc(action,...args) {
   for(let attempt=0;attempt<(READS.has(action)?2:1);attempt++) {
     let response;

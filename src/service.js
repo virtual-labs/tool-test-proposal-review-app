@@ -4,7 +4,7 @@ import { PortalError } from './errors.js';
 import { sendEmail } from './email.js';
 export const DATA_SHEETS=['Proposals','Users','Completed Reviews','Draft Reviews'];
 export const WRITE_ACTIONS=new Set(['saveDraft','submitToLdc','submitReview','autoRankProposals','saveRankJustification','saveRankings']);
-export const READ_ACTIONS=new Set(['getInitialData','getProposal','getReview','downloadReview','getAdminProposals','getAdminUsers','getAdminData','getAssistantReview','getRankingData','getAdminRankings']);
+export const READ_ACTIONS=new Set(['getSummaryData','getInitialData','getProposal','getReview','downloadReview','getAdminProposals','getAdminUsers','getAdminData','getAssistantReview','getRankingData','getAdminRankings']);
 export class Portal {
   constructor(settings,sheets,coordination,auth,mailer=sendEmail){Object.assign(this,{settings,sheets,coordination,auth,mailer});}
   async registeredUser(email) {

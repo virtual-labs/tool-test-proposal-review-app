@@ -1,5 +1,10 @@
 # Local verification
 
+## Summary Dashboard — 13 November 2026
+
+Lint, all 28 Node tests, production build and all 14 browser tests passed. Summary tests cover all four roles, global aggregate-only output, reviewed/pending calculations, incomplete experiment totals, duplicate IDs, disabled users, Set filtering and mobile overflow. No live spreadsheet or deployment changes were made.
+
+
 ## Set filter update — 13 November 2026
 
 Lint, all 26 Node tests, production build and all 13 Edge browser tests passed. Coverage includes exact A_/B_ prefixes, unknown IDs under All sets, composed filters, PIC institute scope, monitoring totals, unchanged User Dashboard and ranking edits saved across hidden sets. Desktop/mobile visual-token and overflow checks passed. Initial sandbox HTTP checks failed and passed with local network access; one outdated help-text assertion was updated for the new Set wording before the final successful run. No live data, deployment or environment settings were changed.

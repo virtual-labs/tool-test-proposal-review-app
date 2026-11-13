@@ -1,0 +1,16 @@
+import {test,expect} from '@playwright/test';
+async function login(page,email){await page.goto('/');await page.locator('#email').fill(email);await page.locator('#sendBtn').click();await expect(page.locator('#otpForm')).toBeVisible();const {code}=await(await page.request.get('/__test/mailbox?email='+encodeURIComponent(email))).json();await page.locator('#otp').fill(code);await page.locator('#verifyBtn').click();await expect(page.locator('#appNav')).toBeVisible();}
+test('all roles can view both summary tables and filter by set on desktop and mobile',async({page,request})=>{
+ for(const [email,role] of [['admin@example.com','Admin'],['ldc@example.com','LDC'],['ldc@example.com','PIC'],['assistant@example.com','Assistant Reviewer']]){
+  await request.post('/__test/reset?sets=true');await login(page,email);
+  if(role==='PIC')await page.locator('#roleSelector').selectOption('PIC');
+  await page.locator('#summaryBtn').click();
+  const domain=page.getByRole('table',{name:'Domain-wise Summary'}),institutes=page.getByRole('table',{name:'Institute-wise Summary'});
+  await expect(domain.locator('tbody tr')).toHaveCount(1);await expect(institutes.locator('tbody tr')).toHaveCount(2);
+  await expect(domain).toContainText('incomplete: 1');
+  await page.getByRole('combobox',{name:'Set',exact:true}).selectOption('A');await expect(institutes.locator('tbody tr')).toHaveCount(1);await expect(domain).not.toContainText('incomplete:');
+  await page.getByRole('button',{name:'Clear filters',exact:true}).click();await expect(institutes.locator('tbody tr')).toHaveCount(2);
+  await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.setViewportSize({width:1280,height:900});
+  await page.locator('#logoutBtn').click();
+ }
+});
