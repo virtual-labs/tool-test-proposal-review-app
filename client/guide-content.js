@@ -1,12 +1,14 @@
 // Approved role guides ported from the Apps Script interface, with current PIC wording.
 export const roleGuides={
   "Assistant Reviewer": [
+    "Use Set to show All sets, Set A (Proposal IDs beginning A_) or Set B (beginning B_). Clear filters restores all sets. Ranking filters only change visibility; saved ranks remain part of your full reviewer list.",
     "Open Assigned Proposals to see only your assignments.",
     "Read the proposal and existing lab links, then complete the review form. Save as Draft moves your work to Draft Proposals, where Resume Draft lets you continue.",
     "Click Submit to LDC to hand your answers to the LDC. You cannot edit after handoff. An existing LDC draft blocks handoff to protect their work.",
     "Open Submitted to LDC and select View Submitted Review to read your original answers. View Final Review becomes available after the LDC finalises the review."
   ],
   "LDC": [
+    "Use Set to show All sets, Set A (Proposal IDs beginning A_) or Set B (beginning B_). Clear filters restores all sets. Ranking filters only change visibility; saved ranks remain part of your full reviewer list.",
     "In My Rank Dashboard, use Add or View/Edit in the Justification column to enter an explanation for a proposal. Submit blank text to remove it. Justifications are visible in ranking views and review PDFs. Click Save Rankings to save both ranks and justification.",
     "If you have assistant assignments, open My Assistant Reviewers Dashboard to track them. Review Draft opens the assistant’s submitted answers as your draft. Check and edit them before submitting your final review.",
     "In My Workspace, open a card to see your pending assignments, saved drafts or submitted reviews. Click Start Review, Resume Draft or View Review to open a proposal.",
@@ -19,6 +21,7 @@ export const roleGuides={
     "Save your changes before clicking Refresh or leaving the page. For assistance, email support@vlabs.ac.in or manager.iitdelhi@gmail.com."
   ],
   "Admin": [
+    "Use Set on proposal, review and rank dashboards to show All sets, Set A (IDs beginning A_) or Set B (beginning B_). User Dashboard has no Set filter.",
     "Navigate in this order: Review Dashboard, Proposal Dashboard, Rank Dashboard, User Dashboard. Proposal Dashboard lists all proposals with Status, Institute and Domain filters. Pending includes proposals with saved drafts. Select View Proposal to open its document; Clear filters restores all proposals.",
     "User Dashboard contains one read-only Users & roles table. Filter by Domain, Institutes, Roles or Active/Inactive Status; Clear filters restores all users. Domain shows Not applicable for Admins and the configured domain for LDC and Assistant Reviewer users, including PIC/LDC dual-role users. User changes are managed in the Google Sheet.",
     "In Review Dashboard, select Reviewed Proposals or Pending Proposals. Pending includes proposals with saved drafts.",
@@ -30,9 +33,10 @@ export const roleGuides={
     "Select Refresh to load the latest data and Sign out when you finish. For assistance, email support@vlabs.ac.in or manager.iitdelhi@gmail.com."
   ],
   "PIC": [
+    "Use Set to show All sets, Set A (Proposal IDs beginning A_) or Set B (beginning B_). Clear filters restores all sets. Ranking filters only change visibility; saved ranks remain part of your full reviewer list.",
     "Sign in with your registered email address and the latest verification code. If you also have the LDC role, select PIC from Active Role.",
     "PIC Dashboard displays proposals for your configured institute. Select Reviewed Proposals or Pending Proposals to display the relevant list.",
-    "Use Domain and Status to narrow the results. Select Clear filters to restore the full list. Institute and Reviewer filters are not shown.",
+    "Use Domain, Status and Set to narrow the results. Select Clear filters to restore the full list. Institute and Reviewer filters are not shown.",
     "Select View Review to read submitted ratings and comments. Draft answers remain private.",
     "In Rank Dashboard, open Ranked Proposals or Unranked Proposals to view your institute's reviewed proposals. Each reviewer has a separate ranking list. Rank / Reviewer Total shows the saved rank against that person's reviewed proposals in the domain, including any from other institutes.",
     "PIC dashboards are for monitoring. If you also have the LDC role, switch to LDC to review assigned proposals or rank proposals whose final review you submitted. Save your changes before switching roles.",

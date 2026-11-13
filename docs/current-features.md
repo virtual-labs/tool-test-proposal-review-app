@@ -52,3 +52,7 @@ Use exactly Proposals, Users, Completed Reviews and Draft Reviews. A separate Ra
 - Rank is numeric; Rank Justification and Rank Updated At are optional metadata created by ranking writes. Rank Order Mode is optional: changed manual rank saves write Manual. It does not replace Rank or select an automatic-ranking mode.
 
 See [deployment](deployment.md), [verification](verification.md), and [UI alignment](ui-alignment.md). No new environment variables are required for these interface changes.
+
+## Proposal Set filter
+
+All proposal dashboards offer All sets, Set A and Set B. Set A matches Proposal IDs beginning with `A_`; Set B matches `B_`. Other IDs appear only under All sets. The User Dashboard is unchanged. Set combines with existing filters and updates proposal counts and monitoring progress. Clear filters resets it. Downloads select from visible rows. In My Rank Dashboard, switching sets preserves edits; Save Rankings saves edits across sets and Generate Rankings still ranks the reviewer’s full list. No spreadsheet column or configuration change is required.

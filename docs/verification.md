@@ -1,5 +1,11 @@
 # Local verification
 
+## Set filter update — 13 November 2026
+
+Lint, all 26 Node tests, production build and all 13 Edge browser tests passed. Coverage includes exact A_/B_ prefixes, unknown IDs under All sets, composed filters, PIC institute scope, monitoring totals, unchanged User Dashboard and ranking edits saved across hidden sets. Desktop/mobile visual-token and overflow checks passed. Initial sandbox HTTP checks failed and passed with local network access; one outdated help-text assertion was updated for the new Set wording before the final successful run. No live data, deployment or environment settings were changed.
+
+## Previous documentation audit — 4 November 2026
+
 Verified on 4 November 2026 during the documentation audit. These results apply to the local checkout, not the deployed application.
 
 ## Passed

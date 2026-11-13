@@ -1,3 +1,4 @@
+import {matchesSet} from '../shared/proposal-set.js';
 import { createHash, randomUUID } from 'node:crypto';
 import { formatDate } from './time.js';
 import { PortalError } from './errors.js';
@@ -466,7 +467,7 @@ function getAdminProposals(token, filters) {
   const states=new Map(snapshot_(db,user).map(e=>[e.summary.id,e.summary.state]));
   const rows=proposals.rows.map(p=>({id:text_(p['Proposal ID']),name:text_(p['Lab/Proposal Name']),institute:text_(p['Institute Name']),domain:text_(p.Domain),status:states.get(text_(p['Proposal ID']))==='reviewed'?'reviewed':'pending',link:optionalLabLink_(labLinkFromCell_(proposals,p,'Proposal Link'))}));
   const options=values=>Array.from(new Map(values.filter(Boolean).map(v=>[normalized_(v),v])),pair=>({value:pair[0],label:pair[1]})).sort((a,b)=>a.label.localeCompare(b.label));
-  return {filterOptions:{domains:options(rows.map(r=>r.domain)),institutes:options(rows.map(r=>r.institute))},rows:rows.filter(r=>(!status || r.status===status) && (!filters.institute || normalized_(r.institute)===normalized_(filters.institute)) && (!filters.domain || normalized_(r.domain)===normalized_(filters.domain)))};
+  return {filterOptions:{domains:options(rows.map(r=>r.domain)),institutes:options(rows.map(r=>r.institute))},rows:rows.filter(r=>matchesSet(r,filters.set) && (!status || r.status===status) && (!filters.institute || normalized_(r.institute)===normalized_(filters.institute)) && (!filters.domain || normalized_(r.domain)===normalized_(filters.domain)))};
 }
 
 function getAdminUsers(token, filters) {
@@ -514,7 +515,7 @@ function getAdminData(token, filters) {
     status = normalized_(filters.status), reviewer = normalized_(filters.reviewer);
   if (status && !['reviewed','draft','pending'].includes(status)) throw new Error('Invalid proposal status filter.');
   const entries = source.filter(function (e) {
-    return (!domain || normalized_(e.summary.domain) === domain) &&
+    return matchesSet(e.summary,filters.set) && (!domain || normalized_(e.summary.domain) === domain) &&
       (!institute || normalized_(e.summary.institute) === institute) &&
       (!status || e.summary.state === status) &&
       (!reviewer || reviewerNames(e).some(name => normalized_(name) === reviewer));
@@ -537,7 +538,7 @@ function getAdminData(token, filters) {
   });
   let visibleReviewers = reviewers.filter(r => !reviewer || normalized_(r.name) === reviewer);
   if (user.role === 'Admin') {
-    if (domain || institute || status || reviewer) {
+    if (domain || institute || status || reviewer || filters.set) {
       visibleReviewers = visibleReviewers.filter(r => r.assigned > 0 || r.reviewed > 0);
     }
     visibleReviewers.sort((a,b) => a.name.localeCompare(b.name, 'en', {sensitivity:'base'}));
@@ -1079,7 +1080,7 @@ function getAdminRankings(token, filters) {
   const domain=normalized_(filters.domain), institute=normalized_(filters.institute),
     status=normalized_(filters.status), reviewer=normalized_(filters.reviewer);
   if (status && !['reviewed','draft','pending'].includes(status)) throw new Error('Invalid proposal status filter.');
-  const matches = r => (!domain || normalized_(r.domain)===domain) && (!institute || normalized_(r.institute)===institute) &&
+  const matches = r => matchesSet(r,filters.set) && (!domain || normalized_(r.domain)===domain) && (!institute || normalized_(r.institute)===institute) &&
     (!status || r.status===status) && (!reviewer || r.reviewerKey===reviewer);
   const result = validRows.filter(matches), unranked = unrankedRows.filter(matches);
   unranked.sort((a,b)=>a.domain.localeCompare(b.domain)||a.reviewerKey.localeCompare(b.reviewerKey)||a.name.localeCompare(b.name));

@@ -15,7 +15,17 @@ const server=await createPortalServer(handler,{beforeRequest:async(req,res)=>{
   }
   if(url.pathname==='/__test/reset'&&req.method==='POST'){
     coordination.data.clear();coordination.limits.clear();outbox.length=0;
-    const fresh=new MemorySheets();sheets.data=fresh.data;res.end('reset');return true;
+    const fresh=new MemorySheets();sheets.data=fresh.data;
+    if(url.searchParams.get('sets')==='true'){
+      const rows=sheets.data.sheets.find(s=>s.properties.title==='Proposals').data[0].rowData;
+      rows[1].values[0]={effectiveValue:{stringValue:'A_P1'}};
+      rows[2].values[0]={effectiveValue:{stringValue:'B_P2'}};
+      if(url.searchParams.get('own')==='true'){
+        const index=rows[0].values.findIndex(v=>v.effectiveValue.stringValue==='Assigned LDC');
+        rows[2].values[index]={effectiveValue:{stringValue:'Reviewer'}};
+      }
+    }
+    res.end('reset');return true;
   }
   if(url.pathname==='/__test/clear-limits'&&req.method==='POST'){
     for(const key of coordination.data.keys())if(key.startsWith('otp-cooldown:'))coordination.data.delete(key);coordination.limits.clear();res.end('cleared');return true;

@@ -2,6 +2,11 @@
 
 The existing proposal review workflows, rebuilt with **React and Vite** on the frontend and a **Node.js API** for Vercel. Application data stays in Google Sheets. Login uses **email OTP** rather than passwords.
 
+## Documentation
+
+- [User Guide](docs/user-guide.md): sign-in, role-by-role workflows, rankings, downloads and troubleshooting.
+- [Technical Guide](docs/technical-guide.md): architecture, source map, API, data, authentication, development and operations.
+
 ## Architecture
 
 Browser → React interface → same-origin Node.js `/api` → Google Sheets API.
