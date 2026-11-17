@@ -1,5 +1,10 @@
 # Local verification
 
+## LDC proposal selection — 17 November 2026
+
+Final checks passed: lint, 29 Node tests, production build and 15 Edge browser tests. Selection coverage includes Yes/No persistence, author-only writes, stale updates, rejected invalid batches, domain visibility and Set filtering. An initial request-shape mismatch was fixed; a later parallel run encountered a local out-of-memory failure and was rerun successfully in sequence. No live spreadsheet or deployment was changed.
+
+
 ## Summary Dashboard — 13 November 2026
 
 Lint, all 28 Node tests, production build and all 14 browser tests passed. Summary tests cover all four roles, global aggregate-only output, reviewed/pending calculations, incomplete experiment totals, duplicate IDs, disabled users, Set filtering and mobile overflow. No live spreadsheet or deployment changes were made.

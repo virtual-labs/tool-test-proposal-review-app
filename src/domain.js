@@ -287,6 +287,7 @@ function snapshot_(db, user) {
     return { proposal: p, review: review || null, mine: mine || null, claimEmail: claim ? normalized_(claim['Reviewer Email']) : '', claimedByOther: claimedByOther,
       assigned: assigned_(p, user), ownReview: finished && author === user.email,
       summary: { id: id, name: text_(p['Lab/Proposal Name']) || id, domain: text_(p.Domain), downloadable: !!review && (user.role!=='LDC' || author===user.email),
+        selected: normalized_(review?.Selected)==='yes'?'Yes':'No', selectionVersion:text_(review?.['Selection Revision']),
         assignedReviewers: names, state: finished ? 'reviewed' : claim ? 'draft' : 'pending',
         reviewer: finished ? text_(review ? review.Reviewer : p.Reviewer) || 'Not recorded' : '',
         submittedAt: finished ? date.label : '', order: finished ? date.order : 0,
@@ -350,6 +351,7 @@ function getInitialData(token) {
   const closed = personal.filter(e => e.assigned && e.summary.state === 'reviewed' && !e.ownReview).length;
   const domain = board_(entries.filter(e => sameDomain_(e.summary.domain, user)));
   domain.name = user.domain;
+  domain.selected=domain.reviewed.filter(p=>p.selected==='Yes');
   const rankEntries = rankingEntries_(db,user).filter(p => sameDomain_(p.domain,user));
   const summaryById = new Map(domain.reviewed.map(p => [p.id,p]));
   domain.ranked = domainRankings_(rankRows_(db),rankEntries)
@@ -980,6 +982,31 @@ function saveRankJustification(token, data) {
   } finally {lock.releaseLock();}
 }
 
+function saveProposalSelections(token, data) {
+  assertWritable();
+  const db=db_(),user=user_(db,token);
+  if(user.role!=='LDC')throw new Error('Only LDC users can submit proposal selections.');
+  if(!Array.isArray(data?.selections)||!data.selections.length)throw new Error('No selection changes to submit.');
+  data=data.selections;
+  const entries=snapshot_(db,user),table=table_(db,CONFIG.REVIEWS_SHEET,HEADERS.Reviews),seen=new Set();
+  const updates=data.map(item=>{
+    const id=text_(item?.id),entry=entries.find(e=>e.summary.id===id);
+    if(seen.has(id)||!entry?.ownReview||!entry.review)throw new Error('Selection is not available for this proposal. Only your own completed reviews can be changed.');
+    seen.add(id);
+    if(!['Yes','No'].includes(item.selected)||!['Yes','No'].includes(item.expectedSelected))throw new Error('Selected must be Yes or No.');
+    if(item.version!==entry.summary.selectionVersion||item.expectedSelected!==entry.summary.selected)throw new Error('Selections changed in another tab. Refresh before submitting.');
+    return {row:entry.review._row,selected:item.selected};
+  });
+  const column=name=>{
+    let index=table.headers.indexOf(name)+1;
+    if(!index){index=table.sheet.getLastColumn()+1;table.sheet.getRange(1,index).setValue(name);table.headers.push(name);}
+    return index;
+  };
+  const selectedColumn=column('Selected'),versionColumn=column('Selection Revision');
+  for(const item of updates){table.sheet.getRange(item.row,selectedColumn).setValue(item.selected);table.sheet.getRange(item.row,versionColumn).setValue(Utilities.getUuid());}
+  return {success:true};
+}
+
 function saveRankings(token, data) {
   const lock = LockService.getScriptLock(); lock.waitLock(30000);
   try {
@@ -1110,5 +1137,5 @@ function getAdminRankings(token, filters) {
   return { rows:result, unrankedRows:unranked, filterOptions:{domains:options('domain'),institutes:options('institute'),reviewers:Array.from(people.values()).sort((a,b)=>a.label.localeCompare(b.label))} };
 }
 
-return { getSummaryData, getInitialData, getProposal, getReview, downloadReview, getAdminProposals, getAdminUsers, getAdminData, saveDraft, getAssistantReview, submitToLdc, submitReview, getRankingData, saveRankJustification, autoRankProposals, saveRankings, getAdminRankings, currentUser: () => user_(db), headers: HEADERS };
+return { getSummaryData, getInitialData, getProposal, getReview, downloadReview, getAdminProposals, getAdminUsers, getAdminData, saveDraft, getAssistantReview, submitToLdc, submitReview, getRankingData, saveRankJustification, autoRankProposals, saveProposalSelections, saveRankings, getAdminRankings, currentUser: () => user_(db), headers: HEADERS };
 }

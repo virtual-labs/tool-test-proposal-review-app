@@ -1,0 +1,23 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {MemorySheets,MemoryCoordination,settings} from './fixtures.js';
+import {Portal} from '../src/service.js';
+const owner={email:'ldc@example.com',activeRole:'LDC'};
+const answers={proposalId:'P1',draftVersion:'',clarity:5,academicRelevance:5,pedagogicalNeed:5,quality:5,experimentDesign:5,jobRelevance:5,userExperience:5,overallRating:6};
+test('LDC selections persist, reject unauthorized/stale writes, and can be removed',async()=>{
+ const sheets=new MemorySheets(),portal=new Portal(settings,sheets,new MemoryCoordination(),null,async()=>{});
+ const call=(action,data,user=owner)=>portal.execute(action,['cookie',action==='saveProposalSelections'?{selections:data}:data],user);
+ await call('submitReview',answers);
+ const change={id:'P1',selected:'Yes',expectedSelected:'No',version:''};
+ for(const user of [{email:'other@example.com',activeRole:'LDC'},{email:'admin@example.com',activeRole:'Admin'},{...owner,activeRole:'PIC'},{email:'assistant@example.com',activeRole:'Assistant Reviewer'}])await assert.rejects(call('saveProposalSelections',[change],user));
+ await assert.rejects(call('saveProposalSelections',[{...change,selected:'Maybe'}]));
+ await assert.rejects(call('saveProposalSelections',[change,{...change,id:'P2'}]));
+ assert.equal((await call('getInitialData')).domain.selected.length,0);
+ await call('saveProposalSelections',[change]);
+ const data=await call('getInitialData');assert.deepEqual(data.domain.selected.map(p=>p.id),['P1']);
+ assert.equal((await call('getInitialData',undefined,{email:'other@example.com',activeRole:'LDC'})).domain.selected.length,1);
+ await assert.rejects(call('saveProposalSelections',[change]),/changed/);
+ const row=data.personal.reviewed[0];await call('saveProposalSelections',[{id:'P1',selected:'No',expectedSelected:'Yes',version:row.selectionVersion}]);
+ assert.equal((await call('getInitialData')).domain.selected.length,0);
+ const db=await sheets.snapshot('id',['Completed Reviews']);assert.ok(db.getSheetByName('Completed Reviews').getDataRange().getValues()[0].includes('Selected'));
+});
