@@ -548,6 +548,7 @@ function getAdminData(token, filters) {
       (!reviewer || reviewerNames(e).some(name => normalized_(name) === reviewer));
   });
   const all = board_(entries);
+  if(user.role==='Admin')all.selected=all.reviewed.filter(p=>p.selected==='Yes');
   const canonicalDomains = new Map();
   entries.forEach(e => { if (!canonicalDomains.has(normalized_(e.summary.domain))) canonicalDomains.set(normalized_(e.summary.domain), e.summary.domain); });
   const domainNames = Array.from(canonicalDomains.values()).sort();

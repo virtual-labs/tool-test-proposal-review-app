@@ -22,6 +22,7 @@ export const roleGuides={
     "Save your changes before clicking Refresh or leaving the page. For assistance, email support@vlabs.ac.in or manager.iitdelhi@gmail.com."
   ],
   "Admin": [
+    "Review Dashboard includes Reviewed, Pending and Selected Proposals cards. Selected Proposals shows saved Yes choices from LDC reviewers, read-only. Use the compact Set selector at the right of the table toolbar together with Domain, Institute and Reviewer filters. Choose All sets or Clear filters to reset it.",
     "Use Set on proposal, review and rank dashboards to show All sets, Set A (IDs beginning A_) or Set B (beginning B_). User Dashboard has no Set filter.",
     "Navigate in this order: Review Dashboard, Proposal Dashboard, Rank Dashboard, User Dashboard. Proposal Dashboard lists all proposals with Status, Institute and Domain filters. Pending includes proposals with saved drafts. Select View Proposal to open its document; Clear filters restores all proposals.",
     "User Dashboard contains one read-only Users & roles table. Filter by Domain, Institutes, Roles or Active/Inactive Status; Clear filters restores all users. Domain shows Not applicable for Admins and the configured domain for LDC and Assistant Reviewer users, including PIC/LDC dual-role users. User changes are managed in the Google Sheet.",

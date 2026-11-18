@@ -180,3 +180,7 @@ Ranks are independent for each reviewer, domain and set. A_ IDs belong to Set A 
 ## Compact Set filters and selected summaries
 
 My Workspace and Domain Dashboard place the compact Set selector at the right of the table action row, even when there are no download actions. My Rank Dashboard places it beside Generate Rankings. Choose All sets to reset these selectors. Summary Dashboard has synchronized Set selectors at the right of each table heading. My Workspace adds a Selected Proposals card for your own saved Yes choices; Domain Dashboard continues to show domain-wide choices. Both four-card groups share one desktop row and stack on small screens. Summary tables and their Total rows now include Selected Labs and Selected Experiments, based on saved Yes values in Completed Reviews and experiment counts from Proposals. Missing counts for selected labs are flagged as incomplete. No new configuration or spreadsheet columns are required.
+
+## Admin selected proposals
+
+Admin Review Dashboard shows Reviewed Proposals, Pending Proposals and Selected Proposals cards in one desktop row. Selected Proposals contains completed reviews with saved Selected = Yes and is read-only for Admin. The compact Set selector sits at the right of the table action row and combines with Domain, Institute and Reviewer filters; cards and progress totals follow those filters. Choose All sets or Clear filters to reset it. PIC screens and selection editing permissions are unchanged.

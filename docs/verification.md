@@ -1,5 +1,10 @@
 # Local verification
 
+## Admin selected proposals — 18 November 2026
+
+Lint, all 32 Node tests, production build and all 16 browser tests passed. Coverage includes Admin read-only selected proposals, combined filters, compact toolbar placement, inline cards, keeping the selected card active across filter changes, mobile overflow and unchanged PIC selection visibility. No live data or deployment changes were made.
+
+
 ## Compact dashboard filters and selected summary totals — 18 November 2026
 
 Lint, all 32 Node tests, production build and all 15 browser tests passed. Coverage includes saved selected-lab/experiment totals, synchronized summary selectors, Set filtering, My Workspace selected card, four-card desktop alignment, toolbar/header placement, desktop summary column fit and mobile overflow. Workspace and summary screenshots were visually inspected. No live data or deployment was changed.

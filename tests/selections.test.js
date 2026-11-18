@@ -16,6 +16,11 @@ test('LDC selections persist, reject unauthorized/stale writes, and can be remov
  await call('saveProposalSelections',[change]);
  const data=await call('getInitialData');assert.deepEqual(data.domain.selected.map(p=>p.id),['P1']);
  assert.equal((await call('getInitialData',undefined,{email:'other@example.com',activeRole:'LDC'})).domain.selected.length,1);
+ const admin={email:'admin@example.com',activeRole:'Admin'};
+ assert.deepEqual((await call('getAdminData',{},admin)).all.selected.map(p=>p.id),['P1']);
+ assert.equal((await call('getAdminData',{institute:'Other Institute'},admin)).all.selected.length,0);
+ assert.equal((await call('getAdminData',{set:'A'},admin)).all.selected.length,0);
+ assert.equal((await call('getAdminData',{}, {...owner,activeRole:'PIC'})).all.selected,undefined);
  await assert.rejects(call('saveProposalSelections',[change]),/changed/);
  const row=data.personal.reviewed[0];await call('saveProposalSelections',[{id:'P1',selected:'No',expectedSelected:'Yes',version:row.selectionVersion}]);
  assert.equal((await call('getInitialData')).domain.selected.length,0);
