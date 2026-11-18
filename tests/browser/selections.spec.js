@@ -18,9 +18,18 @@ test('LDC submits Yes/No selections and the filtered Domain card reflects saved 
   const total=page.getByRole('table',{name:table}).locator('tfoot');await expect(total.locator('td').nth(4)).toHaveText('1');await expect(total.locator('td').nth(5)).toHaveText('4');
  }
  await page.locator('#domainBtn').click();await page.getByRole('button',{name:/^Selected Proposals/}).click();await expect(page.getByRole('table',{name:'Proposals',exact:true})).toContainText('A_P1');
+ const domainTable=page.getByRole('table',{name:'Proposals',exact:true});
+ await expect(domainTable.getByRole('columnheader',{name:'Submitted on'})).toHaveCount(0);
+ await expect(domainTable.locator('tbody [data-column="Number of Experiments"]')).toHaveText('4');
+ await expect(domainTable.locator('tfoot td')).toHaveText('4');
+ await page.getByRole('button',{name:/^Reviewed Proposals/}).click();
+ await expect(domainTable.locator('tbody [data-column="Selected"]')).toHaveText('Yes');
+ await expect(domainTable.getByRole('combobox',{name:/Selected for/})).toHaveCount(0);
+ await page.getByRole('button',{name:/^Selected Proposals/}).click();
  const domainCards=await page.locator('#domainPage .stat').evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().y));expect(domainCards).toHaveLength(4);expect(new Set(domainCards).size).toBe(1);
  await page.screenshot({path:'test-results/compact-domain.png',fullPage:true});
  await page.getByRole('combobox',{name:'Set',exact:true}).selectOption('B');await expect(page.getByRole('table',{name:'Proposals',exact:true}).locator('tbody tr')).toHaveCount(0);
+ await expect(domainTable.locator('tfoot td')).toHaveText('0');
  await page.locator('#workspaceBtn').click();await page.getByRole('button',{name:/^Reviewed Proposals/}).click();await expect(selected).toHaveValue('Yes');
  await selected.selectOption('No');await page.getByRole('button',{name:'Submit Selections',exact:true}).click();await expect(page.locator('#notice')).toContainText('Proposal selections saved');
  await page.locator('#domainBtn').click();await page.getByRole('button',{name:/^Selected Proposals/}).click();await expect(page.getByRole('table',{name:'Proposals',exact:true}).locator('tbody tr')).toHaveCount(0);

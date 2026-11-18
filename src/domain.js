@@ -286,7 +286,7 @@ function snapshot_(db, user) {
     const date = historyDate_(review ? review['Submission Date/Time'] : p['Review Date']);
     return { proposal: p, review: review || null, mine: mine || null, claimEmail: claim ? normalized_(claim['Reviewer Email']) : '', claimedByOther: claimedByOther,
       assigned: assigned_(p, user), ownReview: finished && author === user.email,
-      summary: { id: id, name: text_(p['Lab/Proposal Name']) || id, domain: text_(p.Domain), downloadable: !!review && (user.role!=='LDC' || author===user.email),
+      summary: { numberOfExperiments:text_(p['No. of Experiments']), id: id, name: text_(p['Lab/Proposal Name']) || id, domain: text_(p.Domain), downloadable: !!review && (user.role!=='LDC' || author===user.email),
         selected: normalized_(review?.Selected)==='yes'?'Yes':'No', selectionVersion:text_(review?.['Selection Revision']),
         assignedReviewers: names, state: finished ? 'reviewed' : claim ? 'draft' : 'pending',
         reviewer: finished ? text_(review ? review.Reviewer : p.Reviewer) || 'Not recorded' : '',

@@ -71,7 +71,7 @@ Each reviewer has an independent ranking list within each domain and set, so dif
 
 ### Monitor the domain and download reviews
 
-**Domain Dashboard** shows Reviewed, Pending, Ranked and Selected proposals across your domain. Pending includes saved drafts. It has no Saved Draft card or Action column; other reviewers' assessment details remain private.
+**Domain Dashboard** shows Reviewed, Pending, Ranked and Selected proposals across your domain. Pending includes saved drafts. Reviewed Proposals displays the saved Selected value (Yes/No), read-only. Selected Proposals displays Number of Experiments instead of Submitted on, with a total for the current Set filter; missing or invalid experiment counts are flagged as incomplete. It has no Saved Draft card or Action column; other reviewers' assessment details remain private.
 
 To download your own completed reviews, select checkboxes in **My Workspace → Reviewed Proposals** or **My Rank Dashboard**, then choose **Download Selected Reviews**.
 

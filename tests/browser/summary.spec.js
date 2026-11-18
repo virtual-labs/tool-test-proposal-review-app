@@ -17,7 +17,7 @@ test('all roles can view both summary tables and filter by set on desktop and mo
   for(const table of [domain,institutes]){
     await expect(table.locator('tfoot th')).toHaveText('Total');
     await expect(table.locator('tfoot td')).toHaveText(['2','4 (incomplete: 1 lab(s) missing a valid count)','0','2','0','0']);
-    await table.getByRole('button',{name:/Number of Labs/}).click();
+    await table.getByRole('button',{name:/^Labs/}).click();
     await expect(table.locator('tfoot tr')).toHaveCount(1);
   }
   await page.getByRole('combobox',{name:'Set',exact:true}).first().selectOption('A');await expect(institutes.locator('tbody tr')).toHaveCount(1);await expect(domain).not.toContainText('incomplete:');

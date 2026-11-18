@@ -4,6 +4,8 @@ The existing proposal review workflows, rebuilt with **React and Vite** on the f
 
 ## Documentation
 
+- [Colour Palette](docs/color-palette.md): shareable UI colours, usage notes and CSS variables.
+
 - [User Guide](docs/user-guide.md): sign-in, role-by-role workflows, rankings, downloads and troubleshooting.
 - [Technical Guide](docs/technical-guide.md): architecture, source map, API, data, authentication, development and operations.
 
