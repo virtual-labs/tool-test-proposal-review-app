@@ -1,5 +1,10 @@
 # Local verification
 
+## Compact dashboard filters and selected summary totals — 18 November 2026
+
+Lint, all 32 Node tests, production build and all 15 browser tests passed. Coverage includes saved selected-lab/experiment totals, synchronized summary selectors, Set filtering, My Workspace selected card, four-card desktop alignment, toolbar/header placement, desktop summary column fit and mobile overflow. Workspace and summary screenshots were visually inspected. No live data or deployment was changed.
+
+
 ## Reviewer/domain/set rankings — 18 November 2026
 
 Lint, all 31 Node tests, production build and all 15 browser tests passed. Tests cover independent Rank 1 across sets and reviewers, per-set limits, later duplicate ranks displayed as unranked, manual saving, automatic generation and filtered edits. One old combined-rank browser assertion was corrected before the successful full rerun. A read-only check using the updated local code and configured Google Sheet confirmed A_BTBE05 and B_BTBE01 both resolve to Rank 1; zero writes were queued. This does not verify the deployed Vercel code.

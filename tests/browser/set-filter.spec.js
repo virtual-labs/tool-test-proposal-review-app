@@ -18,7 +18,7 @@ test('Admin set filters narrow cards, progress and directory; User Dashboard sta
 test('LDC and assistant proposal dashboards expose Set and clear it without changing data',async({page})=>{
  await login(page,'ldc@example.com');
  await page.getByRole('combobox',{name:'Set',exact:true}).selectOption('B');await expect(page.getByRole('table',{name:'Proposals',exact:true}).locator('tbody tr')).toHaveCount(0);
- await page.getByRole('button',{name:'Clear filters',exact:true}).click();await expect(page.getByRole('table',{name:'Proposals',exact:true})).toContainText('A_P1');
+ await page.getByRole('combobox',{name:'Set',exact:true}).selectOption('');await expect(page.getByRole('table',{name:'Proposals',exact:true})).toContainText('A_P1');
  for(const id of ['domainBtn','assistantBtn','rankingBtn']){await page.locator('#'+id).click();await expect(page.getByRole('combobox',{name:'Set',exact:true})).toBeVisible();}
  await page.locator('#logoutBtn').click();await login(page,'assistant@example.com');await page.getByRole('combobox',{name:'Set',exact:true}).selectOption('B');await expect(page.getByRole('table',{name:'Assistant proposals'}).locator('tbody tr')).toHaveCount(0);
 });
@@ -36,7 +36,7 @@ test('ranking edits survive filtering and save both sets without renumbering',as
  await set.selectOption('A');await page.getByRole('combobox',{name:'Rank for Test Lab',exact:true}).selectOption('1');
  await set.selectOption('B');await page.getByRole('combobox',{name:'Rank for Other Lab',exact:true}).selectOption('1');
  await page.locator('#submitRanksBottom').click();await expect(page.getByRole('status').filter({hasText:'Your rankings have been saved.'})).toBeVisible();
- await page.getByRole('button',{name:'Clear filters',exact:true}).click();
+ await page.getByRole('combobox',{name:'Set',exact:true}).selectOption('');
  await expect(page.getByRole('combobox',{name:'Rank for Test Lab',exact:true})).toHaveValue('1');await expect(page.getByRole('combobox',{name:'Rank for Other Lab',exact:true})).toHaveValue('1');
  await page.locator('#refreshBtn').click();await expect(page.getByRole('combobox',{name:'Rank for Test Lab',exact:true})).toHaveValue('1');await expect(page.getByRole('combobox',{name:'Rank for Other Lab',exact:true})).toHaveValue('1');
 });

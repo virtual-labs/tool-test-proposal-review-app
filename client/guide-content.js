@@ -8,7 +8,8 @@ export const roleGuides={
     "Open Submitted to LDC and select View Submitted Review to read your original answers. View Final Review becomes available after the LDC finalises the review."
   ],
   "LDC": [
-    "Use Set to show All sets, Set A (Proposal IDs beginning A_) or Set B (beginning B_). Clear filters restores all sets. Ranking filters only change visibility; saved ranks remain part of your full reviewer list.",
+    "In My Workspace → Reviewed Proposals, choose Yes or No in Selected and click Submit Selections. Saved Yes choices appear in My Workspace → Selected Proposals and the domain-wide Selected Proposals card. Summary Dashboard shows selected lab and experiment totals; its two heading-row Set filters stay synchronized.",
+    "Use Set to show All sets, Set A (Proposal IDs beginning A_) or Set B (beginning B_). Choose All sets to restore all sets. The compact selector is at the right of the workspace/domain table toolbar and beside Generate Rankings. Ranking filters only change visibility; saved ranks remain part of your full reviewer list.",
     "In My Rank Dashboard, use Add or View/Edit in the Justification column to enter an explanation for a proposal. Submit blank text to remove it. Justifications are visible in ranking views and review PDFs. Click Save Rankings to save both ranks and justification.",
     "If you have assistant assignments, open My Assistant Reviewers Dashboard to track them. Review Draft opens the assistant’s submitted answers as your draft. Check and edit them before submitting your final review.",
     "In My Workspace, open a card to see your pending assignments, saved drafts or submitted reviews. Click Start Review, Resume Draft or View Review to open a proposal.",

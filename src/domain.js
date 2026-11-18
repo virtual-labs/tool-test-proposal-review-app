@@ -322,16 +322,19 @@ function getSummaryData(token, filters) {
   const proposals=table_(db,CONFIG.PROPOSALS_SHEET,HEADERS.Proposals).rows.filter(p=>text_(p['Proposal ID']));
   const ids=new Set();
   for(const p of proposals){const id=text_(p['Proposal ID']);if(ids.has(id))throw new Error('Duplicate Proposal ID. Contact the administrator.');ids.add(id);}
-  const reviewed=new Set(table_(db,CONFIG.REVIEWS_SHEET,HEADERS.Reviews).rows.map(r=>text_(r['Proposal ID'])).filter(Boolean));
+  const reviews=table_(db,CONFIG.REVIEWS_SHEET,HEADERS.Reviews).rows;
+  const reviewed=new Set(reviews.map(r=>text_(r['Proposal ID'])).filter(Boolean));
+  const selected=new Set(reviews.filter(r=>normalized_(r.Selected)==='yes').map(r=>text_(r['Proposal ID'])));
   const rows=proposals.filter(p=>matchesSet({id:text_(p['Proposal ID'])},filters?.set));
   const group=column=>{
     const groups=new Map();
     for(const p of rows){
       const label=text_(p[column])||'Not configured',key=normalized_(label);
-      if(!groups.has(key))groups.set(key,{name:label,labs:0,experiments:0,missingExperiments:0,reviewed:0,pending:0});
+      if(!groups.has(key))groups.set(key,{name:label,labs:0,experiments:0,missingExperiments:0,reviewed:0,pending:0,selectedLabs:0,selectedExperiments:0,missingSelectedExperiments:0});
       const row=groups.get(key);row.labs++;
       const raw=text_(p['No. of Experiments']),count=Number(raw);
       if(raw && Number.isSafeInteger(count) && count>=0)row.experiments+=count;else row.missingExperiments++;
+      if(selected.has(text_(p['Proposal ID']))){row.selectedLabs++;if(raw && Number.isSafeInteger(count) && count>=0)row.selectedExperiments+=count;else row.missingSelectedExperiments++;}
       if(reviewed.has(text_(p['Proposal ID']))||normalized_(p.Status)==='reviewed')row.reviewed++;else row.pending++;
     }
     return [...groups.values()].sort((a,b)=>a.name.localeCompare(b.name));
@@ -361,7 +364,7 @@ function getInitialData(token) {
   domain.reviewed.forEach(p=>{p.rank=domainRanks.has(p.id)?domainRanks.get(p.id):null;p.justification=(rankEntries.find(e=>e.id===p.id)||{}).justification || '';});
   return { user: { name: user.name,
       domain: user.domain || 'Domain not configured', institute: user.institute || 'Institute not configured', role: user.role, roles:user.roles, primaryRole:user.primaryRole },
-    personal: {total: personal.length, reviewed: reviewed, draft: drafts, pending: pending, completedByOthers: closed, claimedByOthers: personal.filter(e => e.assigned && e.claimedByOther).length},
+    personal: {total: personal.length, selected:reviewed.filter(p=>p.selected==='Yes'), reviewed: reviewed, draft: drafts, pending: pending, completedByOthers: closed, claimedByOthers: personal.filter(e => e.assigned && e.claimedByOther).length},
     assistantReviews: user.role==='LDC' ? ldcAssistantRows_(db,user) : [],
     domain: domain,
     // Compatibility names also used by local regression tests.
