@@ -30,12 +30,12 @@ test('monitor and directory set filters compose with institute scope and progres
 test('rank monitoring filters both ranked and unranked reviews without renumbering',()=>{
  const tables=fixtureTables();tables.Proposals[1][0]='A_P1';tables.Proposals[2][0]='B_P2';
  const headers=tables['Completed Reviews'][0];
- for(const [id,rank] of [['A_P1',2],['B_P2','']]){
+ for(const [id,rank] of [['A_P1',1],['B_P2','']]){
   const row={'Review ID':'R_'+id,'Proposal ID':id,'Proposal Name':id,Domain:'CSE',Reviewer:'Reviewer','Reviewer Email':'ldc@example.com','Institute Name':'IIT',Rank:rank,'Submission Date/Time':'2026-11-13T08:00:00.000Z'};
   tables['Completed Reviews'].push(headers.map(h=>row[h]??''));
  }
  const admin=createDomain(new SheetSnapshot(payload(tables)),{email:'admin@example.com',activeRole:'Admin'});
  const a=admin.getAdminRankings('cookie',{set:'A'}), b=admin.getAdminRankings('cookie',{set:'B'});
- assert.deepEqual(a.rows.map(r=>r.id),['A_P1']);assert.equal(a.rows[0].rank,2);assert.equal(a.rows[0].reviewerTotal,2);
+ assert.deepEqual(a.rows.map(r=>r.id),['A_P1']);assert.equal(a.rows[0].rank,1);assert.equal(a.rows[0].reviewerTotal,1);
  assert.equal(a.unrankedRows.length,0);assert.equal(b.rows.length,0);assert.deepEqual(b.unrankedRows.map(r=>r.id),['B_P2']);
 });

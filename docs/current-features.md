@@ -26,10 +26,10 @@ PIC/LDC dual-role users switch Active Role. Access checks still run on the serve
 
 ## Rankings
 
-- Rank 1 is highest priority. Each reviewer maintains an independent list of personally reviewed proposals in their domain.
+- Rank 1 is highest priority. Each reviewer maintains an independent ranking list for each domain and set.
 - Current form: eight ratings from 1–6. LDC Overall Score totals the first seven ratings (maximum 42); Admin/PIC Overall Rating displays the eighth rating out of 6.
 - Generation is explicit: Generate Rankings saves score-descending ranks, breaking ties by Proposal ID. Reading a dashboard or submitting a review does not automatically generate ranks.
-- Manual ranks must be unique. Unranked proposals sort first ascending, with Proposal ID ties. Clearing all ranks is supported.
+- Manual ranks must be unique within each reviewer/domain/set. Unranked proposals sort first ascending, with Proposal ID ties. Clearing all ranks is supported.
 - Add / View/Edit opens a justification editor. Submit stages the edit; Save Rankings persists it. Cancel/Escape discards dialog edits. Read-only View popups are used in monitoring/domain tables.
 - LDC ranking totals use a compact summary. Monitor cards show Count / Total Proposals for the filtered reviewed set.
 - PIC Rank Dashboard has a Reviewer Rankings panel containing cards, Domain/Status filters, result explanation and table. Status means proposal status (Reviewed/Pending), not Ranked/Unranked; use the cards for rank state. Since ranking results contain completed reviews, Pending can produce empty results.
@@ -68,3 +68,7 @@ Both Summary Dashboard tables include a Total row at the bottom. Totals follow t
 My Workspace → Reviewed Proposals has a final Selected column with Yes/No choices (default No). Choose values and click Submit Selections to save. Only the author of a completed review can change its selection; historical rows without a completed-review record are not editable. Domain Dashboard → Selected Proposals shows saved Yes choices across the domain and follows the Set filter. Submit No to remove a proposal from that card. Selection does not change review status or rankings. Download checkboxes remain separate. Unsaved choices persist across Set filters and card changes; navigation warns before discarding them. Same-account session recovery can restore them.
 
 The saveProposalSelections write action uses the existing Sheets lock/batch flow and rejects stale or unauthorized edits. On first save it creates optional Selected and Selection Revision columns in Completed Reviews; no manual schema or environment change is required. Selected stores Yes/No, and Selection Revision supports concurrent-edit checks. Blank selections read as No.
+
+## Separate set rankings
+
+Ranks are independent for each reviewer, domain and set. A_ IDs belong to Set A and B_ IDs to Set B; each can start at Rank 1. IDs without either prefix use a separate legacy group. Automatic generation starts at 1 independently in each group. Rank choices and Rank / Reviewer Total use the number of that reviewer’s reviewed proposals in the same domain and set, including other institutes. Set filtering changes visibility, while Save Rankings saves edits in all sets and Generate Rankings generates each group separately. Later duplicate ranks in spreadsheet row order within one group display as unranked; the first eligible valid rank remains ranked. Duplicate choices submitted through the UI are rejected. Reading dashboards never rewrites imported ranks. Existing ranks beyond a group’s proposal count remain unranked until corrected. No data migration or environment change is required.

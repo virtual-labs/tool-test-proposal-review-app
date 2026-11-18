@@ -1,4 +1,4 @@
-import {matchesSet} from '../shared/proposal-set.js';
+import {matchesSet,proposalSet,rankKey,setRankLimit} from '../shared/proposal-set.js';
 import { createHash, randomUUID } from 'node:crypto';
 import { formatDate } from './time.js';
 import { PortalError } from './errors.js';
@@ -882,8 +882,8 @@ function domainRankings_(table, entries) {
 function effectiveRankings_(row, entries) {
   const ids = new Set(entries.map(p=>p.id)), seen = new Set(), ranks = new Set();
   return rankingValues_(row).filter(v => {
-    if (!ids.has(v.id) || v.rank > entries.length || seen.has(v.id) || ranks.has(v.rank)) return false;
-    seen.add(v.id); ranks.add(v.rank); return true;
+    if (!ids.has(v.id) || v.rank > setRankLimit(entries,v.id) || seen.has(v.id) || ranks.has(rankKey(v.id,v.rank))) return false;
+    seen.add(v.id); ranks.add(rankKey(v.id,v.rank)); return true;
   }).map(v => Object.assign({},v,{
     reviewer: text_(v.reviewer || (row && row.Reviewer)),
     reviewerEmail: normalized_(v.reviewerEmail || (row && row['Reviewer Email'])),
@@ -907,7 +907,8 @@ function ldcOverallScore_(review) {
   return scores.every(value=>Number.isInteger(value) && value>=1 && value<=6)?scores.reduce((sum,value)=>sum+value,0):null;
 }
 function ldcAutomaticRanks_(proposals) {
-  return proposals.filter(p=>Number.isInteger(p.overallScore)).slice().sort((a,b)=>b.overallScore-a.overallScore || (a.id<b.id?-1:a.id>b.id?1:0)).map((p,i)=>({id:p.id,rank:i+1}));
+  const counts=new Map();
+  return proposals.filter(p=>Number.isInteger(p.overallScore)).slice().sort((a,b)=>b.overallScore-a.overallScore || (a.id<b.id?-1:a.id>b.id?1:0)).map(p=>{const set=proposalSet(p.id),rank=(counts.get(set)||0)+1;counts.set(set,rank);return {id:p.id,rank};});
 }
 /** Called under the script lock. Only this LDC's current eligible reviews are changed. */
 function synchronizeLdcRanks_(table,user,proposals) {
@@ -1024,14 +1025,14 @@ function saveRankings(token, data) {
     const values = data.rankings.map(function (item) {
       const id = text_(item && item.id), rank = item && item.rank;
       if (!ids.has(id) || seen.has(id)) throw new Error('Invalid or duplicate proposal in ranking. You can rank only proposals you personally reviewed.');
-      if (!Number.isInteger(rank) || rank < 1 || rank > entries.length || ranks.has(rank)) throw new Error('Use each rank from 1 to ' + entries.length + ' without repeating a rank.');
-      seen.add(id); ranks.add(rank); return {id:id,rank:rank};
+      if (!Number.isInteger(rank) || rank < 1 || rank > setRankLimit(entries,id) || ranks.has(rankKey(id,rank))) throw new Error('Use unique ranks within each set, up to the number of your reviewed proposals in that set.');
+      seen.add(id); ranks.add(rankKey(id,rank)); return {id:id,rank:rank};
     }).sort((a,b) => a.rank-b.rank);
     // Merge edited selections into this reviewer's latest list under the script lock.
     // Other reviewers' records are never updated by this operation.
     const baseline = new Map();
     data.baseRankings.forEach(v => {
-      if (!v || !ids.has(v.id) || !Number.isInteger(v.rank) || v.rank < 1 || v.rank > entries.length || baseline.has(v.id)) throw new Error('Invalid ranking baseline. Refresh Rank Dashboard.');
+      if (!v || !ids.has(v.id) || !Number.isInteger(v.rank) || v.rank < 1 || v.rank > setRankLimit(entries,v.id) || baseline.has(v.id)) throw new Error('Invalid ranking baseline. Refresh Rank Dashboard.');
       baseline.set(v.id,v.rank);
     });
     const desired = new Map(values.map(v=>[v.id,v.rank]));
@@ -1043,7 +1044,7 @@ function saveRankings(token, data) {
       else merged.set(id,{id:id,rank:desired.get(id),reviewer:user.name,reviewerEmail:user.email,updatedAt:now.toISOString()});
     });
     const saved = Array.from(merged.values()).sort((a,b)=>a.rank-b.rank);
-    if (new Set(saved.map(v=>v.rank)).size !== saved.length) throw new Error('Two proposals in your ranking list cannot have the same rank. Refresh My Rank Dashboard and choose unique ranks.');
+    if (new Set(saved.map(v=>rankKey(v.id,v.rank))).size !== saved.length) throw new Error('Two proposals in the same set of your ranking list cannot have the same rank. Refresh My Rank Dashboard and choose unique ranks.');
     const byId = new Map(saved.map(v=>[v.id,v.rank]));
     const rankSignature=values=>JSON.stringify(values.map(v=>[v.id,v.rank]).sort((a,b)=>a[0]<b[0]?-1:a[0]>b[0]?1:0));
     const manualRankChange=rankSignature(saved)!==rankSignature(effectiveRankings_(row,entries));
@@ -1107,15 +1108,15 @@ function getAdminRankings(token, filters) {
     const saved=domainRankings_(table,domainEntries), byId=new Map(saved.map(v=>[v.id,v]));
     eligible.forEach(p=>{
       const v=byId.get(p.id);
-      const owned=domainEntries.filter(e=>e.reviewAuthorEmail===p.reviewAuthorEmail);
+      const owned=domainEntries.filter(e=>e.reviewAuthorEmail===p.reviewAuthorEmail && proposalSet(e.id)===proposalSet(p.id));
       const record=ownRanking_(table,{domain:p.domain,email:p.reviewAuthorEmail,name:p.reviewAuthorName},owned);
-      const needsUpdate=rankingValues_(record).length!==effectiveRankings_(record,owned).length;
+      const needsUpdate=rankingValues_(record).filter(v=>proposalSet(v.id)===proposalSet(p.id)).length!==effectiveRankings_(record,owned).length;
       const completed=table.rows.find(r=>text_(r['Proposal ID'])===p.id) || {};
       const rankUpdated=completed['Rank Updated At'];
       const displayDate=rankUpdated || completed['Submission Date/Time'];
       const item=Object.assign({},p,{updatedAtSource:rankUpdated?'rank':displayDate?'submission':'',rank:v?v.rank:null, reviewer:p.reviewAuthorName || (v?v.reviewer:''),reviewerKey:p.reviewAuthorEmail,
         updatedAt:displayDate?historyDate_(displayDate).label:'—',rankedTotal:(domainTotals.get(domain)||new Set()).size,
-        reviewerTotal:owned.length,rankedCount:saved.filter(r=>r.reviewerEmail===p.reviewAuthorEmail).length,needsUpdate:needsUpdate});
+        reviewerTotal:owned.length,rankedCount:saved.filter(r=>r.reviewerEmail===p.reviewAuthorEmail && proposalSet(r.id)===proposalSet(p.id)).length,needsUpdate:needsUpdate});
       (v?validRows:unrankedRows).push(item);
     });
   });

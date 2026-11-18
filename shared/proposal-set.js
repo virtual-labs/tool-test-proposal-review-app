@@ -9,3 +9,8 @@ export function filterBoard(board, set) {
   result.total=new Set(['reviewed','draft','pending'].flatMap(key=>result[key].map(p=>p.id))).size;
   return result;
 }
+
+// IDs without a recognised prefix retain a separate legacy ranking group.
+export function proposalSet(id){return String(id||'').startsWith('A_')?'A':String(id||'').startsWith('B_')?'B':'legacy';}
+export function rankKey(id,rank){return proposalSet(id)+':'+rank;}
+export function setRankLimit(entries,id){return entries.filter(p=>proposalSet(p.id)===proposalSet(id)).length;}

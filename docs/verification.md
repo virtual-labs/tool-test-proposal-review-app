@@ -1,5 +1,10 @@
 # Local verification
 
+## Reviewer/domain/set rankings — 18 November 2026
+
+Lint, all 31 Node tests, production build and all 15 browser tests passed. Tests cover independent Rank 1 across sets and reviewers, per-set limits, later duplicate ranks displayed as unranked, manual saving, automatic generation and filtered edits. One old combined-rank browser assertion was corrected before the successful full rerun. A read-only check using the updated local code and configured Google Sheet confirmed A_BTBE05 and B_BTBE01 both resolve to Rank 1; zero writes were queued. This does not verify the deployed Vercel code.
+
+
 ## LDC proposal selection — 17 November 2026
 
 Final checks passed: lint, 29 Node tests, production build and 15 Edge browser tests. Selection coverage includes Yes/No persistence, author-only writes, stale updates, rejected invalid batches, domain visibility and Set filtering. An initial request-shape mismatch was fixed; a later parallel run encountered a local out-of-memory failure and was rerun successfully in sequence. No live spreadsheet or deployment was changed.

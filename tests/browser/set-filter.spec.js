@@ -33,10 +33,10 @@ test('ranking edits survive filtering and save both sets without renumbering',as
  }
  await page.locator('#rankingBtn').click();
  const set=page.getByRole('combobox',{name:'Set',exact:true});
- await set.selectOption('A');await page.getByRole('combobox',{name:'Rank for Test Lab',exact:true}).selectOption('2');
+ await set.selectOption('A');await page.getByRole('combobox',{name:'Rank for Test Lab',exact:true}).selectOption('1');
  await set.selectOption('B');await page.getByRole('combobox',{name:'Rank for Other Lab',exact:true}).selectOption('1');
  await page.locator('#submitRanksBottom').click();await expect(page.getByRole('status').filter({hasText:'Your rankings have been saved.'})).toBeVisible();
  await page.getByRole('button',{name:'Clear filters',exact:true}).click();
- await expect(page.getByRole('combobox',{name:'Rank for Test Lab',exact:true})).toHaveValue('2');await expect(page.getByRole('combobox',{name:'Rank for Other Lab',exact:true})).toHaveValue('1');
- await page.locator('#refreshBtn').click();await expect(page.getByRole('combobox',{name:'Rank for Test Lab',exact:true})).toHaveValue('2');await expect(page.getByRole('combobox',{name:'Rank for Other Lab',exact:true})).toHaveValue('1');
+ await expect(page.getByRole('combobox',{name:'Rank for Test Lab',exact:true})).toHaveValue('1');await expect(page.getByRole('combobox',{name:'Rank for Other Lab',exact:true})).toHaveValue('1');
+ await page.locator('#refreshBtn').click();await expect(page.getByRole('combobox',{name:'Rank for Test Lab',exact:true})).toHaveValue('1');await expect(page.getByRole('combobox',{name:'Rank for Other Lab',exact:true})).toHaveValue('1');
 });

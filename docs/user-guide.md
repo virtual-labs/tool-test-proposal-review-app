@@ -56,12 +56,12 @@ When assistant assignments exist, open **My Assistant Reviewers Dashboard** to m
 
 1. Open **My Rank Dashboard** and read **Ranking Guidelines**.
 2. Rank only the proposals whose final review you submitted in your domain. New completed reviews remain unranked until ranks are saved or generated.
-3. Enter ranks manually, with **1** as the highest priority. Avoid duplicate ranks in your list.
+3. Enter ranks manually, with **1** as the highest priority. Avoid duplicate ranks within the same set in your list.
 4. Alternatively, select **Generate Rankings**. This replaces and saves ranks using overall score descending, then Proposal ID ascending to break ties. The score totals the first seven criteria, out of 42; the eighth overall rating is separate.
 5. Use **Add** or **View/Edit** in Justification to explain a rank. **Submit** in the dialog stages the text; **Save Rankings** persists both ranks and justifications. Cancel or Escape discards dialog edits. Submit blank justification text and save to remove it.
 6. Save manual changes with **Save Rankings**. You can also clear all ranks using the available removal control.
 
-Each reviewer has an independent ranking list, so different reviewers can use the same rank numbers. You cannot edit another reviewer's rankings. In ascending rank order, unranked entries appear first.
+Each reviewer has an independent ranking list within each domain and set, so different reviewers can use the same rank numbers. You cannot edit another reviewer's rankings. In ascending rank order, unranked entries appear first.
 
 ### Monitor the domain and download reviews
 
@@ -93,7 +93,7 @@ Assistant handoff is not the final review submission. The LDC checks the answers
 
 Open **Rank Dashboard**, then select **Ranked Proposals** or **Unranked Proposals** inside **Reviewer Rankings**. Use Domain/Status filters to narrow results. Status describes proposal review status, not rank state; selecting Pending can produce no results because ranking lists contain completed reviews.
 
-**Rank / Reviewer Total** compares a saved rank with that reviewer's completed proposals in the domain, including proposals from other institutes. It is not a single institute-wide ranking. PIC access is for monitoring; switch to LDC, if assigned, to submit reviews or edit personal ranks.
+**Rank / Reviewer Total** compares a saved rank with that reviewer's completed proposals in the same domain and set, including proposals from other institutes. It is not a single institute-wide ranking. PIC access is for monitoring; switch to LDC, if assigned, to submit reviews or edit personal ranks.
 
 ### Download
 
@@ -158,3 +158,7 @@ Both Summary Dashboard tables include a Total row at the bottom. Totals follow t
 My Workspace → Reviewed Proposals has a final Selected column with Yes/No choices (default No). Choose values and click Submit Selections to save. Only the author of a completed review can change its selection; historical rows without a completed-review record are not editable. Domain Dashboard → Selected Proposals shows saved Yes choices across the domain and follows the Set filter. Submit No to remove a proposal from that card. Selection does not change review status or rankings. Download checkboxes remain separate. Unsaved choices persist across Set filters and card changes; navigation warns before discarding them. Same-account session recovery can restore them.
 
 The saveProposalSelections write action uses the existing Sheets lock/batch flow and rejects stale or unauthorized edits. On first save it creates optional Selected and Selection Revision columns in Completed Reviews; no manual schema or environment change is required. Selected stores Yes/No, and Selection Revision supports concurrent-edit checks. Blank selections read as No.
+
+## Separate set rankings
+
+Ranks are independent for each reviewer, domain and set. A_ IDs belong to Set A and B_ IDs to Set B; each can start at Rank 1. IDs without either prefix use a separate legacy group. Automatic generation starts at 1 independently in each group. Rank choices and Rank / Reviewer Total use the number of that reviewer’s reviewed proposals in the same domain and set, including other institutes. Set filtering changes visibility, while Save Rankings saves edits in all sets and Generate Rankings generates each group separately. Later duplicate ranks in spreadsheet row order within one group display as unranked; the first eligible valid rank remains ranked. Duplicate choices submitted through the UI are rejected. Reading dashboards never rewrites imported ranks. Existing ranks beyond a group’s proposal count remain unranked until corrected. No data migration or environment change is required.
