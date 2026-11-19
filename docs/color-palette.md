@@ -1,8 +1,10 @@
 # Virtual Labs Proposal Review — Colour Palette
 
-Developer reference · Verified against repository CSS on 18 November 2026.
+Previous palette reference · Verified on 18 November 2026.
 
-The interface uses deep teal actions, dark blue-grey text, soft green surfaces and pastel dashboard cards. Source: [client/styles.css](../client/styles.css). This reference describes stylesheet declarations after overrides, not sampled pixels from the deployed site. Logo/image colours and browser-default link colours are excluded.
+The application adopted the supplied developer colours on 20 November 2026. See [the colour comparison and rollback instructions](../backups/README.md) for the changes. The tables below document the previous palette preserved in [the stylesheet backup](../backups/styles.before-colour-update-2026-11-20.css).
+
+The interface uses deep teal actions, dark blue-grey text, soft green surfaces and pastel dashboard cards. Source: [previous stylesheet backup](../backups/styles.before-colour-update-2026-11-20.css). This reference describes stylesheet declarations after overrides, not sampled pixels from the deployed site. Logo/image colours and browser-default link colours are excluded.
 
 ## Core palette
 
