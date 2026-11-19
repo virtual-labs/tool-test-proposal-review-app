@@ -65,7 +65,7 @@ Both Summary Dashboard tables include a Total row at the bottom. Totals follow t
 
 ## LDC proposal selection
 
-My Workspace → Reviewed Proposals has a final Selected column with Yes, No, On Hold and - choices (default -). Choose values and click Submit Selections to save. Only the author of a completed review can change its selection; historical rows without a completed-review record are not editable. Domain Dashboard → Selected Proposals shows saved Yes choices across the domain and follows the Set filter. Submit No, On Hold or - to remove a proposal from that card. Selection does not change review status or rankings. Download checkboxes remain separate. Unsaved choices persist across Set filters and card changes; navigation warns before discarding them. Same-account session recovery can restore them.
+My Workspace → Reviewed Proposals has a Selected column with Yes, No, On Hold and - choices (default -). Choose values and click Submit Selections to save. Only the author of a completed review can change its selection; historical rows without a completed-review record are not editable. Domain Dashboard → Selected Proposals shows saved Yes choices across the domain and follows the Set filter. Submit No, On Hold or - to remove a proposal from that card. Selection does not change review status or rankings. Download checkboxes remain separate. Unsaved choices persist across Set filters and card changes; navigation warns before discarding them. Same-account session recovery can restore them.
 
 The saveProposalSelections write action uses the existing Sheets lock/batch flow and rejects stale or unauthorized edits. On first save it creates optional Selected and Selection Revision columns in Completed Reviews; no manual schema or environment change is required. Selected stores Yes, No, On Hold or -, and Selection Revision supports concurrent-edit checks. Blank selections read as -. Existing saved Yes/No values are preserved.
 
@@ -79,4 +79,13 @@ My Workspace and Domain Dashboard place the compact Set selector at the right of
 
 ## Admin selected proposals
 
-Admin Review Dashboard shows Reviewed Proposals, Pending Proposals and Selected Proposals cards in one desktop row. Selected Proposals contains completed reviews with saved Selected = Yes and is read-only for Admin. The compact Set selector sits at the right of the table action row and combines with Domain, Institute and Reviewer filters; cards and progress totals follow those filters. Choose All sets or Clear filters to reset it. PIC screens and selection editing permissions are unchanged.
+Admin Review Dashboard shows Reviewed Proposals, Pending Proposals and Selected Proposals cards in one desktop row. Selected Proposals contains completed reviews with saved Selected = Yes and is read-only for Admin. The compact Set selector sits at the right of the table action row and combines with Domain, Institute and Reviewer filters; cards and progress totals follow those filters. Choose All sets or Clear filters to reset it. PIC also has an institute-scoped Selected Proposals card; only LDC review authors can edit selections and remarks.
+
+
+### Selection remarks and table columns
+
+LDC users can edit Remarks in My Workspace → Reviewed and Selected Proposals, then click Submit Selections to save Remarks and Selected together. Remarks are optional (up to 10,000 characters). Admin/PIC and Domain Dashboard display them read-only. Pending and Saved Drafts do not have this field.
+
+Selected Proposals columns are S.No., Proposal ID, Proposal Name, Number of Experiment, Action (View Review), Overall Score (out of 42), Rank, Justification, Selected, Remarks, and Submitted on last. Domain Dashboard omits Action. PIC sees only its institute’s selected proposals. Existing View Review permissions remain unchanged. Experiment totals follow the active filters.
+
+The optional Remarks column in Completed Reviews is created on save; no manual sheet setup is needed. Remarks share Selection Revision concurrency protection, including a check against the original Remarks value.

@@ -61,10 +61,11 @@ export function App(){
   async function switchRole(role){if(busy||!canLeave())return;const result=await run('switchRole',[role]);if(result){discard();setSession({...session,activeRole:role});setView(null);setRevision(n=>n+1);}}
   function saved(result,submit){discard();setWork(null);setView(returnView.current);setRevision(n=>n+1);setNotice(submit?(user.role==='Assistant Reviewer'?'Your review was submitted to the LDC.':result.alreadySaved?result.message:'Your final review has been submitted successfully.'+(result.emailSent===false?' Confirmation email could not be sent; do not resubmit.':'')):'Draft saved. You can return later to edit and submit your final review.');}
   function restore(){if(recovery.type==='selections'){setSelectionEdits(recovery.edits);setView('workspace');}else if(recovery.type==='review'){setWork(recovery.work);setView('review');}else{setRankRestore(recovery);setView('ranking');}setDirty(true);setNotice('Unsaved work restored. Check it before saving.');}
-  function changeSelection(row,value){
+  function changeSelection(row,value,field='selected'){
     const next={...selectionEdits};
-    const original=next[row.id]||{id:row.id,version:row.selectionVersion||'',expectedSelected:row.selected||'-'};
-    if(value===original.expectedSelected)delete next[row.id];else next[row.id]={...original,selected:value};
+    const original=next[row.id]||{id:row.id,version:row.selectionVersion||'',expectedSelected:row.selected||'-',expectedRemarks:row.remarks||'',selected:row.selected||'-',remarks:row.remarks||''};
+    const updated={...original,[field]:value};
+    if(updated.selected===original.expectedSelected&&updated.remarks===original.expectedRemarks)delete next[row.id];else next[row.id]=updated;
     setSelectionEdits(next);onDirty(Object.keys(next).length>0,{type:'selections',edits:next});
   }
   async function submitSelections(){

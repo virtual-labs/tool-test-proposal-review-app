@@ -287,7 +287,7 @@ function snapshot_(db, user) {
     return { proposal: p, review: review || null, mine: mine || null, claimEmail: claim ? normalized_(claim['Reviewer Email']) : '', claimedByOther: claimedByOther,
       assigned: assigned_(p, user), ownReview: finished && author === user.email,
       summary: { numberOfExperiments:text_(p['No. of Experiments']), id: id, name: text_(p['Lab/Proposal Name']) || id, domain: text_(p.Domain), downloadable: !!review && (user.role!=='LDC' || author===user.email),
-        selected: ({'yes':'Yes','no':'No','on hold':'On Hold'})[normalized_(review?.Selected)]||'-', selectionVersion:text_(review?.['Selection Revision']),
+        remarks:text_(review?.Remarks), overallScore:ldcOverallScore_(review), selected: ({'yes':'Yes','no':'No','on hold':'On Hold'})[normalized_(review?.Selected)]||'-', selectionVersion:text_(review?.['Selection Revision']),
         assignedReviewers: names, state: finished ? 'reviewed' : claim ? 'draft' : 'pending',
         reviewer: finished ? text_(review ? review.Reviewer : p.Reviewer) || 'Not recorded' : '',
         submittedAt: finished ? date.label : '', order: finished ? date.order : 0,
@@ -548,7 +548,10 @@ function getAdminData(token, filters) {
       (!reviewer || reviewerNames(e).some(name => normalized_(name) === reviewer));
   });
   const all = board_(entries);
-  if(user.role==='Admin')all.selected=all.reviewed.filter(p=>p.selected==='Yes');
+  all.selected=all.reviewed.filter(p=>p.selected==='Yes');
+  const rankEntries=rankingEntries_(db,{...user,role:'Admin'});
+  const ranks=new Map(domainRankings_(rankRows_(db),rankEntries).map(r=>[r.id,r]));
+  entries.forEach(e=>{e.summary.rank=ranks.get(e.summary.id)?.rank??null;e.summary.justification=text_(e.review?.['Rank Justification']);});
   const canonicalDomains = new Map();
   entries.forEach(e => { if (!canonicalDomains.has(normalized_(e.summary.domain))) canonicalDomains.set(normalized_(e.summary.domain), e.summary.domain); });
   const domainNames = Array.from(canonicalDomains.values()).sort();
@@ -1000,15 +1003,17 @@ function saveProposalSelections(token, data) {
     seen.add(id);
     if(!['Yes','No','On Hold','-'].includes(item.selected)||!['Yes','No','On Hold','-'].includes(item.expectedSelected))throw new Error('Selected must be Yes, No, On Hold or -.');
     if(item.version!==entry.summary.selectionVersion||item.expectedSelected!==entry.summary.selected)throw new Error('Selections changed in another tab. Refresh before submitting.');
-    return {row:entry.review._row,selected:item.selected};
+    if(item.remarks!==undefined && (typeof item.remarks!=='string'||item.remarks.length>10000))throw new Error('Remarks must be text of at most 10,000 characters.');
+    if(item.remarks!==undefined && item.expectedRemarks!==entry.summary.remarks)throw new Error('Remarks changed in another tab. Refresh before submitting.');
+    return {row:entry.review._row,selected:item.selected,remarks:item.remarks===undefined?entry.summary.remarks:item.remarks.trim()};
   });
   const column=name=>{
     let index=table.headers.indexOf(name)+1;
     if(!index){index=table.sheet.getLastColumn()+1;table.sheet.getRange(1,index).setValue(name);table.headers.push(name);}
     return index;
   };
-  const selectedColumn=column('Selected'),versionColumn=column('Selection Revision');
-  for(const item of updates){table.sheet.getRange(item.row,selectedColumn).setValue(item.selected);table.sheet.getRange(item.row,versionColumn).setValue(Utilities.getUuid());}
+  const selectedColumn=column('Selected'),versionColumn=column('Selection Revision'),remarksColumn=column('Remarks');
+  for(const item of updates){table.sheet.getRange(item.row,selectedColumn).setValue(item.selected);table.sheet.getRange(item.row,remarksColumn).setValue(sheetValue_(item.remarks));table.sheet.getRange(item.row,versionColumn).setValue(Utilities.getUuid());}
   return {success:true};
 }
 

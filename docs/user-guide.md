@@ -50,7 +50,7 @@ A confirmation email may follow submission. If email delivery fails, the saved r
 
 ### Select reviewed proposals
 
-In **My Workspace → Reviewed Proposals**, choose **Yes**, **No**, **On Hold** or **-** in the final **Selected** column and click **Submit Selections**. The default is **-** (not decided). Only the review author can edit this choice; records without a detailed completed review are not editable. Saved Yes choices appear in **My Workspace → Selected Proposals** and **Domain Dashboard → Selected Proposals**. Submit No, On Hold or - to remove them. Selection does not change review status or rank, and download checkboxes are separate.
+In **My Workspace → Reviewed Proposals**, choose **Yes**, **No**, **On Hold** or **-** in the **Selected** column and click **Submit Selections**. The default is **-** (not decided). Only the review author can edit this choice; records without a detailed completed review are not editable. Saved Yes choices appear in **My Workspace → Selected Proposals** and **Domain Dashboard → Selected Proposals**. Submit No, On Hold or - to remove them. Selection does not change review status or rank, and download checkboxes are separate.
 
 Set changes and card changes preserve unsaved selection edits. Save before leaving the dashboard. My Workspace and Domain Dashboard each have four cards in one desktop row; cards stack on small screens.
 
@@ -71,7 +71,7 @@ Each reviewer has an independent ranking list within each domain and set, so dif
 
 ### Monitor the domain and download reviews
 
-**Domain Dashboard** shows Reviewed, Pending, Ranked and Selected proposals across your domain. Pending includes saved drafts. Reviewed Proposals displays the saved Selected value (Yes, No, On Hold or -), read-only. Selected Proposals displays Number of Experiments instead of Submitted on, with a total for the current Set filter; missing or invalid experiment counts are flagged as incomplete. It has no Saved Draft card or Action column; other reviewers' assessment details remain private.
+**Domain Dashboard** shows Reviewed, Pending, Ranked and Selected proposals across your domain. Pending includes saved drafts. Reviewed Proposals displays the saved Selected value (Yes, No, On Hold or -), read-only. Selected Proposals includes experiment counts and a total for the current Set filter, with Submitted on last; missing or invalid experiment counts are flagged as incomplete. It has no Saved Draft card or Action column; other reviewers' assessment details remain private.
 
 To download your own completed reviews, select checkboxes in **My Workspace → Reviewed Proposals** or **My Rank Dashboard**, then choose **Download Selected Reviews**.
 
@@ -97,7 +97,7 @@ Assistant handoff is not the final review submission. The LDC checks the answers
 3. Filter using **Domain**, **Status** and **Set**. Institute and Reviewer filters are not shown because this dashboard is scoped to your institute.
 4. Select **View Review** to read submitted assessments and reviewer names.
 
-PIC Dashboard and Rank Dashboard have no Selected Proposals card. You can see portal-wide selected counts in Summary Dashboard (section 10).
+PIC Dashboard includes a read-only Selected Proposals card for its institute. Rank Dashboard has no Selected Proposals card. You can see portal-wide selected counts in Summary Dashboard (section 10).
 
 ### Monitor rankings
 
@@ -188,3 +188,12 @@ Each Proposal ID in Proposals counts as one lab. A completed review or Reviewed 
 Filters narrow visible rows and card counts. Downloads use visible selected rows. In My Rank Dashboard, filtering preserves edits; Save Rankings includes edits across sets, and Generate Rankings generates each set independently even when only one set is displayed.
 
 Each reviewer has separate ranks within each domain and set. Set A and Set B can each start at Rank 1; IDs without either prefix form a separate legacy group. Rank choices and Rank / Reviewer Total use that reviewer's reviewed proposals in the same domain/set, including other institutes. Manual duplicate rank choices are rejected. For duplicate spreadsheet entries within a group, the first eligible valid rank remains ranked and later conflicts appear unranked. Ranks above the group's proposal count also appear unranked. Ask the administrator to resolve imported conflicts; viewing a dashboard does not rewrite the sheet.
+
+
+### Selection remarks and table columns
+
+LDC users can edit Remarks in My Workspace → Reviewed and Selected Proposals, then click Submit Selections to save Remarks and Selected together. Remarks are optional (up to 10,000 characters). Admin/PIC and Domain Dashboard display them read-only. Pending and Saved Drafts do not have this field.
+
+Selected Proposals columns are S.No., Proposal ID, Proposal Name, Number of Experiment, Action (View Review), Overall Score (out of 42), Rank, Justification, Selected, Remarks, and Submitted on last. Domain Dashboard omits Action. PIC sees only its institute’s selected proposals. Existing View Review permissions remain unchanged. Experiment totals follow the active filters.
+
+The optional Remarks column in Completed Reviews is created on save; no manual sheet setup is needed. Remarks share Selection Revision concurrency protection, including a check against the original Remarks value.
