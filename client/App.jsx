@@ -63,7 +63,7 @@ export function App(){
   function restore(){if(recovery.type==='selections'){setSelectionEdits(recovery.edits);setView('workspace');}else if(recovery.type==='review'){setWork(recovery.work);setView('review');}else{setRankRestore(recovery);setView('ranking');}setDirty(true);setNotice('Unsaved work restored. Check it before saving.');}
   function changeSelection(row,value){
     const next={...selectionEdits};
-    const original=next[row.id]||{id:row.id,version:row.selectionVersion||'',expectedSelected:row.selected||'No'};
+    const original=next[row.id]||{id:row.id,version:row.selectionVersion||'',expectedSelected:row.selected||'-'};
     if(value===original.expectedSelected)delete next[row.id];else next[row.id]={...original,selected:value};
     setSelectionEdits(next);onDirty(Object.keys(next).length>0,{type:'selections',edits:next});
   }

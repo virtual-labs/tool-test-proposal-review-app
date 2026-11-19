@@ -50,13 +50,13 @@ A confirmation email may follow submission. If email delivery fails, the saved r
 
 ### Select reviewed proposals
 
-In **My Workspace → Reviewed Proposals**, choose **Yes** or **No** in the final **Selected** column and click **Submit Selections**. The default is No. Only the review author can edit this choice; records without a detailed completed review are not editable. Saved Yes choices appear in **My Workspace → Selected Proposals** and **Domain Dashboard → Selected Proposals**. Submit No to remove them. Selection does not change review status or rank, and download checkboxes are separate.
+In **My Workspace → Reviewed Proposals**, choose **Yes**, **No**, **On Hold** or **-** in the final **Selected** column and click **Submit Selections**. The default is **-** (not decided). Only the review author can edit this choice; records without a detailed completed review are not editable. Saved Yes choices appear in **My Workspace → Selected Proposals** and **Domain Dashboard → Selected Proposals**. Submit No, On Hold or - to remove them. Selection does not change review status or rank, and download checkboxes are separate.
 
 Set changes and card changes preserve unsaved selection edits. Save before leaving the dashboard. My Workspace and Domain Dashboard each have four cards in one desktop row; cards stack on small screens.
 
 ### Work with assistant reviewers
 
-When assistant assignments exist, open **My Assistant Reviewers Dashboard** to monitor them. **Review Draft** opens an assistant's handed-off answers as your draft. Review and edit those answers before submitting the final assessment. You remain responsible for the final review.
+When assistant assignments exist, open **My Assistant Reviewers Dashboard** to monitor them. Use the compact Set selector at the right above the table, matching My Workspace; choose **All sets** to reset it. **Review Draft** opens an assistant's handed-off answers as your draft. Review and edit those answers before submitting the final assessment. You remain responsible for the final review.
 
 ### Rank completed reviews
 
@@ -71,7 +71,7 @@ Each reviewer has an independent ranking list within each domain and set, so dif
 
 ### Monitor the domain and download reviews
 
-**Domain Dashboard** shows Reviewed, Pending, Ranked and Selected proposals across your domain. Pending includes saved drafts. Reviewed Proposals displays the saved Selected value (Yes/No), read-only. Selected Proposals displays Number of Experiments instead of Submitted on, with a total for the current Set filter; missing or invalid experiment counts are flagged as incomplete. It has no Saved Draft card or Action column; other reviewers' assessment details remain private.
+**Domain Dashboard** shows Reviewed, Pending, Ranked and Selected proposals across your domain. Pending includes saved drafts. Reviewed Proposals displays the saved Selected value (Yes, No, On Hold or -), read-only. Selected Proposals displays Number of Experiments instead of Submitted on, with a total for the current Set filter; missing or invalid experiment counts are flagged as incomplete. It has no Saved Draft card or Action column; other reviewers' assessment details remain private.
 
 To download your own completed reviews, select checkboxes in **My Workspace → Reviewed Proposals** or **My Rank Dashboard**, then choose **Download Selected Reviews**.
 
@@ -181,7 +181,8 @@ Each Proposal ID in Proposals counts as one lab. A completed review or Reviewed 
 | LDC My Workspace / Domain Dashboard | Right of the proposal-table action row; choose All sets. |
 | LDC My Rank Dashboard | Beside Generate Rankings; choose All sets. |
 | Admin Review Dashboard | Right of the table action row; choose All sets or Clear filters. |
-| Admin Proposal / Rank dashboards, PIC dashboards, assistant lists | In the filter panel; choose All sets or Clear filters. |
+| My Assistant Reviewers Dashboard | Right above the table; choose All sets. |
+| Admin Proposal / Rank dashboards, PIC dashboards, Assistant Reviewer workspace | In the filter panel; choose All sets or Clear filters. |
 | Summary Dashboard | Right of both table headings, synchronized; choose All sets. |
 
 Filters narrow visible rows and card counts. Downloads use visible selected rows. In My Rank Dashboard, filtering preserves edits; Save Rankings includes edits across sets, and Generate Rankings generates each set independently even when only one set is displayed.

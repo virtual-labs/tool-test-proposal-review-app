@@ -7,7 +7,7 @@ test('LDC submits Yes/No selections and the filtered Domain card reflects saved 
  page.once('dialog',d=>d.accept());await page.locator('#submitBtn').click();await expect(page.locator('#notice')).toContainText('submitted successfully');
  await page.getByRole('button',{name:/^Reviewed Proposals/}).click();
  const selected=page.getByRole('combobox',{name:'Selected for A_P1',exact:true});
- await expect(page.getByRole('table',{name:'Proposals',exact:true}).locator('th').last()).toHaveText('Selected');await expect(selected).toHaveValue('No');
+ await expect(page.getByRole('table',{name:'Proposals',exact:true}).locator('th').last()).toHaveText('Selected');await expect(selected).toHaveValue('-');
  const cards=await page.locator('#dashboardPage .stat').evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().y));expect(cards).toHaveLength(4);expect(new Set(cards).size).toBe(1);
  const selectAll=await page.getByRole('button',{name:'Select All',exact:true}).boundingBox(),setBox=await page.getByRole('combobox',{name:'Set',exact:true}).boundingBox();expect(setBox.x).toBeGreaterThan(selectAll.x+selectAll.width);expect(Math.abs(setBox.y-selectAll.y)).toBeLessThan(8);
  await page.screenshot({path:'test-results/compact-workspace.png',fullPage:true});
@@ -31,6 +31,11 @@ test('LDC submits Yes/No selections and the filtered Domain card reflects saved 
  await page.getByRole('combobox',{name:'Set',exact:true}).selectOption('B');await expect(page.getByRole('table',{name:'Proposals',exact:true}).locator('tbody tr')).toHaveCount(0);
  await expect(domainTable.locator('tfoot td')).toHaveText('0');
  await page.locator('#workspaceBtn').click();await page.getByRole('button',{name:/^Reviewed Proposals/}).click();await expect(selected).toHaveValue('Yes');
+ for(const value of ['On Hold','-']){
+  await selected.selectOption(value);await page.getByRole('button',{name:'Submit Selections',exact:true}).click();await expect(page.locator('#notice')).toContainText('Proposal selections saved');
+  await page.locator('#domainBtn').click();await page.getByRole('button',{name:/^Reviewed Proposals/}).click();await expect(domainTable.locator('tbody [data-column="Selected"]')).toHaveText(value);
+  await page.locator('#workspaceBtn').click();await page.getByRole('button',{name:/^Reviewed Proposals/}).click();await expect(selected).toHaveValue(value);
+ }
  await selected.selectOption('No');await page.getByRole('button',{name:'Submit Selections',exact:true}).click();await expect(page.locator('#notice')).toContainText('Proposal selections saved');
  await page.locator('#domainBtn').click();await page.getByRole('button',{name:/^Selected Proposals/}).click();await expect(page.getByRole('table',{name:'Proposals',exact:true}).locator('tbody tr')).toHaveCount(0);
 });
@@ -41,7 +46,7 @@ test('Admin selected card is read-only and its compact Set filter preserves the 
   const call=async(action,data)=>(await fetch('/api',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,args:['cookie',data]})})).json();
   const submitted=await call('submitReview',{proposalId:'A_P1',draftVersion:'',clarity:5,academicRelevance:5,pedagogicalNeed:5,quality:5,experimentDesign:5,jobRelevance:5,userExperience:5,overallRating:5});
   if(!submitted.ok)return submitted;
-  return call('saveProposalSelections',{selections:[{id:'A_P1',selected:'Yes',expectedSelected:'No',version:''}]});
+  return call('saveProposalSelections',{selections:[{id:'A_P1',selected:'Yes',expectedSelected:'-',version:''}]});
  });expect(saved.ok).toBe(true);
  await page.locator('#logoutBtn').click();await login(page,'admin@example.com');
  await page.getByRole('button',{name:/^Selected Proposals/}).click();

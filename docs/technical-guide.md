@@ -169,9 +169,9 @@ Every signed-in role can open Summary Dashboard to see portal-wide aggregate cou
 
 ## LDC proposal selection
 
-My Workspace → Reviewed Proposals has a final Selected column with Yes/No choices (default No). Choose values and click Submit Selections to save. Only the author of a completed review can change its selection; historical rows without a completed-review record are not editable. Domain Dashboard → Selected Proposals shows saved Yes choices across the domain and follows the Set filter. Submit No to remove a proposal from that card. Selection does not change review status or rankings. Download checkboxes remain separate. Unsaved choices persist across Set filters and card changes; navigation warns before discarding them. Same-account session recovery can restore them.
+My Workspace → Reviewed Proposals has a final Selected column with Yes, No, On Hold and - choices (default -). Choose values and click Submit Selections to save. Only the author of a completed review can change its selection; historical rows without a completed-review record are not editable. Domain Dashboard → Selected Proposals shows saved Yes choices across the domain and follows the Set filter. Submit No, On Hold or - to remove a proposal from that card. Selection does not change review status or rankings. Download checkboxes remain separate. Unsaved choices persist across Set filters and card changes; navigation warns before discarding them. Same-account session recovery can restore them.
 
-The saveProposalSelections write action uses the existing Sheets lock/batch flow and rejects stale or unauthorized edits. On first save it creates optional Selected and Selection Revision columns in Completed Reviews; no manual schema or environment change is required. Selected stores Yes/No, and Selection Revision supports concurrent-edit checks. Blank selections read as No.
+The saveProposalSelections write action uses the existing Sheets lock/batch flow and rejects stale or unauthorized edits. On first save it creates optional Selected and Selection Revision columns in Completed Reviews; no manual schema or environment change is required. Selected stores Yes, No, On Hold or -, and Selection Revision supports concurrent-edit checks. Blank selections read as -. Existing saved Yes/No values are preserved.
 
 ## Separate set rankings
 

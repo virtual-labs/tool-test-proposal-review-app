@@ -8,7 +8,7 @@ test('LDC selections persist, reject unauthorized/stale writes, and can be remov
  const sheets=new MemorySheets(),portal=new Portal(settings,sheets,new MemoryCoordination(),null,async()=>{});
  const call=(action,data,user=owner)=>portal.execute(action,['cookie',action==='saveProposalSelections'?{selections:data}:data],user);
  await call('submitReview',answers);
- const change={id:'P1',selected:'Yes',expectedSelected:'No',version:''};
+ const change={id:'P1',selected:'Yes',expectedSelected:'-',version:''};
  for(const user of [{email:'other@example.com',activeRole:'LDC'},{email:'admin@example.com',activeRole:'Admin'},{...owner,activeRole:'PIC'},{email:'assistant@example.com',activeRole:'Assistant Reviewer'}])await assert.rejects(call('saveProposalSelections',[change],user));
  await assert.rejects(call('saveProposalSelections',[{...change,selected:'Maybe'}]));
  await assert.rejects(call('saveProposalSelections',[change,{...change,id:'P2'}]));
@@ -24,5 +24,11 @@ test('LDC selections persist, reject unauthorized/stale writes, and can be remov
  await assert.rejects(call('saveProposalSelections',[change]),/changed/);
  const row=data.personal.reviewed[0];await call('saveProposalSelections',[{id:'P1',selected:'No',expectedSelected:'Yes',version:row.selectionVersion}]);
  assert.equal((await call('getInitialData')).domain.selected.length,0);
+ for(const selected of ['On Hold','-','Yes','On Hold','No']){
+  const before=(await call('getInitialData')).personal.reviewed[0];
+  await call('saveProposalSelections',[{id:'P1',selected,expectedSelected:before.selected,version:before.selectionVersion}]);
+  const after=await call('getInitialData');assert.equal(after.personal.reviewed[0].selected,selected);assert.equal(after.domain.selected.length,selected==='Yes'?1:0);
+  const summary=await call('getSummaryData',{});assert.equal(summary.domains.reduce((n,r)=>n+r.selectedLabs,0),selected==='Yes'?1:0);
+ }
  const db=await sheets.snapshot('id',['Completed Reviews']);assert.ok(db.getSheetByName('Completed Reviews').getDataRange().getValues()[0].includes('Selected'));
 });

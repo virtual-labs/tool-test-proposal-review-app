@@ -287,7 +287,7 @@ function snapshot_(db, user) {
     return { proposal: p, review: review || null, mine: mine || null, claimEmail: claim ? normalized_(claim['Reviewer Email']) : '', claimedByOther: claimedByOther,
       assigned: assigned_(p, user), ownReview: finished && author === user.email,
       summary: { numberOfExperiments:text_(p['No. of Experiments']), id: id, name: text_(p['Lab/Proposal Name']) || id, domain: text_(p.Domain), downloadable: !!review && (user.role!=='LDC' || author===user.email),
-        selected: normalized_(review?.Selected)==='yes'?'Yes':'No', selectionVersion:text_(review?.['Selection Revision']),
+        selected: ({'yes':'Yes','no':'No','on hold':'On Hold'})[normalized_(review?.Selected)]||'-', selectionVersion:text_(review?.['Selection Revision']),
         assignedReviewers: names, state: finished ? 'reviewed' : claim ? 'draft' : 'pending',
         reviewer: finished ? text_(review ? review.Reviewer : p.Reviewer) || 'Not recorded' : '',
         submittedAt: finished ? date.label : '', order: finished ? date.order : 0,
@@ -998,7 +998,7 @@ function saveProposalSelections(token, data) {
     const id=text_(item?.id),entry=entries.find(e=>e.summary.id===id);
     if(seen.has(id)||!entry?.ownReview||!entry.review)throw new Error('Selection is not available for this proposal. Only your own completed reviews can be changed.');
     seen.add(id);
-    if(!['Yes','No'].includes(item.selected)||!['Yes','No'].includes(item.expectedSelected))throw new Error('Selected must be Yes or No.');
+    if(!['Yes','No','On Hold','-'].includes(item.selected)||!['Yes','No','On Hold','-'].includes(item.expectedSelected))throw new Error('Selected must be Yes, No, On Hold or -.');
     if(item.version!==entry.summary.selectionVersion||item.expectedSelected!==entry.summary.selected)throw new Error('Selections changed in another tab. Refresh before submitting.');
     return {row:entry.review._row,selected:item.selected};
   });
