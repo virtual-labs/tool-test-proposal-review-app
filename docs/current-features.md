@@ -86,6 +86,15 @@ Admin Review Dashboard shows Reviewed Proposals, Pending Proposals and Selected 
 
 LDC users can edit Remarks in My Workspace → Reviewed and Selected Proposals, then click Submit Selections to save Remarks and Selected together. Remarks are optional (up to 10,000 characters). Admin/PIC and Domain Dashboard display them read-only. Pending and Saved Drafts do not have this field.
 
-Selected Proposals columns are S.No., Proposal ID, Proposal Name, Number of Experiment, Action (View Review), Overall Score (out of 42), Rank, Justification, Selected, Remarks, and Submitted on last. Domain Dashboard omits Action. PIC sees only its institute’s selected proposals. Existing View Review permissions remain unchanged. Experiment totals follow the active filters.
+Selected Proposals columns are S.No., Proposal ID, Proposal Name, Number of Experiment, Action (View Review), Overall Score (out of 42), Rank, Justification, Selected, Remarks, and Submitted on last. Domain Dashboard omits Action. PIC sees only its institute’s selected proposals and does not see Overall Score. Existing View Review permissions remain unchanged. Experiment totals follow the active filters.
 
 The optional Remarks column in Completed Reviews is created on save; no manual sheet setup is needed. Remarks share Selection Revision concurrency protection, including a check against the original Remarks value.
+
+
+### My Selection Dashboard
+
+LDC, Admin and PIC users can open My Selection Dashboard. It shows only saved Selected = Yes proposals: the LDC’s own reviews, all proposals for Admin, and institute proposals for PIC. Use Set to narrow the list. The columns match Selected Proposals, without Submitted on; PIC also omits Overall Score. LDC can edit Selected and Remarks and save with Submit Selections; Admin/PIC are read-only. View Review retains existing role permissions.
+
+Remarks use Add / View/Edit / View dialogs, separately from Rank Justification. Submit in the dialog stages an edit; Submit Selections saves it. Cancel discards dialog changes. Clear and submit the text to remove Remarks.
+
+Summary headings are Domain (or Institute), Proposals, Experiments, Reviewed, Pending, Selected and Selected Experiments. PIC status options display Reviewed and Pending.

@@ -6,11 +6,11 @@ export function Dialog({title,children,onClose,id,closeLabel='Close',showClose=t
   return <dialog ref={ref} id={id} aria-labelledby={titleId} onCancel={event=>{event.preventDefault();onClose();}}><h2 id={titleId} tabIndex={-1}>{title}</h2>{children}{showClose&&<button className="secondary compact" onClick={onClose}>{closeLabel}</button>}</dialog>;
 }
 
-export function Justification({name,value='',onChange,busy=false}){
+export function Justification({name,value='',onChange,busy=false,label='Rank justification',saveLabel='Save Rankings'}){
   const [open,setOpen]=useState(false);
-  return <>{onChange||value?<button className="view-action" disabled={busy} onClick={()=>setOpen(true)}>{onChange?(value?'View/Edit':'Add'):'View'}</button>:<span>—</span>}{open&&(onChange?<JustificationEditor name={name} value={value} onSave={text=>{onChange(text);setOpen(false);}} onClose={()=>setOpen(false)}/>:<Dialog title={`Rank justification — ${name}`} onClose={()=>setOpen(false)}><p className="review-text">{value}</p></Dialog>)}</>;
+  return <>{onChange||value?<button className="view-action" disabled={busy} onClick={()=>setOpen(true)}>{onChange?(value?'View/Edit':'Add'):'View'}</button>:<span>—</span>}{open&&(onChange?<JustificationEditor label={label} saveLabel={saveLabel} name={name} value={value} onSave={text=>{onChange(text);setOpen(false);}} onClose={()=>setOpen(false)}/>:<Dialog title={`${label} — ${name}`} onClose={()=>setOpen(false)}><p className="review-text">{value}</p></Dialog>)}</>;
 }
-function JustificationEditor({name,value,onSave,onClose}){
+function JustificationEditor({name,value,onSave,onClose,label,saveLabel}){
   const [text,setText]=useState(value),id=useId();
-  return <Dialog title={`Rank justification — ${name}`} onClose={onClose} showClose={false}><form onSubmit={event=>{event.preventDefault();onSave(text.trim());}}><label htmlFor={id}>Justification for {name}</label><textarea id={id} maxLength={10000} value={text} onChange={event=>setText(event.target.value)}/><p>The rank justification is saved when the ranking is saved.</p><p className="muted small">Clear the text and submit to remove it. Then click Save Rankings.</p><div className="actions"><button type="button" className="secondary compact" onClick={onClose}>Cancel</button><button type="submit" className="compact">Submit</button></div></form></Dialog>;
+  return <Dialog title={`${label} — ${name}`} onClose={onClose} showClose={false}><form onSubmit={event=>{event.preventDefault();onSave(text.trim());}}><label htmlFor={id}>{label==='Rank justification'?'Justification':label} for {name}</label><textarea id={id} maxLength={10000} value={text} onChange={event=>setText(event.target.value)}/><p>Changes are saved when you click {saveLabel}.</p><p className="muted small">Clear the text and submit to remove it. Then click {saveLabel}.</p><div className="actions"><button type="button" className="secondary compact" onClick={onClose}>Cancel</button><button type="submit" className="compact">Submit</button></div></form></Dialog>;
 }
