@@ -6,7 +6,8 @@ import { Auth } from '../src/auth.js';
 import { Portal } from '../src/service.js';
 import { createDomain } from '../src/domain.js';
 import { createHandler } from '../src/http.js';
-import { MemorySheets,MemoryCoordination,settings } from './fixtures.js';
+import { SheetSnapshot } from '../src/sheets.js';
+import { fixtureTables,payload,MemorySheets,MemoryCoordination,settings } from './fixtures.js';
 
 const session={email:'ldc@example.com',activeRole:'LDC',expiresAt:Date.now()+7200000};
 async function setup(){
@@ -102,3 +103,14 @@ test('Admin reviewer progress excludes administrators/assistants; PIC pending in
  const pic=await x.portal.execute('getAdminData',['cookie',{status:'pending'}],{...session,activeRole:'PIC'});
  assert.equal(pic.all.total,1);assert.equal(pic.all.pending[0].id,'P1');assert.equal(pic.all.draft.length,0);assert.equal(pic.all.pending[0].answers,undefined);
 });
+
+ test('Admin reviewer progress excludes primary PIC accounts and retains LDC reviewers',()=>{
+ const tables=fixtureTables(),headers=tables.Users[0];
+ tables.Users.push(headers.map(h=>({Email:'pic@example.com',Name:'PIC Only',Status:'Active',Role:'PIC','Institute Name':'IIT',Domain:'CSE'})[h]||''));
+ const db=new SheetSnapshot(payload(tables));
+ const result=createDomain(db,{email:'admin@example.com',activeRole:'Admin'}).getAdminData('cookie',{});
+ assert.ok(result.reviewers.every(r=>!['Admin','Assistant Reviewer','PIC'].includes(r.role)));
+ assert.ok(result.reviewers.some(r=>r.name==='Reviewer'));
+ const pic=createDomain(db,{email:'pic@example.com',activeRole:'PIC'}).getAdminData('cookie',{});
+ assert.ok(pic.reviewers.some(r=>r.name==='PIC Only'));
+ });

@@ -113,7 +113,7 @@ Select completed reviews in either dashboard and choose **Download Selected Revi
 
 ### Review Dashboard
 
-Select Reviewed, Pending or Selected Proposals. Selected Proposals shows saved Yes choices read-only. Filter by **Domain**, **Institute** and **Reviewer**, with the compact **Set** selector at the right of the table toolbar. Domain Progress and Reviewer Progress summarise filtered results. Reviewer Progress excludes Admin and Assistant Reviewer accounts. Pending includes drafts, but their answers remain private. Open **View Review** to inspect completed assessments.
+Select Reviewed, Pending or Selected Proposals. Selected Proposals shows saved Yes choices read-only. Filter by **Domain**, **Institute** and **Reviewer**, with the compact **Set** selector at the right of the table toolbar. Domain Progress and Reviewer Progress summarise filtered results. Reviewer Progress excludes Admin, Assistant Reviewer and PIC accounts (based on the primary Role in Users). Pending includes drafts, but their answers remain private. Open **View Review** to inspect completed assessments.
 
 ### Proposal Dashboard
 
