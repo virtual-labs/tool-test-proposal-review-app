@@ -176,3 +176,6 @@ dialog textarea { min-height:180px; }
 #summaryPage th, #summaryPage td { white-space:normal; overflow-wrap:anywhere; }
 #summaryPage [data-column="S.No."] { width:5%; }
 #summaryPage [data-column="Domain"], #summaryPage [data-column="Institute"] { width:20%; }
+
+/* Keep serial-number headings and values on one line in every table. */
+#appMain [data-column="S.No."] { white-space:nowrap; overflow-wrap:normal; word-break:normal; min-width:4ch; }
