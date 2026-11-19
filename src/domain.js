@@ -451,7 +451,7 @@ function reviewHtmlText_(value) {
 /** Standalone printable HTML; no scripts, external resources or client identity fields. */
 function reviewDocumentHtml_(review) {
   const esc = reviewHtmlText_;
-  const metadata = [['Proposal ID', review.id], ['Domain', review.domain], ['No. of Experiments', review.numberOfExperiments],
+  const metadata = [['Proposal ID', review.id], ['Domain', review.domain], ['Experiments', review.numberOfExperiments],
     ['Reviewed Date', review.submittedAt], ['Review ID', review.reviewId],
     ['Reviewer', (review.assignedReviewers || []).join(', ') || 'Not recorded']];
   if (Object.prototype.hasOwnProperty.call(review, 'rank')) {

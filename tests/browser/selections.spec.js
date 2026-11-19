@@ -7,12 +7,14 @@ test('LDC submits Yes/No selections and the filtered Domain card reflects saved 
  page.once('dialog',d=>d.accept());await page.locator('#submitBtn').click();await expect(page.locator('#notice')).toContainText('submitted successfully');
  await page.getByRole('button',{name:/^Reviewed Proposals/}).click();
  const selected=page.getByRole('combobox',{name:'Selected for A_P1',exact:true});
- await expect(page.getByRole('table',{name:'Proposals',exact:true}).locator('th').last()).toHaveText('Remarks');await expect(selected).toHaveValue('-');
+ await expect(page.getByRole('columnheader',{name:'Selected',exact:true})).toHaveCount(0);await expect(page.getByRole('columnheader',{name:'Remarks',exact:true})).toHaveCount(0);
  const cards=await page.locator('#dashboardPage .stat').evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().y));expect(cards).toHaveLength(4);expect(new Set(cards).size).toBe(1);
  const selectAll=await page.getByRole('button',{name:'Select All',exact:true}).boundingBox(),setBox=await page.getByRole('combobox',{name:'Set',exact:true}).boundingBox();expect(setBox.x).toBeGreaterThan(selectAll.x+selectAll.width);expect(Math.abs(setBox.y-selectAll.y)).toBeLessThan(8);
  await page.screenshot({path:'test-results/compact-workspace.png',fullPage:true});
+ await page.locator('#selectionBtn').click();await expect(selected).toHaveValue('-');
+ const tabs=await page.locator('#appNav button[id$="Btn"]').evaluateAll(nodes=>nodes.map(n=>n.id).filter(id=>id!=='refreshBtn'));expect(tabs.indexOf('selectionBtn')).toBeLessThan(tabs.indexOf('domainBtn'));if(tabs.includes('assistantBtn'))expect(tabs.at(-1)).toBe('assistantBtn');
  await page.locator('tbody [data-column="Remarks"] button').click();await page.getByRole('dialog').getByRole('textbox').fill('Recommended for selection');await page.getByRole('dialog').getByRole('button',{name:'Submit',exact:true}).click();await selected.selectOption('Yes');await page.getByRole('button',{name:'Submit Selections',exact:true}).click();await expect(page.locator('#notice')).toContainText('Proposal selections saved');
- await page.getByRole('button',{name:/^Selected Proposals/}).click();await expect(page.getByRole('table',{name:'Proposals',exact:true})).toContainText('A_P1');
+ await expect(selected).toHaveValue('Yes');
  await page.locator('#summaryBtn').click();
  for(const table of ['Domain-wise Summary','Institute-wise Summary']){
   const total=page.getByRole('table',{name:table}).locator('tfoot');await expect(total.locator('td').nth(4)).toHaveText('1');await expect(total.locator('td').nth(5)).toHaveText('4');
@@ -20,7 +22,7 @@ test('LDC submits Yes/No selections and the filtered Domain card reflects saved 
  await page.locator('#domainBtn').click();await page.getByRole('button',{name:/^Selected Proposals/}).click();await expect(page.getByRole('table',{name:'Proposals',exact:true})).toContainText('A_P1');
  const domainTable=page.getByRole('table',{name:'Proposals',exact:true});
  await expect(domainTable.getByRole('columnheader',{name:'Submitted on'})).toHaveCount(1);
- await expect(domainTable.locator('tbody [data-column="Number of Experiment"]')).toHaveText('4');
+ await expect(domainTable.locator('tbody [data-column="Experiments"]')).toHaveText('4');
  await expect(domainTable.locator('tfoot td').first()).toHaveText('4');
  await page.getByRole('button',{name:/^Reviewed Proposals/}).click();
  await expect(domainTable.locator('tbody [data-column="Selected"]')).toHaveText('Yes');
@@ -32,11 +34,11 @@ test('LDC submits Yes/No selections and the filtered Domain card reflects saved 
  await page.screenshot({path:'test-results/compact-domain.png',fullPage:true});
  await page.getByRole('combobox',{name:'Set',exact:true}).selectOption('B');await expect(page.getByRole('table',{name:'Proposals',exact:true}).locator('tbody tr')).toHaveCount(0);
  await expect(domainTable.locator('tfoot td').first()).toHaveText('0');
- await page.locator('#workspaceBtn').click();await page.getByRole('button',{name:/^Reviewed Proposals/}).click();await expect(selected).toHaveValue('Yes');
+ await page.locator('#selectionBtn').click();await expect(selected).toHaveValue('Yes');
  for(const value of ['On Hold','-']){
   await selected.selectOption(value);await page.getByRole('button',{name:'Submit Selections',exact:true}).click();await expect(page.locator('#notice')).toContainText('Proposal selections saved');
   await page.locator('#domainBtn').click();await page.getByRole('button',{name:/^Reviewed Proposals/}).click();await expect(domainTable.locator('tbody [data-column="Selected"]')).toHaveText(value);
-  await page.locator('#workspaceBtn').click();await page.getByRole('button',{name:/^Reviewed Proposals/}).click();await expect(selected).toHaveValue(value);
+  await page.locator('#selectionBtn').click();await expect(selected).toHaveValue(value);
  }
  await selected.selectOption('No');await page.getByRole('button',{name:'Submit Selections',exact:true}).click();await expect(page.locator('#notice')).toContainText('Proposal selections saved');
  await page.locator('#domainBtn').click();await page.getByRole('button',{name:/^Selected Proposals/}).click();await expect(page.getByRole('table',{name:'Proposals',exact:true}).locator('tbody tr')).toHaveCount(0);
@@ -76,9 +78,9 @@ test('Admin selected card is read-only and its compact Set filter preserves the 
  await page.locator('#selectionBtn').click();await expect(page.locator('#selectionPage')).toContainText('A_P1');await expect(page.getByRole('columnheader',{name:'Submitted on'})).toHaveCount(0);await expect(page.getByRole('columnheader',{name:'Overall Score'})).toHaveCount(1);
  await page.locator('#roleSelector').selectOption('PIC');await page.getByRole('button',{name:/^Selected Proposals/}).click();
  const table=page.getByRole('table',{name:'Proposals',exact:true});
- expect(await table.locator('thead th').evaluateAll(nodes=>nodes.map(n=>n.dataset.column))).toEqual(['S.No.','Proposal ID','Proposal Name','Number of Experiment','Action','Rank','Justification','Selected','Remarks','Submitted on']);
+ expect(await table.locator('thead th').evaluateAll(nodes=>nodes.map(n=>n.dataset.column))).toEqual(['S.No.','Proposal ID','Proposal Name','Experiments','Action','Rank','Justification','Selected','Remarks','Submitted on']);
  await table.locator('tbody [data-column="Remarks"] button').click();await expect(page.getByRole('dialog')).toContainText('Ready');await page.getByRole('dialog').getByRole('button',{name:'Close',exact:true}).click();await expect(table.getByRole('columnheader',{name:'Overall Score'})).toHaveCount(0);
  await expect(table.getByRole('textbox')).toHaveCount(0);await expect(page.getByRole('button',{name:'Submit Selections'})).toHaveCount(0);
- await page.locator('#selectionBtn').click();await expect(page.locator('#selectionPage')).toContainText('A_P1');await expect(table.getByRole('columnheader',{name:'Overall Score'})).toHaveCount(0);await expect(table.getByRole('columnheader',{name:'Submitted on'})).toHaveCount(0);
+ await expect(page.locator('#selectionBtn')).toHaveCount(0);
  await table.getByRole('button',{name:'View Review',exact:true}).click();await expect(page.locator('#viewPage')).toBeVisible();
  });

@@ -17,7 +17,7 @@ export async function reviewPdf({fileName,review:r}) {
   }
   doc.fontSize(10).fillColor('#52717d').text('Virtual Labs - Proposal Review Portal',left,doc.y,{width});
   doc.fillColor(ink).moveDown(0.8);heading('Proposal Review Form',20);doc.moveDown(0.5);heading(r.name,13);
-  for(const [label,value] of [['Proposal ID',r.id],['Domain',r.domain],['No. of Experiments',r.numberOfExperiments],['Reviewed Date',r.submittedAt],['Review ID',r.reviewId],['Reviewer',r.reviewer||(r.assignedReviewers||[]).join(', ')],['Rank',r.rank??'Not ranked'],['Rank Justification',r.justification||'None']])metadata(label,value);
+  for(const [label,value] of [['Proposal ID',r.id],['Domain',r.domain],['Experiments',r.numberOfExperiments],['Reviewed Date',r.submittedAt],['Review ID',r.reviewId],['Reviewer',r.reviewer||(r.assignedReviewers||[]).join(', ')],['Rank',r.rank??'Not ranked'],['Rank Justification',r.justification||'None']])metadata(label,value);
   metadata('Proposal Link',r.link,!!r.link);
   doc.moveDown(0.7);space(85);heading('Submitted Ratings');
   const widths=[width*0.1,width*0.65,width*0.25];

@@ -59,13 +59,13 @@ All proposal dashboards offer All sets, Set A and Set B. Set A matches Proposal 
 
 ## Summary Dashboard
 
-Every signed-in role can open Summary Dashboard to see portal-wide aggregate counts, including across domains and institutes. The Domain-wise Summary and Institute-wise Summary each show Number of Labs, Number of Experiments, Number of Proposals Reviewed and Number of Pending Proposals. Set filters use A_/B_ Proposal ID prefixes. Each unique nonempty Proposal ID in Proposals counts as one lab; duplicate IDs fail validation. A completed review or Reviewed proposal status counts as reviewed; all others, including drafts, count as pending. Completed Reviews records with no corresponding Proposals row are excluded. Experiments sum valid nonnegative whole numbers from the optional No. of Experiments column. Missing/invalid values are flagged as incomplete; missing domain/institute labels appear as Not configured. Only aggregate counts are exposed; access to proposal/review details is unchanged. The read-only getSummaryData API returns domains and institutes arrays and validates the active user.
+Every signed-in role can open Summary Dashboard to see portal-wide aggregate counts, including across domains and institutes. The Domain-wise Summary and Institute-wise Summary each show Number of Labs, Experiments, Number of Proposals Reviewed and Number of Pending Proposals. Set filters use A_/B_ Proposal ID prefixes. Each unique nonempty Proposal ID in Proposals counts as one lab; duplicate IDs fail validation. A completed review or Reviewed proposal status counts as reviewed; all others, including drafts, count as pending. Completed Reviews records with no corresponding Proposals row are excluded. Experiments sum valid nonnegative whole numbers from the optional No. of Experiments column. Missing/invalid values are flagged as incomplete; missing domain/institute labels appear as Not configured. Only aggregate counts are exposed; access to proposal/review details is unchanged. The read-only getSummaryData API returns domains and institutes arrays and validates the active user.
 
 Both Summary Dashboard tables include a Total row at the bottom. Totals follow the selected Set filter and remain at the bottom when sorting. Experiment totals retain any incomplete-count warning.
 
 ## LDC proposal selection
 
-My Workspace → Reviewed Proposals has a Selected column with Yes, No, On Hold and - choices (default -). Choose values and click Submit Selections to save. Only the author of a completed review can change its selection; historical rows without a completed-review record are not editable. Domain Dashboard → Selected Proposals shows saved Yes choices across the domain and follows the Set filter. Submit No, On Hold or - to remove a proposal from that card. Selection does not change review status or rankings. Download checkboxes remain separate. Unsaved choices persist across Set filters and card changes; navigation warns before discarding them. Same-account session recovery can restore them.
+My Selection Dashboard has a Selected column with Yes, No, On Hold and - choices (default -). Choose values and click Submit Selections to save. Only the author of a completed review can change its selection; historical rows without a completed-review record are not editable. Domain Dashboard → Selected Proposals shows saved Yes choices across the domain and follows the Set filter. Submit No, On Hold or - to remove a proposal from that card. Selection does not change review status or rankings. Download checkboxes remain separate. Unsaved choices persist across Set filters and card changes; navigation warns before discarding them. Same-account session recovery can restore them.
 
 The saveProposalSelections write action uses the existing Sheets lock/batch flow and rejects stale or unauthorized edits. On first save it creates optional Selected and Selection Revision columns in Completed Reviews; no manual schema or environment change is required. Selected stores Yes, No, On Hold or -, and Selection Revision supports concurrent-edit checks. Blank selections read as -. Existing saved Yes/No values are preserved.
 
@@ -75,7 +75,7 @@ Ranks are independent for each reviewer, domain and set. A_ IDs belong to Set A 
 
 ## Compact Set filters and selected summaries
 
-My Workspace and Domain Dashboard place the compact Set selector at the right of the table action row, even when there are no download actions. My Rank Dashboard places it beside Generate Rankings. Choose All sets to reset these selectors. Summary Dashboard has synchronized Set selectors at the right of each table heading. My Workspace adds a Selected Proposals card for your own saved Yes choices; Domain Dashboard continues to show domain-wide choices. Both four-card groups share one desktop row and stack on small screens. Summary tables and their Total rows now include Selected Labs and Selected Experiments, based on saved Yes values in Completed Reviews and experiment counts from Proposals. Missing counts for selected labs are flagged as incomplete. No new configuration or spreadsheet columns are required.
+My Workspace and Domain Dashboard place the compact Set selector at the right of the table action row, even when there are no download actions. My Rank Dashboard places it beside Generate Rankings. Choose All sets to reset these selectors. Summary Dashboard has synchronized Set selectors at the right of each table heading. My Workspace adds a Selected Proposals card for your own saved Yes choices; Domain Dashboard continues to show domain-wide choices. Both four-card groups share one desktop row and stack on small screens. Summary tables and their Total rows now include Selected and Selected Exp., based on saved Yes values in Completed Reviews and experiment counts from Proposals. Missing counts for selected labs are flagged as incomplete. No new configuration or spreadsheet columns are required.
 
 ## Admin selected proposals
 
@@ -84,17 +84,17 @@ Admin Review Dashboard shows Reviewed Proposals, Pending Proposals and Selected 
 
 ### Selection remarks and table columns
 
-LDC users can edit Remarks in My Workspace → Reviewed and Selected Proposals, then click Submit Selections to save Remarks and Selected together. Remarks are optional (up to 10,000 characters). Admin/PIC and Domain Dashboard display them read-only. Pending and Saved Drafts do not have this field.
+LDC users can edit Remarks in My Selection Dashboard, then click Submit Selections to save Remarks and Selected together. Remarks are optional (up to 10,000 characters). Admin/PIC and Domain Dashboard display them read-only. Pending and Saved Drafts do not have this field.
 
-Selected Proposals columns are S.No., Proposal ID, Proposal Name, Number of Experiment, Action (View Review), Overall Score (out of 42), Rank, Justification, Selected, Remarks, and Submitted on last. Domain Dashboard omits Action. PIC sees only its institute’s selected proposals and does not see Overall Score. Existing View Review permissions remain unchanged. Experiment totals follow the active filters.
+Selected Proposals columns are S.No., Proposal ID, Proposal Name, Experiments, Action (View Review), Overall Score (out of 42), Rank, Justification, Selected, Remarks, and Submitted on last. Domain Dashboard omits Action. PIC sees only its institute’s selected proposals and does not see Overall Score. Existing View Review permissions remain unchanged. Experiment totals follow the active filters.
 
 The optional Remarks column in Completed Reviews is created on save; no manual sheet setup is needed. Remarks share Selection Revision concurrency protection, including a check against the original Remarks value.
 
 
 ### My Selection Dashboard
 
-LDC, Admin and PIC users can open My Selection Dashboard. It shows only saved Selected = Yes proposals: the LDC’s own reviews, all proposals for Admin, and institute proposals for PIC. Use Set to narrow the list. The columns match Selected Proposals, without Submitted on; PIC also omits Overall Score. LDC can edit Selected and Remarks and save with Submit Selections; Admin/PIC are read-only. View Review retains existing role permissions.
+LDC and Admin users can open My Selection Dashboard. LDC sees all their own reviewed proposals, including -, No, On Hold and Yes, and can edit Selected and Remarks there. Admin sees saved Yes selections across all proposals, read-only. PIC has no My Selection Dashboard. Use Set to narrow the list. The columns match Selected Proposals, without Submitted on; PIC’s Selected Proposals card omits Overall Score. LDC can edit Selected and Remarks and save with Submit Selections; Admin/PIC are read-only. View Review retains existing role permissions.
 
 Remarks use Add / View/Edit / View dialogs, separately from Rank Justification. Submit in the dialog stages an edit; Submit Selections saves it. Cancel discards dialog changes. Clear and submit the text to remove Remarks.
 
-Summary headings are Domain (or Institute), Proposals, Experiments, Reviewed, Pending, Selected and Selected Experiments. PIC status options display Reviewed and Pending.
+Summary headings are Domain (or Institute), Proposals, Experiments, Reviewed, Pending, Selected and Selected Exp. PIC status options display Reviewed and Pending.

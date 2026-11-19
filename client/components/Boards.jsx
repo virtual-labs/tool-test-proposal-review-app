@@ -13,14 +13,14 @@ export function ProposalTable({rows,scope='personal',onOpen,onView,onDownload,bu
     {key:'id',label:'Proposal ID'},{key:'name',label:'Proposal Name'},
     ...(scope!=='personal'?[{key:'reviewer',label:'Reviewer',render:r=>r.reviewer||(r.assignedReviewers||[]).join(', ')||'Not assigned'}]:[]),
     ...(scope==='admin'?[{key:'domain',label:'Domain'},{key:'institute',label:'Institute'}]:[]),
-    ...extra,...(showExperiments?[{key:'numberOfExperiments',label:'Number of Experiments',sort:r=>experimentCount(r)??-1,render:r=>experimentCount(r)??'Not recorded'}]:[]),...(showDate?[{key:'date',label:dateLabel,sort:r=>r.order||r.updatedAt||r.submittedAt,render:r=><DisplayDate value={r.submittedAt||r.updatedAt}/>}]:[]),
+    ...extra,...(showExperiments?[{key:'numberOfExperiments',label:'Experiments',sort:r=>experimentCount(r)??-1,render:r=>experimentCount(r)??'Not recorded'}]:[]),...(showDate?[{key:'date',label:dateLabel,sort:r=>r.order||r.updatedAt||r.submittedAt,render:r=><DisplayDate value={r.submittedAt||r.updatedAt}/>}]:[]),
     ...(scope!=='domain'?[{key:'actions',label:'Action',sortable:false,render:r=><div className="row-actions">{r.state==='reviewed'?scope==='domain'?null:<button disabled={busy} className="view-action" onClick={()=>onView(r.id)}>View Review</button>:scope==='personal'?<button disabled={busy} className="view-action" onClick={()=>onOpen(r.id)}>{r.state==='draft'?'Resume Draft':'Start Review'}</button>:null}</div>}]:[]),...(selectionEditor?[{key:'selected',label:'Selected',sortable:false,render:r=><select aria-label={`Selected for ${r.id}`} value={selectionEditor.edits[r.id]?.selected??r.selected??'-'} disabled={busy||!r.downloadable} onChange={e=>selectionEditor.onChange(r,e.target.value)}><option value="-">-</option><option value="Yes">Yes</option><option value="No">No</option><option value="On Hold">On Hold</option></select>}]:[]),...(showSelected?[{key:'selected',label:'Selected',render:r=>r.selected||'-'}]:[])];
   const remarks={key:'remarks',label:'Remarks',sortable:false,render:r=><Justification label="Remarks" saveLabel="Submit Selections" name={r.name} value={selectionEditor?.edits[r.id]?.remarks??r.remarks??''} busy={busy} onChange={selectionEditor&&r.downloadable?value=>selectionEditor.onChange(r,value,'remarks'):undefined}/>};
   if(selectionEditor)columns.push(remarks);
   if(selectedLayout){
     const selection=columns.find(c=>c.key==='selected')||{key:'selected',label:'Selected',render:r=>r.selected||'-'};
     columns=[{key:'id',label:'Proposal ID'},{key:'name',label:'Proposal Name'},
-      {key:'numberOfExperiments',label:'Number of Experiment',sort:r=>experimentCount(r)??-1,render:r=>experimentCount(r)??'Not recorded'},
+      {key:'numberOfExperiments',label:'Experiments',sort:r=>experimentCount(r)??-1,render:r=>experimentCount(r)??'Not recorded'},
       ...(scope==='domain'?[]:[{key:'actions',label:'Action',sortable:false,render:r=><button className="view-action" disabled={busy} onClick={()=>onView(r.id)}>View Review</button>}]),
       ...(scope==='monitor'?[]:[{key:'overallScore',label:'Overall Score',render:r=>r.overallScore==null?'-':`${r.overallScore}/42`}]),
       {key:'rank',label:'Rank',render:r=>r.rank??'-'},
@@ -67,8 +67,8 @@ export function Directory({kind,revision,onError,busy}){
 
 export function SelectionDashboard({user,revision,onError,selectionEditor,...props}){
  const [set,setSet]=useState('');
- const monitor=['Admin','PIC'].includes(user.role);
+ const monitor=user.role==='Admin';
  const {data,loading}=useResource(monitor?'getAdminData':'getInitialData',monitor?[{}]:[],revision,onError);
- const rows=(monitor?data?.all.selected:data?.personal.selected)||[];
- return <section id="selectionPage"><div className="dashboard-intro"><h2>My Selection Dashboard</h2><p className="muted">Selected proposals{user.role==='PIC'?' from your institute':user.role==='LDC'?' from your reviews':''}.</p></div>{loading?<p role="status">Loading selections…</p>:data&&<section className="card"><ProposalTable rows={rows.filter(r=>matchesSet(r,set))} scope={user.role==='PIC'?'monitor':monitor?'admin':'personal'} selectedLayout hideSubmitted selectionEditor={monitor?undefined:selectionEditor} toolbarFilter={<SetFilter value={set} onChange={setSet} busy={props.busy}/>} {...props}/></section>}</section>;
+ const rows=(monitor?data?.all.selected:data?.personal.reviewed)||[];
+ return <section id="selectionPage"><div className="dashboard-intro"><h2>My Selection Dashboard</h2><p className="muted">{monitor?'Saved Yes selections across all proposals.':'All your reviewed proposals. Update Selected and Remarks, then click Submit Selections.'}</p></div>{loading?<p role="status">Loading selections…</p>:data&&<section className="card"><ProposalTable rows={rows.filter(r=>matchesSet(r,set))} scope={monitor?'admin':'personal'} selectedLayout hideSubmitted selectionEditor={monitor?undefined:selectionEditor} toolbarFilter={<SetFilter value={set} onChange={setSet} busy={props.busy}/>} {...props}/></section>}</section>;
 }
