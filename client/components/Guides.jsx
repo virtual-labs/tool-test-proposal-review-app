@@ -7,16 +7,18 @@ export function Help({onClose}){
     <li><strong>Unable to sign in:</strong> Use the email address registered by your administrator. Your account must be active. Contact support if you are unsure which address to use.</li>
     <li><strong>Verification email not received:</strong> Check your spam or junk folder and confirm the email address. Wait sixty seconds before requesting another code. Contact support if it still does not arrive.</li>
     <li><strong>Invalid or expired code:</strong> Use the latest six-digit code in the tab where you requested it. Codes expire after ten minutes and work only once. Request a new code if needed.</li>
-    <li><strong>Portal invalid response:</strong> If the portal returns an invalid response, save your work if possible and use Refresh. Read any unsaved-changes warning before continuing. On the sign-in screen, wait a moment and try again.</li>
+    <li><strong>Portal invalid response:</strong> If the portal returns an invalid response, save your work if possible and use <em>Refresh</em>. Read any unsaved-changes warning before continuing. On the sign-in screen, wait a moment and try again.</li>
     <li><strong>Session expired:</strong> Sign in again. Unsaved changes can be restored in the same tab when you sign in with the same account. Reloading or closing the tab loses unsaved changes.</li>
     <li><strong>Browser refresh:</strong> Reloading or closing the tab can lose unsaved work. Saved drafts and submitted reviews remain stored. You may need to sign in again if your session has expired.</li>
     <li><strong>Contact support:</strong> Email <a href="mailto:support@vlabs.ac.in">support@vlabs.ac.in</a> or <a href="mailto:manager.iitdelhi@gmail.com">manager.iitdelhi@gmail.com</a> with the error message and action you were performing. Do not share verification codes or session tokens.</li>
   </ol></Dialog>;
 }
+function GuideText({text}){return text.split(/(\*[^*]+\*)/g).map((part,i)=>part.startsWith('*')&&part.endsWith('*')?<em key={i}>{part.slice(1,-1)}</em>:part);}
+
 export function UserGuide({user,onClose}){
-  return <Dialog title={`${user.role==='Admin'?'Administrator':user.role} User Guide`} id="userGuideDialog" onClose={onClose} closeLabel="Close Guide"><ol>{(roleGuides[user.role]||[]).map((text,i)=><li key={i}>{text}</li>)}</ol></Dialog>;
+  return <Dialog title={`${user.role==='Admin'?'Administrator':user.role} User Guide`} id="userGuideDialog" onClose={onClose} closeLabel="Close Guide"><ol>{(roleGuides[user.role]||[]).map((text,i)=><li key={i}><GuideText text={text}/></li>)}</ol></Dialog>;
 }
-const ButtonName=({children})=><span className="guideline-button-name">{children}</span>;
+const ButtonName=({children})=><em className="guideline-button-name">{children}</em>;
 export function RankingGuidelines({onClose}){
   return <Dialog title="Ranking Guidelines" id="rankingGuidelinesDialog" onClose={onClose}><ol className="ranking-instructions">
     <li><strong>Eligible proposals:</strong> You can rank proposals in your domain whose final reviews you submitted. Each LDC has a separate ranking list for each domain and set.</li>
