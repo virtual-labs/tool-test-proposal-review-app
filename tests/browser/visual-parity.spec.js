@@ -2,7 +2,7 @@ import {test,expect} from '@playwright/test';
 import {readFileSync} from 'node:fs';
 const referenceCss=readFileSync(new URL('./fixtures/original-portal.css',import.meta.url),'utf8');
 async function login(page,email){await page.goto('/');await page.locator('#email').fill(email);await page.locator('#sendBtn').click();await expect(page.locator('#otpForm')).toBeVisible();const {code}=await(await page.request.get('/__test/mailbox?email='+encodeURIComponent(email))).json();await page.locator('#otp').fill(code);await page.locator('#verifyBtn').click();await expect(page.locator('#appNav')).toBeVisible();}
-test('original portal layout with developer palette and all role screens at desktop and mobile widths',async({page,request,context})=>{
+test('original portal layout with restored palette and all role screens at desktop and mobile widths',async({page,request,context})=>{
  test.setTimeout(180000);
  await request.post('/__test/reset');
  const reference=await context.newPage();await reference.setContent(`<style>${referenceCss}</style><main><div class="dashboard-intro"><h2>Dashboard</h2></div><button class="secondary compact">Navigation</button><div class="stat red"><strong>1</strong></div></main>`);
@@ -10,7 +10,7 @@ test('original portal layout with developer palette and all role screens at desk
   await page.setViewportSize({width,height:1000});await reference.setViewportSize({width,height:1000});
   await page.bringToFront();await page.goto('/');await expect(page.locator('#loginCard')).toBeVisible();
   await expect(page.locator('body')).toHaveCSS('font-family',await reference.locator('body').evaluate(e=>getComputedStyle(e).fontFamily));
-  await expect(page.locator('body')).toHaveCSS('color','rgb(28, 43, 64)');
+  await expect(page.locator('body')).toHaveCSS('color','rgb(37, 59, 67)');
   await page.screenshot({path:`test-results/ui-login-${width}.png`,fullPage:true});
   for(const [email,role] of [['ldc@example.com','ldc'],['admin@example.com','admin'],['assistant@example.com','assistant']]){
    await request.post('/__test/clear-limits');await login(page,email);

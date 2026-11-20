@@ -1,5 +1,7 @@
 # Colour-only update — 20 November 2026
 
+Status: original palette restored on 20 November 2026 at the user’s request. The comparison below records the reverted experiment.
+
 Original stylesheet: `styles.before-colour-update-2026-11-20.css`. This is a byte-for-byte backup made before applying the developer palette.
 
 Only hexadecimal colour values changed. Fonts, dimensions, spacing, border widths, shadow geometry, responsive rules and the S.No. fix are preserved.
