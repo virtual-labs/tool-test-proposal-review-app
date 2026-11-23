@@ -52,7 +52,7 @@ A confirmation email may follow submission. If email delivery fails, the saved r
 
 In **My Selection Dashboard**, choose **Yes**, **No**, **On Hold** or **-** in the **Selected** column and click **Submit Selections**. The default is **-** (not decided). Only the review author can edit this choice; records without a detailed completed review are not editable. Saved Yes choices appear in **My Workspace → Selected Proposals** and **Domain Dashboard → Selected Proposals**. Submit No, On Hold or - to remove them. Selection does not change review status or rank, and download checkboxes are separate.
 
-Set changes and card changes preserve unsaved selection edits. Save before leaving the dashboard. My Workspace and Domain Dashboard each have four cards in one desktop row; cards stack on small screens.
+Set changes and card changes preserve unsaved selection edits. Save before leaving the dashboard. My Workspace and Domain Dashboard show four and five cards respectively in one desktop row; cards stack on small screens.
 
 ### Work with assistant reviewers
 
@@ -71,7 +71,7 @@ Each reviewer has an independent ranking list within each domain and set, so dif
 
 ### Monitor the domain and download reviews
 
-**Domain Dashboard** shows Reviewed, Pending, Ranked and Selected proposals across your domain. Pending includes saved drafts. Reviewed Proposals displays the saved Selected value (Yes, No, On Hold or -), read-only. Selected Proposals includes experiment counts and a total for the current Set filter, with Submitted on last; missing or invalid experiment counts are flagged as incomplete. It has no Saved Draft card or Action column; other reviewers' assessment details remain private.
+**Domain Dashboard** shows Reviewed, Pending, Ranked, Selected and Shared with Me across your domain. Pending includes saved drafts. Reviewed Proposals displays the saved Selected value (Yes, No, On Hold or -), read-only. Selected Proposals includes experiment counts and a total for the current Set filter, with Submitted on last; missing or invalid experiment counts are flagged as incomplete. It has no Saved Draft card. View Review appears only in Shared with Me; other reviewers' assessment details remain private unless explicitly shared.
 
 To download your own completed reviews, select checkboxes in **My Workspace → Reviewed Proposals** or **My Rank Dashboard**, then choose **Download Selected Reviews**.
 
@@ -209,3 +209,12 @@ Summary headings are Domain (or Institute), Proposals, Experiments, Reviewed Pro
 
 
 LDC dashboard tab order: My Workspace, My Rank Dashboard, My Selection Dashboard, Domain Dashboard, Summary Dashboard, and My Assistant Reviewers Dashboard (when available). My Workspace Reviewed Proposals omits Selected and Remarks; selection and remark editing is available only in My Selection Dashboard. The Selected Proposals card remains read-only. Sheet source headers such as No. of Experiments remain unchanged.
+
+
+### Sharing completed reviews within a domain
+
+LDC authors can open *Domain Dashboard* → *Reviewed Proposals*, check their completed reviews, and click *Share*. This grants all other active LDCs in the same domain read-only access, including PDF downloads, irrespective of institute or Set. Recipients use the *Shared with Me* card in Domain Dashboard, with *View Review* and *Download Selected Reviews*. Set filters narrow the visible list. The author sees the saved state in Sharing and can use *Revoke Sharing* on checked reviews. Mixed selections containing another reviewer’s reviews cannot be shared or revoked.
+
+Recipients cannot change the author’s review, rank, selection, remarks or sharing. Sharing does not add assignments or increase Summary counts. Access is checked on each request against current active accounts, LDC roles, proposal domain, original sharing domain and author identity. Revoke blocks future views/downloads; it cannot recall downloaded PDFs or already viewed content. No notification emails are sent.
+
+Optional Completed Reviews columns are created on first share/revoke: Shared With Domain (Yes/No), Shared Domain, Shared By, Sharing Revision. No manual setup or new environment variables are required. saveReviewSharing uses the existing atomic Sheets batch and lock, validates all rows before mutation, and rejects stale revisions. Existing Admin/PIC access remains scoped as before.

@@ -179,7 +179,7 @@ Ranks are independent for each reviewer, domain and set. A_ IDs belong to Set A 
 
 ## Compact Set filters and selected summaries
 
-My Workspace and Domain Dashboard place the compact Set selector at the right of the table action row, even when there are no download actions. My Rank Dashboard places it beside Generate Rankings. Choose All sets to reset these selectors. Summary Dashboard has synchronized Set selectors at the right of each table heading. My Workspace adds a Selected Proposals card for your own saved Yes choices; Domain Dashboard continues to show domain-wide choices. Both four-card groups share one desktop row and stack on small screens. Summary tables and their Total rows now include Selected and Selected Exp., based on saved Yes values in Completed Reviews and experiment counts from Proposals. Missing counts for selected labs are flagged as incomplete. No new configuration or spreadsheet columns are required.
+My Workspace and Domain Dashboard place the compact Set selector at the right of the table action row, even when there are no download actions. My Rank Dashboard places it beside Generate Rankings. Choose All sets to reset these selectors. Summary Dashboard has synchronized Set selectors at the right of each table heading. My Workspace adds a Selected Proposals card for your own saved Yes choices; Domain Dashboard continues to show domain-wide choices. My Workspace has four cards and Domain Dashboard has five, including Shared with Me; each group shares one desktop row and stacks on small screens. Summary tables and their Total rows now include Selected and Selected Exp., based on saved Yes values in Completed Reviews and experiment counts from Proposals. Missing counts for selected labs are flagged as incomplete. No new configuration or spreadsheet columns are required.
 
 ## Admin selected proposals
 
@@ -202,3 +202,12 @@ LDC and Admin users can open My Selection Dashboard. LDC sees all their own revi
 Remarks use Add / View/Edit / View dialogs, separately from Rank Justification. Submit in the dialog stages an edit; Submit Selections saves it. Cancel discards dialog changes. Clear and submit the text to remove Remarks.
 
 Summary headings are Domain (or Institute), Proposals, Experiments, Reviewed Proposals, Pending Proposals, Selected Proposals and Selected Exp. PIC status options display Reviewed and Pending.
+
+
+### Sharing completed reviews within a domain
+
+LDC authors can open *Domain Dashboard* → *Reviewed Proposals*, check their completed reviews, and click *Share*. This grants all other active LDCs in the same domain read-only access, including PDF downloads, irrespective of institute or Set. Recipients use the *Shared with Me* card in Domain Dashboard, with *View Review* and *Download Selected Reviews*. Set filters narrow the visible list. The author sees the saved state in Sharing and can use *Revoke Sharing* on checked reviews. Mixed selections containing another reviewer’s reviews cannot be shared or revoked.
+
+Recipients cannot change the author’s review, rank, selection, remarks or sharing. Sharing does not add assignments or increase Summary counts. Access is checked on each request against current active accounts, LDC roles, proposal domain, original sharing domain and author identity. Revoke blocks future views/downloads; it cannot recall downloaded PDFs or already viewed content. No notification emails are sent.
+
+Optional Completed Reviews columns are created on first share/revoke: Shared With Domain (Yes/No), Shared Domain, Shared By, Sharing Revision. No manual setup or new environment variables are required. saveReviewSharing uses the existing atomic Sheets batch and lock, validates all rows before mutation, and rejects stale revisions. Existing Admin/PIC access remains scoped as before.

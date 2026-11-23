@@ -251,6 +251,14 @@ function findProposal_(table, id) {
   return matches[0];
 }
 
+function sharedWithLdc_(db,user,proposal,review){
+  if(user.role!=='LDC'||!review||normalized_(review['Shared With Domain'])!=='yes'||!sameDomain_(proposal.Domain,user)||normalized_(review['Shared Domain'])!==normalized_(proposal.Domain))return false;
+  const email=normalized_(review['Reviewer Email']);
+  if(email===user.email||normalized_(review['Shared By'])!==email)return false;
+  const author=reviewer_(db,email);
+  return !!author&&author.roles.includes('LDC')&&sameDomain_(proposal.Domain,author);
+}
+
 /** Read one snapshot; never expose raw draft rows or reviewer roster to reviewers. */
 function snapshot_(db, user) {
   const proposals = table_(db, CONFIG.PROPOSALS_SHEET, HEADERS.Proposals).rows.filter(p => text_(p['Proposal ID']));
@@ -284,10 +292,11 @@ function snapshot_(db, user) {
     const claimedByOther = !!claim && normalized_(claim['Reviewer Email']) !== user.email;
     const author = normalized_(review ? review['Reviewer Email'] : p['Reviewer Email']);
     const date = historyDate_(review ? review['Submission Date/Time'] : p['Review Date']);
+    const sharedWithMe=sharedWithLdc_(db,user,p,review);
     return { proposal: p, review: review || null, mine: mine || null, claimEmail: claim ? normalized_(claim['Reviewer Email']) : '', claimedByOther: claimedByOther,
       assigned: assigned_(p, user), ownReview: finished && author === user.email,
-      summary: { numberOfExperiments:text_(p['No. of Experiments']), id: id, name: text_(p['Lab/Proposal Name']) || id, domain: text_(p.Domain), downloadable: !!review && (user.role!=='LDC' || author===user.email),
-        remarks:text_(review?.Remarks), overallScore:ldcOverallScore_(review), selected: ({'yes':'Yes','no':'No','on hold':'On Hold'})[normalized_(review?.Selected)]||'-', selectionVersion:text_(review?.['Selection Revision']),
+      summary: { numberOfExperiments:text_(p['No. of Experiments']), id: id, name: text_(p['Lab/Proposal Name']) || id, domain: text_(p.Domain), downloadable: !!review && (user.role!=='LDC' || author===user.email || sharedWithMe),
+        sharedWithMe,canShare:user.role==='LDC'&&!!review&&author===user.email&&sameDomain_(p.Domain,user),shared:normalized_(review?.['Shared With Domain'])==='yes',sharingVersion:text_(review?.['Sharing Revision']),remarks:text_(review?.Remarks), overallScore:ldcOverallScore_(review), selected: ({'yes':'Yes','no':'No','on hold':'On Hold'})[normalized_(review?.Selected)]||'-', selectionVersion:text_(review?.['Selection Revision']),
         assignedReviewers: names, state: finished ? 'reviewed' : claim ? 'draft' : 'pending',
         reviewer: finished ? text_(review ? review.Reviewer : p.Reviewer) || 'Not recorded' : '',
         submittedAt: finished ? date.label : '', order: finished ? date.order : 0,
@@ -353,6 +362,7 @@ function getInitialData(token) {
   const pending = personal.filter(e => e.assigned && e.summary.state !== 'reviewed' && !e.mine && !e.claimedByOther).map(e => e.summary);
   const closed = personal.filter(e => e.assigned && e.summary.state === 'reviewed' && !e.ownReview).length;
   const domain = board_(entries.filter(e => sameDomain_(e.summary.domain, user)));
+  domain.shared=domain.reviewed.filter(p=>p.sharedWithMe);
   domain.name = user.domain;
   domain.selected=domain.reviewed.filter(p=>p.selected==='Yes');
   const rankEntries = rankingEntries_(db,user).filter(p => sameDomain_(p.domain,user));
@@ -373,12 +383,12 @@ function getInitialData(token) {
     domains: Array.from(new Set(pending.map(p => p.domain))).sort() };
 }
 
-/** LDC users read only their own final reviews; monitor roles retain their scoped access. */
+/** Final authors and explicitly shared same-domain LDC recipients may read reviews. */
 function getReview(token, proposalId) {
   const db = db_(), user = user_(db, token), id = text_(proposalId);
   const entry = snapshot_(db, user).find(e => e.summary.id === id);
   if (!entry || entry.summary.state !== 'reviewed' ||
-      !(user.role==='Assistant Reviewer' ? assistantAssigned_(entry.proposal,user) : ['Admin','PIC'].includes(user.role) || entry.ownReview)) {
+      !(user.role==='Assistant Reviewer' ? assistantAssigned_(entry.proposal,user) : ['Admin','PIC'].includes(user.role) || entry.ownReview || entry.summary.sharedWithMe)) {
     throw new Error('This submitted review is not available to your account.');
   }
   const proposalTable = table_(db, CONFIG.PROPOSALS_SHEET, HEADERS.Proposals);
@@ -990,6 +1000,24 @@ function saveRankJustification(token, data) {
   } finally {lock.releaseLock();}
 }
 
+function saveReviewSharing(token,data){
+  assertWritable();const db=db_(),user=user_(db,token);
+  if(user.role!=='LDC')throw new Error('Only LDC review authors may change sharing.');
+  if(typeof data?.shared!=='boolean'||!Array.isArray(data.proposals)||!data.proposals.length||data.proposals.length>200)throw new Error('Select between 1 and 200 completed reviews.');
+  const entries=snapshot_(db,user),table=table_(db,CONFIG.REVIEWS_SHEET,HEADERS.Reviews),seen=new Set();
+  const updates=data.proposals.map(item=>{
+    const id=text_(item?.id),entry=entries.find(e=>e.summary.id===id);
+    if(seen.has(id)||!entry?.summary.canShare)throw new Error('Only your own completed reviews in your domain can be shared or revoked.');
+    seen.add(id);
+    if(typeof item.expectedShared!=='boolean'||item.version!==entry.summary.sharingVersion||item.expectedShared!==entry.summary.shared)throw new Error('Sharing changed in another tab. Refresh before trying again.');
+    return entry;
+  });
+  const column=name=>{let c=table.headers.indexOf(name)+1;if(!c){c=table.sheet.getLastColumn()+1;table.sheet.getRange(1,c).setValue(name);table.headers.push(name);}return c;};
+  const cols=['Shared With Domain','Shared Domain','Shared By','Sharing Revision'].map(column);
+  for(const entry of updates){const values=[data.shared?'Yes':'No',normalized_(user.domain),user.email,Utilities.getUuid()];cols.forEach((c,i)=>table.sheet.getRange(entry.review._row,c).setValue(values[i]));}
+  return {success:true,shared:data.shared,count:updates.length};
+}
+
 function saveProposalSelections(token, data) {
   assertWritable();
   const db=db_(),user=user_(db,token);
@@ -1147,5 +1175,5 @@ function getAdminRankings(token, filters) {
   return { rows:result, unrankedRows:unranked, filterOptions:{domains:options('domain'),institutes:options('institute'),reviewers:Array.from(people.values()).sort((a,b)=>a.label.localeCompare(b.label))} };
 }
 
-return { getSummaryData, getInitialData, getProposal, getReview, downloadReview, getAdminProposals, getAdminUsers, getAdminData, saveDraft, getAssistantReview, submitToLdc, submitReview, getRankingData, saveRankJustification, autoRankProposals, saveProposalSelections, saveRankings, getAdminRankings, currentUser: () => user_(db), headers: HEADERS };
+return { saveReviewSharing, getSummaryData, getInitialData, getProposal, getReview, downloadReview, getAdminProposals, getAdminUsers, getAdminData, saveDraft, getAssistantReview, submitToLdc, submitReview, getRankingData, saveRankJustification, autoRankProposals, saveProposalSelections, saveRankings, getAdminRankings, currentUser: () => user_(db), headers: HEADERS };
 }

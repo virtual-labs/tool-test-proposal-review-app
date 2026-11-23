@@ -30,7 +30,7 @@ test('LDC submits Yes/No selections and the filtered Domain card reflects saved 
  await page.getByRole('button',{name:/^Selected Proposals/}).click();
  await domainTable.locator('tbody [data-column="Remarks"] button').click();await expect(page.getByRole('dialog')).toContainText('Recommended for selection');await page.getByRole('dialog').getByRole('button',{name:'Close',exact:true}).click();
  await expect(domainTable.getByRole('button',{name:'View Review',exact:true})).toHaveCount(0);
- const domainCards=await page.locator('#domainPage .stat').evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().y));expect(domainCards).toHaveLength(4);expect(new Set(domainCards).size).toBe(1);
+ const domainCards=await page.locator('#domainPage .stat').evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().y));expect(domainCards).toHaveLength(5);expect(new Set(domainCards).size).toBe(1);
  await page.screenshot({path:'test-results/compact-domain.png',fullPage:true});
  await page.getByRole('combobox',{name:'Set',exact:true}).selectOption('B');await expect(page.getByRole('table',{name:'Proposals',exact:true}).locator('tbody tr')).toHaveCount(0);
  await expect(domainTable.locator('tfoot td').first()).toHaveText('0');

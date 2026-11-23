@@ -5,7 +5,7 @@ export function matchesSet(proposal, set) {
 export function filterBoard(board, set) {
   if (!set) return board;
   const result={...board};
-  for (const key of ['reviewed','draft','pending','ranked','selected']) result[key]=(board[key]||[]).filter(p=>matchesSet(p,set));
+  for (const key of ['reviewed','draft','pending','ranked','selected','shared']) result[key]=(board[key]||[]).filter(p=>matchesSet(p,set));
   result.total=new Set(['reviewed','draft','pending'].flatMap(key=>result[key].map(p=>p.id))).size;
   return result;
 }
