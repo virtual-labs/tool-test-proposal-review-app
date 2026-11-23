@@ -558,7 +558,7 @@ function getAdminData(token, filters) {
   const domains = domainNames.map(name => Object.assign({name: name || 'Domain not configured'},
     board_(entries.filter(e => normalized_(e.summary.domain) === normalized_(name)))));
   const roster = table_(db, CONFIG.REVIEWERS_SHEET, HEADERS.Reviewers).rows;
-  const reviewers = roster.filter(r=>(user.role!=='Admin'||!['Admin','Assistant Reviewer','PIC'].includes(role_(r.Role))) && (user.role!=='PIC'||sameInstitute_(r['Institute Name'],user))).map(r => {
+  const reviewers = roster.filter(r=>!['Admin','Assistant Reviewer','PIC'].includes(role_(r.Role)) && (user.role!=='PIC'||sameInstitute_(r['Institute Name'],user))).map(r => {
     const who = {email: normalized_(r.Email), name: text_(r.Name), assignmentNameUnique: roster.filter(other => normalized_(other.Name) === normalized_(r.Name)).length === 1};
     const assigned = entries.filter(e => assigned_(e.proposal, who));
     const reviewed = entries.filter(e => e.summary.state === 'reviewed' &&

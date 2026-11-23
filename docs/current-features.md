@@ -18,7 +18,7 @@ PIC/LDC dual-role users switch Active Role. Access checks still run on the serve
 - Sign-in tagline: “A shared workspace for lab proposal reviews”. Email OTP, separate Help and role-specific User Guide dialogs.
 - Original portal Arial typography, colours, compact controls and dashboard heading styles; My Assistant Reviewers Dashboard also uses the shared 30px heading.
 - Personal LDC workspace retains Saved Draft Proposals. Domain Dashboard has Reviewed, Pending and Ranked cards; no Saved Draft card or Action column. Domain pending includes saved drafts.
-- Admin/PIC pending also includes saved drafts without exposing private draft answers. Admin Reviewer Progress excludes Admin, Assistant Reviewer and PIC accounts (based on the primary Role in Users); Submitted is the last column. PIC progress is institute scoped and does not use that Admin-only exclusion.
+- Admin/PIC pending also includes saved drafts without exposing private draft answers. Admin Reviewer Progress excludes Admin, Assistant Reviewer and PIC accounts (based on the primary Role in Users); Submitted is the last column. PIC Reviewer Progress applies the same primary-role exclusions and remains institute scoped.
 - Pending tables have no date column. Saved Draft Proposals uses Updated on; other proposal tables use Submitted on. Rank monitoring uses Last Updated.
 - Recognized timestamps display as date-only text, with the full formatted timestamp on hover. Formatting is IST, at minute precision; unknown legacy strings remain unchanged. PDF timestamps remain visible because PDFs have no hover UI.
 - S.No. is shown in proposal boards, ranking tables, Admin directories and View Review's ratings table. It follows selection checkboxes where present and follows displayed row order. Assistant list/progress tables do not all have S.No.
@@ -97,4 +97,4 @@ LDC and Admin users can open My Selection Dashboard. LDC sees all their own revi
 
 Remarks use Add / View/Edit / View dialogs, separately from Rank Justification. Submit in the dialog stages an edit; Submit Selections saves it. Cancel discards dialog changes. Clear and submit the text to remove Remarks.
 
-Summary headings are Domain (or Institute), Proposals, Experiments, Reviewed, Pending, Selected and Selected Exp. PIC status options display Reviewed and Pending.
+Summary headings are Domain (or Institute), Proposals, Experiments, Reviewed Proposals, Pending Proposals, Selected Proposals and Selected Exp. PIC status options display Reviewed and Pending.

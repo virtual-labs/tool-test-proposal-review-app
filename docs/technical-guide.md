@@ -201,4 +201,4 @@ LDC and Admin users can open My Selection Dashboard. LDC sees all their own revi
 
 Remarks use Add / View/Edit / View dialogs, separately from Rank Justification. Submit in the dialog stages an edit; Submit Selections saves it. Cancel discards dialog changes. Clear and submit the text to remove Remarks.
 
-Summary headings are Domain (or Institute), Proposals, Experiments, Reviewed, Pending, Selected and Selected Exp. PIC status options display Reviewed and Pending.
+Summary headings are Domain (or Institute), Proposals, Experiments, Reviewed Proposals, Pending Proposals, Selected Proposals and Selected Exp. PIC status options display Reviewed and Pending.

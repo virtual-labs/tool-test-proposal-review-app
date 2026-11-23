@@ -104,13 +104,14 @@ test('Admin reviewer progress excludes administrators/assistants; PIC pending in
  assert.equal(pic.all.total,1);assert.equal(pic.all.pending[0].id,'P1');assert.equal(pic.all.draft.length,0);assert.equal(pic.all.pending[0].answers,undefined);
 });
 
- test('Admin reviewer progress excludes primary PIC accounts and retains LDC reviewers',()=>{
+ test('Admin and PIC reviewer progress excludes non-reviewer roles and retains LDC reviewers',()=>{
  const tables=fixtureTables(),headers=tables.Users[0];
  tables.Users.push(headers.map(h=>({Email:'pic@example.com',Name:'PIC Only',Status:'Active',Role:'PIC','Institute Name':'IIT',Domain:'CSE'})[h]||''));
+ const adminRow=tables.Users.find(r=>r[headers.indexOf('Role')]==='Admin');adminRow[headers.indexOf('Institute Name')]='IIT';
  const db=new SheetSnapshot(payload(tables));
  const result=createDomain(db,{email:'admin@example.com',activeRole:'Admin'}).getAdminData('cookie',{});
  assert.ok(result.reviewers.every(r=>!['Admin','Assistant Reviewer','PIC'].includes(r.role)));
  assert.ok(result.reviewers.some(r=>r.name==='Reviewer'));
  const pic=createDomain(db,{email:'pic@example.com',activeRole:'PIC'}).getAdminData('cookie',{});
- assert.ok(pic.reviewers.some(r=>r.name==='PIC Only'));
+ assert.ok(pic.reviewers.every(r=>!['Admin','Assistant Reviewer','PIC'].includes(r.role)));assert.ok(pic.reviewers.some(r=>r.name==='Reviewer'));assert.ok(!pic.reviewers.some(r=>r.name==='Other'));
  });
