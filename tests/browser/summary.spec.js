@@ -15,6 +15,7 @@ test('all roles can view both summary tables and filter by set on desktop and mo
   await expect(domain.locator('tbody tr')).toHaveCount(1);await expect(institutes.locator('tbody tr')).toHaveCount(2);
   await expect(domain).toContainText('incomplete: 1');
   for(const table of [domain,institutes]){
+    await expect(table.getByRole('columnheader',{name:'Selected Experiments',exact:false})).toHaveCount(1);
     await expect(table.locator('tfoot th')).toHaveText('Total');
     await expect(table.locator('tfoot td')).toHaveText(['2','4 (incomplete: 1 lab(s) missing a valid count)','0','2','0','0']);
     await table.getByRole('button',{name:/^Proposals/}).click();

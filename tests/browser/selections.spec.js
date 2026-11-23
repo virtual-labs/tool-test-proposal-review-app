@@ -65,7 +65,7 @@ test('Admin selected card is read-only and its compact Set filter preserves the 
  await filter.selectOption('A');await expect(table).toContainText('A_P1');
  await page.getByRole('combobox',{name:'Institute',exact:true}).selectOption('other institute');await expect(table.locator('tbody tr')).toHaveCount(0);
  await page.getByRole('button',{name:'Clear filters',exact:true}).click();await expect(filter).toHaveValue('');await expect(table).toContainText('A_P1');
- await page.locator('#selectionBtn').click();await expect(page.locator('#selectionPage')).toContainText('A_P1');await expect(table.getByRole('columnheader',{name:'Submitted on'})).toHaveCount(0);await expect(table.getByRole('columnheader',{name:'Overall Score'})).toHaveCount(1);await expect(page.getByRole('button',{name:'Submit Selections'})).toHaveCount(0);
+ await expect(page.locator('#selectionBtn')).toHaveCount(0);await expect(page.locator('#selectionPage')).toHaveCount(0);await expect(page.getByRole('button',{name:'Submit Selections'})).toHaveCount(0);
  await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
 

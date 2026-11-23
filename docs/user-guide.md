@@ -167,7 +167,7 @@ Both **Domain-wise Summary** and **Institute-wise Summary** include:
 
 - Number of Labs and Experiments.
 - Number of Proposals Reviewed and Number of Pending Proposals.
-- Selected and Selected Exp., based on saved Yes choices.
+- Selected and Selected Experiments, based on saved Yes choices.
 - A Total row that follows the Set filter and stays at the bottom when sorting.
 
 The compact Set selectors sit at the right of both table headings and stay synchronized. Changing either updates both tables. Choose **All sets** to reset.
@@ -203,11 +203,11 @@ The optional Remarks column in Completed Reviews is created on save; no manual s
 
 ### My Selection Dashboard
 
-LDC and Admin users can open My Selection Dashboard. LDC sees all their own reviewed proposals, including -, No, On Hold and Yes, and can edit Selected and Remarks there. Admin sees saved Yes selections across all proposals, read-only. PIC has no My Selection Dashboard. Use Set to narrow the list. The columns match Selected Proposals, without Submitted on; PIC’s Selected Proposals card omits Overall Score. LDC can edit Selected and Remarks and save with Submit Selections; Admin/PIC are read-only. View Review retains existing role permissions.
+Only LDC users can open My Selection Dashboard. LDC sees all their own reviewed proposals, including -, No, On Hold and Yes, and can edit Selected and Remarks there. Admin and PIC have no My Selection Dashboard; they view saved Yes selections in their read-only Selected Proposals cards. Use Set to narrow the list. The columns match Selected Proposals, without Submitted on; PIC’s Selected Proposals card omits Overall Score. LDC can edit Selected and Remarks and save with Submit Selections; Admin/PIC are read-only. View Review retains existing role permissions.
 
 Remarks use Add / View/Edit / View dialogs, separately from Rank Justification. Submit in the dialog stages an edit; Submit Selections saves it. Cancel discards dialog changes. Clear and submit the text to remove Remarks.
 
-Summary headings are Domain (or Institute), Proposals, Experiments, Reviewed Proposals, Pending Proposals, Selected Proposals and Selected Exp. PIC status options display Reviewed and Pending.
+Summary headings are Domain (or Institute), Proposals, Experiments, Reviewed Proposals, Pending Proposals, Selected Proposals and Selected Experiments. PIC status options display Reviewed and Pending.
 
 
 LDC dashboard tab order: My Workspace, My Rank Dashboard, My Selection Dashboard, Domain Dashboard, Summary Dashboard, and My Assistant Reviewers Dashboard (when available). My Workspace Reviewed Proposals omits Selected and Remarks; selection and remark editing is available only in My Selection Dashboard. The Selected Proposals card remains read-only. Sheet source headers such as No. of Experiments remain unchanged.
