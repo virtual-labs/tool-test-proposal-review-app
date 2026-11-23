@@ -28,3 +28,30 @@ test('Admin and PIC progress footers total the displayed rows',async({page,reque
   await page.locator('#logoutBtn').click();
  }
 });
+
+test('ranking titles, controls and headers stay aligned while scrolling for LDC, Admin and PIC',async({page,request})=>{
+ await request.post('/__test/reset');
+ const rows=Array.from({length:40},(_,i)=>({id:`A_${i+1}`,name:`Lab ${i+1}`,downloadable:true,rank:i+1,reviewer:'Reviewer',reviewerTotal:40,domain:'CSE',institute:'IIT',overallScore:35}));
+ await page.route('**/api',async route=>{
+  const action=route.request().postDataJSON()?.action;
+  if(action==='getRankingData')return route.fulfill({json:{ok:true,result:{version:'sticky',proposalSetVersion:'sticky',saved:rows.map(r=>({id:r.id,rank:r.rank})),proposals:rows}}});
+  if(action==='getAdminRankings')return route.fulfill({json:{ok:true,result:{rows,unrankedRows:rows.map(r=>({...r,rank:null})),filterOptions:{}}}});
+  return route.continue();
+ });
+ for(const role of ['LDC','Admin','PIC']){
+  await login(page,role==='Admin'?'admin@example.com':'ldc@example.com');if(role==='PIC')await page.locator('#roleSelector').selectOption('PIC');await page.locator('#rankingBtn').click();
+  const region=page.locator('#rankingPage .proposal-region'),tools=region.locator('.proposal-sticky-tools'),table=region.getByRole('table');
+  await expect(table.locator('tbody tr')).toHaveCount(40);
+  for(const width of [1440,390]){
+   await page.setViewportSize({width,height:900});await region.evaluate(e=>window.scrollTo(0,window.scrollY+e.getBoundingClientRect().top+600));
+   await expect.poll(async()=>Math.round((await tools.boundingBox()).y)).toBe(0);
+   await expect.poll(async()=>Math.abs((await table.locator('thead').boundingBox()).y-(await tools.boundingBox()).height)).toBeLessThan(2);
+   await tools.getByRole('button',{name:'Select All',exact:true}).click();await expect(table.locator('tbody input:checked')).toHaveCount(40);
+   await tools.getByRole('button',{name:'Clear Selection',exact:true}).click();await expect(table.locator('tbody input:checked')).toHaveCount(0);
+   await region.locator('.table-wrap').evaluate(e=>e.scrollLeft=120);
+   const h=await table.locator('thead [data-column="Proposal ID"]').boundingBox(),c=await table.locator('tbody [data-column="Proposal ID"]').first().boundingBox();expect(Math.abs(h.x-c.x)).toBeLessThan(2);
+   await page.screenshot({path:`test-results/sticky-ranking-${role}-${width}.png`});
+  }
+  await page.locator('#logoutBtn').click();
+ }
+});
