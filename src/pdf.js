@@ -17,7 +17,7 @@ export async function reviewPdf({fileName,review:r}) {
   }
   doc.fontSize(10).fillColor('#52717d').text('Virtual Labs - Proposal Review Portal',left,doc.y,{width});
   doc.fillColor(ink).moveDown(0.8);heading('Proposal Review Form',20);doc.moveDown(0.5);heading(r.name,13);
-  for(const [label,value] of [['Proposal ID',r.id],['Domain',r.domain],['Experiments',r.numberOfExperiments],['Reviewed Date',r.submittedAt],['Review ID',r.reviewId],['Reviewer',r.reviewer||(r.assignedReviewers||[]).join(', ')],['Rank',r.rank??'Not ranked'],['Rank Justification',r.justification||'None']])metadata(label,value);
+  for(const [label,value] of [['Proposal ID',r.id],['Domain',r.domain],['Experiments',r.numberOfExperiments],['Reviewed Date',r.submittedAt],['Review ID',r.reviewId],['Reviewer',r.reviewer||(r.assignedReviewers||[]).join(', ')],['Rank',r.rank??'Not ranked'],['Rank Justification',r.justification||'None'],['Selected',r.selected||'-']])metadata(label,value);
   metadata('Proposal Link',r.link,!!r.link);
   doc.moveDown(0.7);space(85);heading('Submitted Ratings');
   const widths=[width*0.1,width*0.65,width*0.25];
@@ -33,6 +33,7 @@ export async function reviewPdf({fileName,review:r}) {
   r.ratings.forEach((rating,index)=>row([index+1,rating.label,rating.value==null?'Not recorded':`${rating.value}/${r.ratingMaximum}`]));
   doc.font('Helvetica').moveDown(1.4);
   function section(title,text){heading(title);doc.text(text||'None',left,doc.y,{width,lineGap:3});doc.moveDown(1);}
+  section('Remarks',r.remarks);
   if(r.formVersion!=='2')section('Overall Feedback',r.overallFeedback);
   section('Reviewer Comments / Suggestions',r.formVersion==='2'?r.reviewerComments:r.additionalComments);
   space(35);const y=doc.y;doc.strokeColor(border).moveTo(left,y).lineTo(left+width,y).stroke();
