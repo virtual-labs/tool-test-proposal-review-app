@@ -115,3 +115,27 @@ test('Admin reviewer progress excludes administrators/assistants; PIC pending in
  const pic=createDomain(db,{email:'pic@example.com',activeRole:'PIC'}).getAdminData('cookie',{});
  assert.ok(pic.reviewers.every(r=>!['Admin','Assistant Reviewer','PIC'].includes(r.role)));assert.ok(pic.reviewers.some(r=>r.name==='Reviewer'));assert.ok(!pic.reviewers.some(r=>r.name==='Other'));
  });
+
+ test('PIC progress includes outside-institute LDCs only for its own filtered proposals',()=>{
+  const tables=fixtureTables(),ph=tables.Proposals[0],rh=tables['Completed Reviews'][0];
+  const put=(row,head,key,value)=>{row[head.indexOf(key)]=value;};
+  put(tables.Proposals[1],ph,'Proposal ID','A_P1');
+  put(tables.Proposals[1],ph,'Assigned LDC','Other');
+  put(tables.Proposals[2],ph,'Proposal ID','B_P2');
+  const pic=()=>createDomain(new SheetSnapshot(payload(tables)),{email:'ldc@example.com',activeRole:'PIC'});
+  let result=pic().getAdminData('cookie',{});
+  assert.deepEqual(result.all.pending.map(r=>r.id),['A_P1']);
+  assert.deepEqual(result.reviewers.map(r=>[r.name,r.assigned,r.open,r.reviewed]),[['Other',1,1,0]]);
+  assert.equal(result.domains[0].total,1);
+  assert.deepEqual(pic().getAdminData('cookie',{set:'B'}).reviewers,[]);
+  assert.deepEqual(pic().getAdminData('cookie',{domain:'ECE'}).reviewers,[]);
+  const review={'Proposal ID':'A_P1','Reviewer Email':'other@example.com',Reviewer:'Other',Domain:'CSE','Institute Name':'Other Institute','Submitted At':'2026-11-01T10:00:00.000Z'};
+  tables['Completed Reviews'].push(rh.map(h=>review[h]||''));
+  put(tables.Proposals[1],ph,'Assigned LDC','Reviewer');
+  result=pic().getAdminData('cookie',{status:'reviewed',set:'A'});
+  assert.equal(result.all.reviewed.length,1);
+  assert.equal(result.reviewers.find(r=>r.name==='Other').reviewed,1);
+  assert.equal(result.reviewers.find(r=>r.name==='Other').assigned,0);
+  assert.ok(!result.all.reviewed.some(r=>r.id==='B_P2'));
+  assert.deepEqual(pic().getAdminData('cookie',{status:'pending'}).reviewers,[]);
+ });

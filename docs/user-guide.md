@@ -28,7 +28,7 @@ Use **Help** for assistance and **User Guide** for the in-app role instructions.
 ## 3. Shared controls and review details
 
 - Select a summary card to display its associated list. Filters narrow results; **Clear filters**, where available, resets the filters. Choose **All sets** to reset a compact Set selector. Card counts can describe the filtered set rather than all records.
-- Use sortable table headings where available. Wide tables can scroll horizontally on smaller screens.
+- Use sortable table headings where available. Wide tables can scroll horizontally on smaller screens. Proposal list titles, action buttons, Set selectors and column headings stay visible while you scroll down the page through that list. No click is needed to start scrolling. They leave the screen when you move past the list.
 - **View Proposal** opens the proposal document. **Existing Lab Links**, when supplied, provide relevant existing labs.
 - **View Review** opens a submitted assessment you are authorised to see. It includes the reviewer name, numbered evaluation criteria, recorded ratings and comments. An assistant name is shown separately when available. Showing names does not grant access to otherwise private reviews.
 - Saved drafts use **Updated on**. Completed proposal lists use **Submitted on**. Pending lists omit the date column. Recognised dates show the full formatted timestamp on hover, in Indian Standard Time at minute precision.
@@ -97,6 +97,8 @@ Assistant handoff is not the final review submission. The LDC checks the answers
 3. Filter using **Domain**, **Status** and **Set**. Institute and Reviewer filters are not shown because this dashboard is scoped to your institute.
 4. Select **View Review** to read submitted assessments and reviewer names.
 
+*Domain Progress* and *Reviewer Progress* include totals for their displayed rows after filters are applied. Reviewer totals sum workloads, so assignments shared by multiple reviewers can count more than once.
+
 PIC Dashboard includes a read-only Selected Proposals card for its institute. Rank Dashboard has no Selected Proposals card. You can see portal-wide selected counts in Summary Dashboard (section 10).
 
 ### Monitor rankings
@@ -113,7 +115,7 @@ Select completed reviews in either dashboard and choose **Download Selected Revi
 
 ### Review Dashboard
 
-Select Reviewed, Pending or Selected Proposals. Selected Proposals shows saved Yes choices read-only. Filter by **Domain**, **Institute** and **Reviewer**, with the compact **Set** selector at the right of the table toolbar. Domain Progress and Reviewer Progress summarise filtered results. Reviewer Progress excludes Admin, Assistant Reviewer and PIC accounts (based on the primary Role in Users). Pending includes drafts, but their answers remain private. Open **View Review** to inspect completed assessments.
+Select Reviewed, Pending or Selected Proposals. Selected Proposals shows saved Yes choices read-only. Filter by **Domain**, **Institute** and **Reviewer**, with the compact **Set** selector at the right of the table toolbar. Domain Progress and Reviewer Progress summarise filtered results. Both tables include a Total row for the displayed numeric columns. Reviewer totals sum reviewer workloads; a proposal assigned to multiple reviewers can contribute more than once. Reviewer Progress excludes Admin, Assistant Reviewer and PIC accounts (based on the primary Role in Users). Pending includes drafts, but their answers remain private. Open **View Review** to inspect completed assessments.
 
 ### Proposal Dashboard
 
@@ -218,3 +220,5 @@ LDC authors can open *Domain Dashboard* → *Reviewed Proposals*, check their co
 Recipients cannot change the author’s review, rank, selection, remarks or sharing. Sharing does not add assignments or increase Summary counts. Access is checked on each request against current active accounts, LDC roles, proposal domain, original sharing domain and author identity. Revoke blocks future views/downloads; it cannot recall downloaded PDFs or already viewed content. No notification emails are sent.
 
 Optional Completed Reviews columns are created on first share/revoke: Shared With Domain (Yes/No), Shared Domain, Shared By, Sharing Revision. No manual setup or new environment variables are required. saveReviewSharing uses the existing atomic Sheets batch and lock, validates all rows before mutation, and rejects stale revisions. Existing Admin/PIC access remains scoped as before.
+
+PIC *Reviewer Progress* includes LDCs assigned to or having submitted a review for the PIC institute’s proposals, regardless of the LDC’s own institute. Counts use the same filtered, institute-owned proposals as *Domain Progress*. LDCs with no assignments or submissions in that filtered set are omitted. Primary Admin, PIC and Assistant Reviewer accounts remain excluded. This does not grant access to proposals belonging to other institutes. No Google Sheets configuration changes are needed.

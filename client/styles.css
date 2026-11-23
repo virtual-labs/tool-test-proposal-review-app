@@ -179,3 +179,11 @@ dialog textarea { min-height:180px; }
 
 /* Keep serial-number headings and values on one line in every table. */
 #appMain [data-column="S.No."] { white-space:nowrap; overflow-wrap:normal; word-break:normal; min-width:4ch; }
+
+/* Keep proposal actions and the real table header visible during page scrolling.
+   Translating the header inside its horizontal scroller preserves column alignment. */
+.proposal-region { position:relative; }
+.proposal-sticky-tools { position:sticky; top:0; z-index:3; background:#fff; padding:1px 0; }
+.page-sticky-table thead { position:relative; z-index:2; }
+.page-sticky-table th { background:#f0f5f2; }
+@media print { .proposal-sticky-tools { position:static; } .page-sticky-table thead { transform:none !important; } }

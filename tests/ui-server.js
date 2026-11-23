@@ -25,6 +25,10 @@ const server=await createPortalServer(handler,{beforeRequest:async(req,res)=>{
         rows[2].values[index]={effectiveValue:{stringValue:'Reviewer'}};
       }
     }
+    if(url.searchParams.get('many')==='true'){
+      const rows=sheets.data.sheets.find(s=>s.properties.title==='Proposals').data[0].rowData;
+      for(let i=3;i<=40;i++){const row=structuredClone(rows[1]);row.values[0]={effectiveValue:{stringValue:'A_P'+i}};rows.push(row);}
+    }
     res.end('reset');return true;
   }
   if(url.pathname==='/__test/clear-limits'&&req.method==='POST'){

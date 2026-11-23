@@ -568,7 +568,7 @@ function getAdminData(token, filters) {
   const domains = domainNames.map(name => Object.assign({name: name || 'Domain not configured'},
     board_(entries.filter(e => normalized_(e.summary.domain) === normalized_(name)))));
   const roster = table_(db, CONFIG.REVIEWERS_SHEET, HEADERS.Reviewers).rows;
-  const reviewers = roster.filter(r=>!['Admin','Assistant Reviewer','PIC'].includes(role_(r.Role)) && (user.role!=='PIC'||sameInstitute_(r['Institute Name'],user))).map(r => {
+  const reviewers = roster.filter(r=>!['Admin','Assistant Reviewer','PIC'].includes(role_(r.Role))).map(r => {
     const who = {email: normalized_(r.Email), name: text_(r.Name), assignmentNameUnique: roster.filter(other => normalized_(other.Name) === normalized_(r.Name)).length === 1};
     const assigned = entries.filter(e => assigned_(e.proposal, who));
     const reviewed = entries.filter(e => e.summary.state === 'reviewed' &&
@@ -577,7 +577,9 @@ function getAdminData(token, filters) {
       assigned: assigned.length, reviewed: reviewed,
       open: assigned.filter(e => e.summary.state !== 'reviewed' && (!e.claimEmail || e.claimEmail === who.email)).length};
   });
-  let visibleReviewers = reviewers.filter(r => !reviewer || normalized_(r.name) === reviewer);
+  // PIC progress follows institute-owned proposals, not the reviewer's institute.
+  let visibleReviewers = reviewers.filter(r => (!reviewer || normalized_(r.name) === reviewer) &&
+    (user.role !== 'PIC' || r.assigned > 0 || r.reviewed > 0));
   if (user.role === 'Admin') {
     if (domain || institute || status || reviewer || filters.set) {
       visibleReviewers = visibleReviewers.filter(r => r.assigned > 0 || r.reviewed > 0);
