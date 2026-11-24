@@ -33,7 +33,7 @@ export async function reviewPdf({fileName,review:r}) {
   r.ratings.forEach((rating,index)=>row([index+1,rating.label,rating.value==null?'Not recorded':`${rating.value}/${r.ratingMaximum}`]));
   doc.font('Helvetica').moveDown(1.4);
   function section(title,text){heading(title);doc.text(text||'None',left,doc.y,{width,lineGap:3});doc.moveDown(1);}
-  section('Remarks',r.remarks);
+  metadata('Remarks',r.remarks||'None');
   if(r.formVersion!=='2')section('Overall Feedback',r.overallFeedback);
   section('Reviewer Comments / Suggestions',r.formVersion==='2'?r.reviewerComments:r.additionalComments);
   space(35);const y=doc.y;doc.strokeColor(border).moveTo(left,y).lineTo(left+width,y).stroke();

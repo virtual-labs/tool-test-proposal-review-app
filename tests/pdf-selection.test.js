@@ -13,8 +13,8 @@ test('PDF includes every saved selection status and separate multiline remarks w
  const review={id:'P1',name:'Test Lab',formVersion:'2',ratingMaximum:6,ratings:[],justification:'Rank reasoning',reviewerComments:'Review comments'};
  for(const selected of ['Yes','No','On Hold','-',undefined]){
   const result=await reviewPdf({fileName:'test.pdf',review:{...review,selected,remarks:'Selection reasoning\nSecond remark line'}});
-  const text=pdfText(result.base64);assert.ok(text.includes('Selected: '+(selected||'-')));assert.ok(text.includes('RemarksSelection reasoningSecond remark line'));assert.ok(text.includes('Rank reasoning'));assert.ok(text.includes('Review comments'));
+  const text=pdfText(result.base64);assert.ok(text.includes('Selected: '+(selected||'-')));assert.ok(text.includes('Remarks: Selection reasoningSecond remark line'));assert.ok(text.includes('Rank reasoning'));assert.ok(text.includes('Review comments'));
  }
- const blank=pdfText((await reviewPdf({fileName:'test.pdf',review})).base64);assert.ok(blank.includes('RemarksNone'));
+ const blank=pdfText((await reviewPdf({fileName:'test.pdf',review})).base64);assert.ok(blank.includes('Remarks: None'));
  const long=pdfText((await reviewPdf({fileName:'test.pdf',review:{...review,remarks:'Long selection remark. '.repeat(400)+'End of remarks'}})).base64);assert.ok(long.includes('End of remarks'));
 });

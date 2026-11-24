@@ -47,7 +47,7 @@ test('ranking titles, controls and headers stay aligned while scrolling for LDC,
    await expect.poll(async()=>Math.round((await tools.boundingBox()).y)).toBe(0);
    await expect.poll(async()=>Math.abs((await table.locator('thead').boundingBox()).y-(await tools.boundingBox()).height)).toBeLessThan(2);
    await tools.getByRole('button',{name:'Select All',exact:true}).click();await expect(table.locator('tbody input:checked')).toHaveCount(40);
-   await tools.getByRole('button',{name:'Clear Selection',exact:true}).click();await expect(table.locator('tbody input:checked')).toHaveCount(0);
+   await tools.getByRole('button',{name:'Clear',exact:true}).click();await expect(table.locator('tbody input:checked')).toHaveCount(0);
    await region.locator('.table-wrap').evaluate(e=>e.scrollLeft=120);
    const h=await table.locator('thead [data-column="Proposal ID"]').boundingBox(),c=await table.locator('tbody [data-column="Proposal ID"]').first().boundingBox();expect(Math.abs(h.x-c.x)).toBeLessThan(2);
    await page.screenshot({path:`test-results/sticky-ranking-${role}-${width}.png`});
