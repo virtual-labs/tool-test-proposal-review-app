@@ -1,15 +1,15 @@
 # Current application features
 
-Reviewed against repository source on 4 November 2026. This describes implemented behaviour, not a certification of the live deployment.
+Reviewed against repository source on 24 November 2026. This describes implemented behaviour, not a certification of the live deployment.
 
 ## Roles and screens
 
 | Role | Workspace and access |
 |---|---|
-| LDC | My Workspace, My Rank Dashboard, Domain Dashboard; My Assistant Reviewers Dashboard when assistant assignments exist. Saves drafts and submits assigned final reviews. Detailed final-review access is limited to the user's own submissions. |
+| LDC | My Workspace, My Rank Dashboard, My Selection Dashboard, Domain Dashboard and Summary Dashboard; My Assistant Reviewers Dashboard when assistant assignments exist. Saves drafts and submits assigned final reviews. Detailed final-review access covers own submissions and reviews explicitly shared by other active LDCs in the same domain. |
 | Assistant Reviewer | Assigned, Draft and Submitted to LDC cards. Saves own answers and hands them to the assigned LDC; cannot overwrite an existing LDC draft. Can view an assigned final review but cannot download final-review PDFs. |
-| PIC | Institute-scoped PIC Dashboard and Rank Dashboard. Domain and Status filters; Reviewed/Pending summary cards above the PIC filter panel. |
-| Admin | Review Dashboard, Proposal Dashboard, Rank Dashboard, User Dashboard. Review/Rank monitoring has Domain, Institute and Reviewer filters; no Status filter. Proposal directory retains Status. |
+| PIC | Institute-scoped PIC Dashboard and Rank Dashboard. Domain, Status and Set filters; Reviewed/Pending/Selected cards above the PIC filter panel. |
+| Admin | Review Dashboard, Proposal Dashboard, Rank Dashboard, User Dashboard and Summary Dashboard. No My Selection Dashboard. Review/Rank monitoring has Domain, Institute and Reviewer filters; no Status filter. Proposal directory retains Status. |
 
 PIC/LDC dual-role users switch Active Role. Access checks still run on the server: displaying the reviewer name does not grant additional review access.
 
@@ -17,8 +17,8 @@ PIC/LDC dual-role users switch Active Role. Access checks still run on the serve
 
 - Sign-in tagline: “A shared workspace for lab proposal reviews”. Email OTP, separate Help and role-specific User Guide dialogs.
 - Original portal Arial typography, colours, compact controls and dashboard heading styles; My Assistant Reviewers Dashboard also uses the shared 30px heading.
-- Personal LDC workspace retains Saved Draft Proposals. Domain Dashboard has Reviewed, Pending and Ranked cards; no Saved Draft card or Action column. Domain pending includes saved drafts.
-- Admin/PIC pending also includes saved drafts without exposing private draft answers. Admin Reviewer Progress excludes Admin, Assistant Reviewer and PIC accounts (based on the primary Role in Users); Submitted is the last column. PIC Reviewer Progress applies the same primary-role exclusions and remains institute scoped.
+- Personal LDC workspace retains Saved Draft Proposals. My Workspace has Reviewed, Saved Draft, Pending, Selected and Shared Reviews cards. Domain Dashboard has Reviewed, Pending, Ranked, Selected and Shared Reviews cards; no Saved Draft card. View Review is available in its Shared Reviews table. Domain pending includes saved drafts.
+- Admin/PIC pending also includes saved drafts without exposing private draft answers. Admin Reviewer Progress excludes Admin, Assistant Reviewer and PIC accounts (based on the primary Role in Users); Submitted is the last column. PIC Reviewer Progress applies the same primary-role exclusions and includes LDCs from any institute assigned to or having reviewed the PIC institute’s filtered proposals. Domain Progress and Reviewer Progress include total rows for Admin and PIC; reviewer workload totals can count a proposal more than once.
 - Pending tables have no date column. Saved Draft Proposals uses Updated on; other proposal tables use Submitted on. Rank monitoring uses Last Updated.
 - Recognized timestamps display as date-only text, with the full formatted timestamp on hover. Formatting is IST, at minute precision; unknown legacy strings remain unchanged. PDF timestamps remain visible because PDFs have no hover UI.
 - S.No. is shown in proposal boards, ranking tables, Admin directories and View Review's ratings table. It follows selection checkboxes where present and follows displayed row order. Assistant list/progress tables do not all have S.No.
@@ -39,7 +39,7 @@ PIC/LDC dual-role users switch Active Role. Access checks still run on the serve
 
 PDF downloads use an A4 form layout: bold metadata, reviewer name, visible reviewed timestamp, rank/justification, clickable proposal link, a bordered S.No. / Evaluation Parameter / Rating table, comments and footer. Long comments flow onto additional pages. Historical reviews preserve their recorded scale and legacy feedback. Built-in fonts have limited non-Latin support.
 
-Admin/PIC can download from View Review. LDC downloads authorized own reviews using selection toolbars. Assistant final-review access is view-only. Records without a detailed review cannot be downloaded.
+Admin/PIC can download from View Review. LDC downloads authorized own or shared reviews using selection toolbars. Assistant final-review access is view-only. Records without a detailed review cannot be downloaded.
 
 ## Spreadsheet imports
 
@@ -59,7 +59,7 @@ All proposal dashboards offer All sets, Set A and Set B. Set A matches Proposal 
 
 ## Summary Dashboard
 
-Every signed-in role can open Summary Dashboard to see portal-wide aggregate counts, including across domains and institutes. The Domain-wise Summary and Institute-wise Summary each show Number of Labs, Experiments, Number of Proposals Reviewed and Number of Pending Proposals. Set filters use A_/B_ Proposal ID prefixes. Each unique nonempty Proposal ID in Proposals counts as one lab; duplicate IDs fail validation. A completed review or Reviewed proposal status counts as reviewed; all others, including drafts, count as pending. Completed Reviews records with no corresponding Proposals row are excluded. Experiments sum valid nonnegative whole numbers from the optional No. of Experiments column. Missing/invalid values are flagged as incomplete; missing domain/institute labels appear as Not configured. Only aggregate counts are exposed; access to proposal/review details is unchanged. The read-only getSummaryData API returns domains and institutes arrays and validates the active user.
+Every signed-in role can open Summary Dashboard to see portal-wide aggregate counts, including across domains and institutes. The Domain-wise Summary and Institute-wise Summary each show Proposals, Experiments, Reviewed Proposals, Pending Proposals, Selected Proposals and Selected Experiments. Set filters use A_/B_ Proposal ID prefixes. Each unique nonempty Proposal ID in Proposals counts as one lab; duplicate IDs fail validation. A completed review or Reviewed proposal status counts as reviewed; all others, including drafts, count as pending. Completed Reviews records with no corresponding Proposals row are excluded. Experiments sum valid nonnegative whole numbers from the optional No. of Experiments column. Missing/invalid values are flagged as incomplete; missing domain/institute labels appear as Not configured. Only aggregate counts are exposed; access to proposal/review details is unchanged. The read-only getSummaryData API returns domains and institutes arrays and validates the active user.
 
 Both Summary Dashboard tables include a Total row at the bottom. Totals follow the selected Set filter and remain at the bottom when sorting. Experiment totals retain any incomplete-count warning.
 
@@ -75,7 +75,7 @@ Ranks are independent for each reviewer, domain and set. A_ IDs belong to Set A 
 
 ## Compact Set filters and selected summaries
 
-My Workspace and Domain Dashboard place the compact Set selector at the right of the table action row, even when there are no download actions. My Rank Dashboard places it beside Generate Rankings. Choose All sets to reset these selectors. Summary Dashboard has synchronized Set selectors at the right of each table heading. My Workspace adds a Selected Proposals card for your own saved Yes choices; Domain Dashboard continues to show domain-wide choices. My Workspace has four cards and Domain Dashboard has five, including Shared with Me; each group shares one desktop row and stacks on small screens. Summary tables and their Total rows now include Selected and Selected Exp., based on saved Yes values in Completed Reviews and experiment counts from Proposals. Missing counts for selected labs are flagged as incomplete. No new configuration or spreadsheet columns are required.
+My Workspace and Domain Dashboard place the compact Set selector at the right of the table action row, even when there are no download actions. My Rank Dashboard places it beside Generate Rankings. Choose All sets to reset these selectors. Summary Dashboard has synchronized Set selectors at the right of each table heading. My Workspace adds a Selected Proposals card for your own saved Yes choices; Domain Dashboard continues to show domain-wide choices. My Workspace and Domain Dashboard each have five cards, including Shared Reviews; each group shares one desktop row and stacks on small screens. Summary tables and their Total rows now include Selected and Selected Experiments, based on saved Yes values in Completed Reviews and experiment counts from Proposals. Missing counts for selected labs are flagged as incomplete. No new configuration or spreadsheet columns are required.
 
 ## Admin selected proposals
 
@@ -93,17 +93,25 @@ The optional Remarks column in Completed Reviews is created on save; no manual s
 
 ### My Selection Dashboard
 
-LDC and Admin users can open My Selection Dashboard. LDC sees all their own reviewed proposals, including -, No, On Hold and Yes, and can edit Selected and Remarks there. Admin sees saved Yes selections across all proposals, read-only. PIC has no My Selection Dashboard. Use Set to narrow the list. The columns match Selected Proposals, without Submitted on; PIC’s Selected Proposals card omits Overall Score. LDC can edit Selected and Remarks and save with Submit Selections; Admin/PIC are read-only. View Review retains existing role permissions.
+Only LDC users can open My Selection Dashboard. LDC sees all their own reviewed proposals, including -, No, On Hold and Yes, and can edit Selected and Remarks there. Admin and PIC have no My Selection Dashboard; their Selected Proposals cards show saved Yes choices read-only. Use Set to narrow the list. The columns match Selected Proposals, without Submitted on; PIC’s Selected Proposals card omits Overall Score. LDC can edit Selected and Remarks and save with Submit Selections; Admin/PIC are read-only. View Review retains existing role permissions.
 
 Remarks use Add / View/Edit / View dialogs, separately from Rank Justification. Submit in the dialog stages an edit; Submit Selections saves it. Cancel discards dialog changes. Clear and submit the text to remove Remarks.
 
-Summary headings are Domain (or Institute), Proposals, Experiments, Reviewed Proposals, Pending Proposals, Selected Proposals and Selected Exp. PIC status options display Reviewed and Pending.
+Summary headings are Domain (or Institute), Proposals, Experiments, Reviewed Proposals, Pending Proposals, Selected Proposals and Selected Experiments. PIC status options display Reviewed and Pending.
 
 
 ### Sharing completed reviews within a domain
 
-LDC authors can open *Domain Dashboard* → *Reviewed Proposals*, check their completed reviews, and click *Share*. This grants all other active LDCs in the same domain read-only access, including PDF downloads, irrespective of institute or Set. Recipients use the *Shared with Me* card in Domain Dashboard, with *View Review* and *Download Selected Reviews*. Set filters narrow the visible list. The author sees the saved state in Sharing and can use *Revoke Sharing* on checked reviews. Mixed selections containing another reviewer’s reviews cannot be shared or revoked.
+LDC authors can use My Workspace, My Rank Dashboard, My Selection Dashboard or Domain Dashboard, check their own completed reviews and click Share. This grants all other active LDCs in the same domain read-only access, including PDF downloads, irrespective of institute or Set. Recipients use the *Shared Reviews* card in each of these four dashboards, with *View Review* and *Download Selected Reviews*. Set filters narrow the visible list. The Shared column is read-only Yes/No, updated by successful Share/Revoke Sharing actions. Only the author can share a completed review. Summary and Assistant dashboards are excluded. Save or discard unsaved ranking/selection edits before changing sharing. Mixed selections containing another reviewer’s reviews cannot be shared or revoked.
 
 Recipients cannot change the author’s review, rank, selection, remarks or sharing. Sharing does not add assignments or increase Summary counts. Access is checked on each request against current active accounts, LDC roles, proposal domain, original sharing domain and author identity. Revoke blocks future views/downloads; it cannot recall downloaded PDFs or already viewed content. No notification emails are sent.
 
 Optional Completed Reviews columns are created on first share/revoke: Shared With Domain (Yes/No), Shared Domain, Shared By, Sharing Revision. No manual setup or new environment variables are required. saveReviewSharing uses the existing atomic Sheets batch and lock, validates all rows before mutation, and rejects stale revisions. Existing Admin/PIC access remains scoped as before.
+
+## Current labels and review presentation
+
+*View Review* shows the current saved Selected status and Remarks. If Selected is - or empty, only the bold label Selected: appears; Yes, No and On Hold remain visible. Downloaded PDFs still show - for an undecided selection. In both outputs, Remarks uses a normal-size bold label with a colon and its value starts on the same line, for example Remarks: None. Rank Justification and Reviewer Comments are separate fields. Only saved values appear; existing downloaded PDFs do not update automatically. Assistant handoff views do not show final-review selection fields.
+
+All tables have sticky column headings with normal page scrolling and aligned horizontal scrolling. Proposal and ranking titles/actions, summary titles/Set selectors, progress titles and directory titles also stay visible above their headers. Headings release at their table end. Print layouts are unchanged.
+
+Clear removes checkbox selections; Clear filters resets filters. Proposal Dashboard Status labels and cells display Pending/Reviewed. Shared Reviews is described as “Reviews shared by other LDCs in the same domain”. Reviewed Proposals replaces My Reviewed Proposals in ranking/selection cards and displays count / total. Shared review counts remain separate from personal assignments.

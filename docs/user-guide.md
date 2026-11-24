@@ -165,9 +165,9 @@ Every signed-in role can open Summary Dashboard. It shows **portal-wide** totals
 
 Both **Domain-wise Summary** and **Institute-wise Summary** include:
 
-- Number of Labs and Experiments.
-- Number of Proposals Reviewed and Number of Pending Proposals.
-- Selected and Selected Experiments, based on saved Yes choices.
+- Proposals and Experiments.
+- Reviewed Proposals and Pending Proposals.
+- Selected Proposals and Selected Experiments, based on saved Yes choices.
 - A Total row that follows the Set filter and stays at the bottom when sorting.
 
 The compact Set selectors sit at the right of both table headings and stay synchronized. Changing either updates both tables. Choose **All sets** to reset.
@@ -215,7 +215,7 @@ LDC dashboard tab order: My Workspace, My Rank Dashboard, My Selection Dashboard
 
 ### Sharing completed reviews within a domain
 
-LDC authors can open *Domain Dashboard* → *Reviewed Proposals*, check their completed reviews, and click *Share*. This grants all other active LDCs in the same domain read-only access, including PDF downloads, irrespective of institute or Set. Recipients use the *Shared Reviews* card in Domain Dashboard, with *View Review* and *Download Selected Reviews*. Set filters narrow the visible list. The *Shared* column shows read-only Yes/No for all rows. Only successful *Share* or *Revoke Sharing* actions on checked reviews update this status. Mixed selections containing another reviewer’s reviews cannot be shared or revoked.
+LDC authors can use *My Workspace*, *My Rank Dashboard*, *My Selection Dashboard* or *Domain Dashboard*, check their own completed reviews, and click *Share*. This grants all other active LDCs in the same domain read-only access, including PDF downloads, irrespective of institute or Set. Recipients use the *Shared Reviews* card in any of these four dashboards, with *View Review* and *Download Selected Reviews*. Set filters narrow the visible list. The *Shared* column shows read-only Yes/No for all rows. Only successful *Share* or *Revoke Sharing* actions on checked reviews update this status. Mixed selections containing another reviewer’s reviews cannot be shared or revoked.
 
 Recipients cannot change the author’s review, rank, selection, remarks or sharing. Sharing does not add assignments or increase Summary counts. Access is checked on each request against current active accounts, LDC roles, proposal domain, original sharing domain and author identity. Revoke blocks future views/downloads; it cannot recall downloaded PDFs or already viewed content. No notification emails are sent.
 
@@ -225,8 +225,10 @@ PIC *Reviewer Progress* includes LDCs assigned to or having submitted a review f
 
 Ranking tables also keep their list title, action toolbar and column headings visible during normal page scrolling. This applies to LDC *My Rank Dashboard* and Admin/PIC *Rank Dashboard*. The LDC toolbar includes *Ranking Guidelines*, *Generate Rankings* and *Set*. The summary and explanatory text scroll with the page; horizontal scrolling keeps the headings aligned with their columns.
 
-*View Review* and downloaded review PDFs include the current saved *Selected* status (Yes, No, On Hold or -) and *Remarks*. Blank Remarks display as None. These are separate from Rank Justification and Reviewer Comments. Unsaved edits are not included; previously downloaded PDFs do not update automatically. Assistant draft handoffs do not display these final-review fields.
+*View Review* shows the current saved Selected status and Remarks. If Selected is - or empty, only the bold label Selected: appears; Yes, No and On Hold remain visible. Downloaded PDFs still show - for an undecided selection. In both outputs, Remarks uses a normal-size bold label with a colon and its value starts on the same line, for example Remarks: None. Rank Justification and Reviewer Comments are separate fields. Only saved values appear; existing downloaded PDFs do not update automatically. Assistant handoff views do not show final-review selection fields.
 
 All on-screen tables use sticky column headings for every role, including progress, directories, summary, assistant tables and submitted ratings. Scroll the page normally; headings stay aligned during horizontal scrolling and stop at the table end. Summary table titles and Set selectors, progress titles and directory table titles also stay visible above their headings. Print/PDF layouts are unchanged.
 
 LDC sharing is available in My Workspace, My Rank Dashboard, My Selection Dashboard and Domain Dashboard. Each has a Shared Reviews card with read-only View Review and PDF downloads. Select your own completed reviews and use Share or Revoke Sharing. Pending/draft proposals and other reviewers’ work cannot be shared by you. Save or discard unsaved ranking/selection edits before changing sharing. My Rank Dashboard and My Selection Dashboard have a Reviewed Proposals card to return to your own work; switching to Shared Reviews preserves unsaved edits. Summary and Assistant dashboards do not include these controls or cards. Admin, PIC and Assistant Reviewer views are unchanged. Shared reviews do not increase personal assignment counts.
+
+Use *Select All* to check eligible reviews in the displayed list and *Clear* to clear those checkboxes. *Clear filters* resets filter choices instead; neither action changes saved ranks, selections or sharing. *Shared Reviews* has the description “Reviews shared by other LDCs in the same domain”. The *Reviewed Proposals* card in My Rank Dashboard and My Selection Dashboard shows count / total (for example 30 / 30); shared reviews are counted separately. Admin Proposal Dashboard displays Pending and Reviewed in both the Status filter and table cells.
