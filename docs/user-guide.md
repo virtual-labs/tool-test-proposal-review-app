@@ -52,7 +52,7 @@ A confirmation email may follow submission. If email delivery fails, the saved r
 
 In **My Selection Dashboard**, choose **Yes**, **No**, **On Hold** or **-** in the **Selected** column and click **Submit Selections**. The default is **-** (not decided). Only the review author can edit this choice; records without a detailed completed review are not editable. Saved Yes choices appear in **My Workspace → Selected Proposals** and **Domain Dashboard → Selected Proposals**. Submit No, On Hold or - to remove them. Selection does not change review status or rank, and download checkboxes are separate.
 
-Set changes and card changes preserve unsaved selection edits. Save before leaving the dashboard. My Workspace and Domain Dashboard show four and five cards respectively in one desktop row; cards stack on small screens.
+Set changes and card changes preserve unsaved selection edits. Save before leaving the dashboard. My Workspace and Domain Dashboard each show five cards in one desktop row; cards stack on small screens.
 
 ### Work with assistant reviewers
 
@@ -226,3 +226,7 @@ PIC *Reviewer Progress* includes LDCs assigned to or having submitted a review f
 Ranking tables also keep their list title, action toolbar and column headings visible during normal page scrolling. This applies to LDC *My Rank Dashboard* and Admin/PIC *Rank Dashboard*. The LDC toolbar includes *Ranking Guidelines*, *Generate Rankings* and *Set*. The summary and explanatory text scroll with the page; horizontal scrolling keeps the headings aligned with their columns.
 
 *View Review* and downloaded review PDFs include the current saved *Selected* status (Yes, No, On Hold or -) and *Remarks*. Blank Remarks display as None. These are separate from Rank Justification and Reviewer Comments. Unsaved edits are not included; previously downloaded PDFs do not update automatically. Assistant draft handoffs do not display these final-review fields.
+
+All on-screen tables use sticky column headings for every role, including progress, directories, summary, assistant tables and submitted ratings. Scroll the page normally; headings stay aligned during horizontal scrolling and stop at the table end. Summary table titles and Set selectors, progress titles and directory table titles also stay visible above their headings. Print/PDF layouts are unchanged.
+
+LDC sharing is available in My Workspace, My Rank Dashboard, My Selection Dashboard and Domain Dashboard. Each has a Shared with Me card with read-only View Review and PDF downloads. Select your own completed reviews and use Share or Revoke Sharing. Pending/draft proposals and other reviewers’ work cannot be shared by you. Save or discard unsaved ranking/selection edits before changing sharing. My Rank Dashboard and My Selection Dashboard have a My Reviewed Proposals card to return to your own work; switching to Shared with Me preserves unsaved edits. Summary and Assistant dashboards do not include these controls or cards. Admin, PIC and Assistant Reviewer views are unchanged. Shared reviews do not increase personal assignment counts.

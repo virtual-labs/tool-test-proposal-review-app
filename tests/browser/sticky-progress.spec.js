@@ -3,7 +3,7 @@ async function login(page,email){await page.request.post('/__test/clear-limits')
 test('proposal controls and column headers follow page scrolling and release at the table end',async({page,request})=>{
  await request.post('/__test/reset?many=true');await login(page,'admin@example.com');
  await page.getByRole('button',{name:/^Pending Proposals/}).click();
- const region=page.locator('.proposal-region'),tools=region.locator('.proposal-sticky-tools'),table=region.getByRole('table'),head=table.locator('thead');
+ const region=page.getByRole('table',{name:'Proposals',exact:true}).locator('xpath=ancestor::div[contains(@class,"proposal-region")][1]'),tools=region.locator('.proposal-sticky-tools'),table=region.getByRole('table'),head=table.locator('thead');
  for(const width of [1440,390]){
   await page.setViewportSize({width,height:900});
   await region.evaluate(e=>window.scrollTo(0,window.scrollY+e.getBoundingClientRect().top+450));
@@ -53,5 +53,28 @@ test('ranking titles, controls and headers stay aligned while scrolling for LDC,
    await page.screenshot({path:`test-results/sticky-ranking-${role}-${width}.png`});
   }
   await page.locator('#logoutBtn').click();
+ }
+});
+
+test('all roles get sticky summary headings and every visible table opts in',async({page,request})=>{
+ const rows=Array.from({length:40},(_,i)=>({name:`Group ${i+1}`,labs:1,experiments:4,reviewed:0,pending:1,selectedLabs:0,selectedExperiments:0}));
+ await page.route('**/api',async route=>route.request().postDataJSON()?.action==='getSummaryData'?route.fulfill({json:{ok:true,result:{domains:rows,institutes:rows}}}):route.continue());
+ for(const role of ['Admin','LDC','PIC','Assistant Reviewer']){
+  await request.post('/__test/reset?many=true');await login(page,role==='Admin'?'admin@example.com':role==='Assistant Reviewer'?'assistant@example.com':'ldc@example.com');if(role==='PIC')await page.locator('#roleSelector').selectOption('PIC');
+  await expect(page.locator('table').first()).toBeVisible();expect(await page.locator('table').evaluateAll(t=>t.every(e=>e.parentElement.classList.contains('page-sticky-table')))).toBe(true);
+  if(role==='Admin')for(const id of ['usersBtn','proposalDashboardBtn']){await page.locator('#'+id).click();await expect(page.locator('.page-sticky-table table')).toBeVisible();}
+  await page.locator('#summaryBtn').click();await expect(page.getByRole('table',{name:'Domain-wise Summary'}).locator('tbody tr')).toHaveCount(40);
+  for(const width of [1440,390]){
+   await page.setViewportSize({width,height:900});
+   for(const label of ['Domain-wise Summary','Institute-wise Summary']){
+    const table=page.getByRole('table',{name:label}),region=table.locator('xpath=ancestor::section[1]'),toolbar=region.locator('.proposal-sticky-tools');
+    await table.evaluate(e=>window.scrollTo(0,window.scrollY+e.getBoundingClientRect().top+500));
+    await expect.poll(async()=>Math.round((await toolbar.boundingBox()).y)).toBe(0);
+    await expect.poll(async()=>Math.abs((await table.locator('thead').boundingBox()).y-(await toolbar.boundingBox()).height)).toBeLessThan(2);
+    await expect(toolbar.getByRole('combobox',{name:'Set'})).toBeVisible();
+    await table.locator('..').evaluate(e=>e.scrollLeft=150);
+    const h=await table.locator('thead th').nth(2).boundingBox(),c=await table.locator('tbody tr').first().locator('td').nth(2).boundingBox();expect(Math.abs(h.x-c.x)).toBeLessThan(2);
+   }
+  }
  }
 });

@@ -5,7 +5,7 @@ import {SET_OPTIONS} from '../../shared/proposal-set.js';
 import {safeUrl} from '../api.js';
 
 export function Link({href,children}){const url=safeUrl(href);return url?<a className="link view-action" href={url} target="_blank" rel="noopener noreferrer">{children}</a>:null;}
-export function Table({columns,rows,label,getKey=row=>row.id||row.email||row.name,defaultSort={key:'',direction:0},serialNumbers=false,className='',id,footer,stickyHeader=false}){
+export function Table({columns,rows,label,getKey=row=>row.id||row.email||row.name,defaultSort={key:'',direction:0},serialNumbers=false,className='',id,footer,stickyHeader=true}){
   const [sort,setSort]=useState(defaultSort);
   const wrapper=useRef(null);
   useEffect(()=>{

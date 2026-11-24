@@ -8,7 +8,7 @@ test('LDC submits Yes/No selections and the filtered Domain card reflects saved 
  await page.getByRole('button',{name:/^Reviewed Proposals/}).click();
  const selected=page.getByRole('combobox',{name:'Selected for A_P1',exact:true});
  await expect(page.getByRole('columnheader',{name:'Selected',exact:true})).toHaveCount(0);await expect(page.getByRole('columnheader',{name:'Remarks',exact:true})).toHaveCount(0);
- const cards=await page.locator('#dashboardPage .stat').evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().y));expect(cards).toHaveLength(4);expect(new Set(cards).size).toBe(1);
+ const cards=await page.locator('#dashboardPage .stat').evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().y));expect(cards).toHaveLength(5);expect(new Set(cards).size).toBe(1);
  const selectAll=await page.getByRole('button',{name:'Select All',exact:true}).boundingBox(),setBox=await page.getByRole('combobox',{name:'Set',exact:true}).boundingBox();expect(setBox.x).toBeGreaterThan(selectAll.x+selectAll.width);expect(Math.abs(setBox.y-selectAll.y)).toBeLessThan(8);
  await page.screenshot({path:'test-results/compact-workspace.png',fullPage:true});
  await page.locator('#selectionBtn').click();await expect(selected).toHaveValue('-');
