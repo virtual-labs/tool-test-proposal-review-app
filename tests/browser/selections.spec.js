@@ -6,6 +6,7 @@ test('LDC submits Yes/No selections and the filtered Domain card reflects saved 
  for(const field of ['clarity','academicRelevance','pedagogicalNeed','quality','experimentDesign','jobRelevance','userExperience','overallRating'])await page.locator('#'+field).selectOption('5');
  page.once('dialog',d=>d.accept());await page.locator('#submitBtn').click();await expect(page.locator('#notice')).toContainText('submitted successfully');
  await page.getByRole('button',{name:/^Reviewed Proposals/}).click();
+ await page.getByRole('button',{name:'View Review',exact:true}).click();await expect(page.locator('#viewPage p').filter({has:page.locator('strong').filter({hasText:'Selected:'})})).toHaveText('Selected:');await page.locator('#viewBackBtn').click();await page.getByRole('button',{name:/^Reviewed Proposals/}).click();
  const selected=page.getByRole('combobox',{name:'Selected for A_P1',exact:true});
  await expect(page.getByRole('columnheader',{name:'Selected',exact:true})).toHaveCount(0);await expect(page.getByRole('columnheader',{name:'Remarks',exact:true})).toHaveCount(0);
  const cards=await page.locator('#dashboardPage .stat').evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().y));expect(cards).toHaveLength(5);expect(new Set(cards).size).toBe(1);
