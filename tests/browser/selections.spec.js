@@ -15,7 +15,7 @@ test('LDC submits Yes/No selections and the filtered Domain card reflects saved 
  const tabs=await page.locator('#appNav button[id$="Btn"]').evaluateAll(nodes=>nodes.map(n=>n.id).filter(id=>id!=='refreshBtn'));expect(tabs.indexOf('selectionBtn')).toBeLessThan(tabs.indexOf('domainBtn'));if(tabs.includes('assistantBtn'))expect(tabs.at(-1)).toBe('assistantBtn');
  await page.locator('tbody [data-column="Remarks"] button').click();await page.getByRole('dialog').getByRole('textbox').fill('Recommended for selection');await page.getByRole('dialog').getByRole('button',{name:'Submit',exact:true}).click();await selected.selectOption('Yes');await page.getByRole('button',{name:'Submit Selections',exact:true}).click();await expect(page.locator('#notice')).toContainText('Proposal selections saved');
  await expect(selected).toHaveValue('Yes');
- await page.getByRole('button',{name:'View Review',exact:true}).click();await expect(page.locator('#viewPage')).toContainText('Selected: Yes');await expect(page.locator('#viewPage')).toContainText('Recommended for selection');await page.locator('#viewBackBtn').click();
+ await page.getByRole('button',{name:'View Review',exact:true}).click();await expect(page.locator('#viewPage')).toContainText('Selected: Yes');for(const label of ['Review ID:','Reviewer:','Rank:','Rank Justification:','Selected:']){const heading=page.locator('#viewPage strong').filter({hasText:new RegExp('^'+label+'\\s*$')});await expect(heading).toHaveCount(1);expect(Number(await heading.evaluate(e=>getComputedStyle(e).fontWeight))).toBeGreaterThanOrEqual(600);}await expect(page.locator('#viewPage')).toContainText('Recommended for selection');await page.locator('#viewBackBtn').click();
  await page.locator('#summaryBtn').click();
  for(const table of ['Domain-wise Summary','Institute-wise Summary']){
   const total=page.getByRole('table',{name:table}).locator('tfoot');await expect(total.locator('td').nth(4)).toHaveText('1');await expect(total.locator('td').nth(5)).toHaveText('4');
@@ -66,6 +66,7 @@ test('Admin selected card is read-only and its compact Set filter preserves the 
  await page.getByRole('combobox',{name:'Institute',exact:true}).selectOption('other institute');await expect(table.locator('tbody tr')).toHaveCount(0);
  await page.getByRole('button',{name:'Clear filters',exact:true}).click();await expect(filter).toHaveValue('');await expect(table).toContainText('A_P1');
  await expect(page.locator('#selectionBtn')).toHaveCount(0);await expect(page.locator('#selectionPage')).toHaveCount(0);await expect(page.getByRole('button',{name:'Submit Selections'})).toHaveCount(0);
+ await page.locator('#proposalDashboardBtn').click();await expect(page.getByRole('table',{name:'Proposal directory'}).locator('tbody [data-column="Status"]')).toHaveText(['Reviewed','Pending']);
  await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
 
