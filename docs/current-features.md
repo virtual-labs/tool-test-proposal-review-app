@@ -115,3 +115,5 @@ Optional Completed Reviews columns are created on first share/revoke: Shared Wit
 All tables have sticky column headings with normal page scrolling and aligned horizontal scrolling. Proposal and ranking titles/actions, summary titles/Set selectors, progress titles and directory titles also stay visible above their headers. Headings release at their table end. Print layouts are unchanged.
 
 Clear removes checkbox selections; Clear filters resets filters. Proposal Dashboard Status labels and cells display Pending/Reviewed. Shared Reviews is described as “Reviews shared by other LDCs in the same domain”. Reviewed Proposals replaces My Reviewed Proposals in ranking/selection cards and displays count / total. Shared review counts remain separate from personal assignments.
+
+Share is disabled when all checked reviews are already shared. Revoke Sharing is disabled when none are shared. Both actions are available for a mixed selection of your own shared and unshared reviews.
