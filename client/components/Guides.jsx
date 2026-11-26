@@ -16,7 +16,7 @@ export function Help({onClose}){
 function GuideText({text}){return text.split(/(\*[^*]+\*)/g).map((part,i)=>part.startsWith('*')&&part.endsWith('*')?<em key={i}>{part.slice(1,-1)}</em>:part);}
 
 export function UserGuide({user,onClose}){
-  return <Dialog title={`${user.role==='Admin'?'Administrator':user.role} User Guide`} id="userGuideDialog" onClose={onClose} closeLabel="Close Guide"><ol>{(roleGuides[user.role]||[]).map((text,i)=><li key={i}><GuideText text={text}/></li>)}</ol></Dialog>;
+  return <Dialog title={`${user.role==='Admin'?'Administrator':user.role} User Guide`} id="userGuideDialog" onClose={onClose} closeLabel="Close Guide">{(roleGuides[user.role]||[]).map(({title,points},i)=><section key={title} aria-labelledby={`guide-section-${i}`}><h3 id={`guide-section-${i}`}><GuideText text={title}/></h3><ul>{points.map((text,j)=><li key={j}><GuideText text={text}/></li>)}</ul></section>)}</Dialog>;
 }
 const ButtonName=({children})=><em className="guideline-button-name">{children}</em>;
 export function RankingGuidelines({onClose}){

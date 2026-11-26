@@ -1,240 +1,273 @@
 # User Guide
 
-Reviewed against the application source on 18 November 2026.
+Updated against the application on 26 November 2026.
 
-## 1. About the portal
+Welcome to the Virtual Labs Proposal Review portal. Find your role below, then follow the dashboard and card you are using. Button, card, dashboard and control names are shown in italics.
 
-The Virtual Labs Proposal Review portal is a shared workspace for reviewing lab proposals, submitting assessments, prioritising reviewed proposals and monitoring progress. The screens available to you depend on your assigned role.
+## Choose your role
 
-| Role | Main responsibilities |
-|---|---|
-| LDC | Review assigned proposals, submit final assessments and rank personal completed reviews. |
-| Assistant Reviewer | Prepare assessments and hand them to an assigned LDC. |
-| PIC | Monitor proposals and submitted reviews for the configured institute. |
-| Admin | Monitor proposals, reviews, rankings and user assignments across the portal. |
+- [LDC](#ldc-guide): review, rank, select and share your completed reviews.
+- [Assistant Reviewer](#assistant-reviewer-guide): prepare assessments for the LDC.
+- [PIC](#pic-guide): monitor your institute’s proposals.
+- [Admin](#admin-guide): monitor proposals and users across the portal.
 
-## 2. Sign in and navigate
+## LDC guide
 
-1. Open the portal URL supplied by your administrator.
-2. Enter your registered email address and request a verification code.
-3. Check your inbox and spam folder. Enter the latest six-digit OTP within ten minutes.
-4. If needed, wait for the 60-second resend cooldown before requesting another code. A replacement invalidates the previous code; each code can be used once and allows at most five attempts.
-5. After signing in, use the navigation tabs for your role. If you have both PIC and LDC access, save your work before switching **Active Role**.
+### *My Workspace*
 
-Only registered, active accounts can sign in. There is no password registration or password-reset workflow. Sessions last two hours; switching roles does not extend the session.
+- *Pending Proposals*: open your unreviewed assignments with *Start Review*. Read the proposal document and any Existing Lab Links before completing the assessment.
+- *Saved Draft Proposals*: use *Resume Draft* to continue saved work. *Save as Draft* lets you save an incomplete assessment; saving reserves the proposal so another reviewer cannot continue it.
+- *Reviewed Proposals*: use *View Review* to read your submitted assessments, or select rows to download or share them. Selected and Remarks are edited in *My Selection Dashboard*, not in this card.
+- *Selected Proposals*: view your reviewed proposals whose saved Selected choice is Yes. This card is read-only; it also shows saved Remarks.
+- *Shared Reviews*: read reviews shared by other active LDCs in your domain. Use *View Review* or *Download Selected Reviews*. These are read-only and do not become your assignments.
+- To submit a final review, answer all eight rating questions from 1 to 6. Comments are optional. Check your answers before submitting: a final review cannot be edited.
+- The compact *Set* filter is at the right of the table action row.
 
-Use **Help** for assistance and **User Guide** for the in-app role instructions. Use **Refresh** to reload data after saving. Select **Sign out** when finished.
+### *My Rank Dashboard*
 
-## 3. Shared controls and review details
+- *Reviewed Proposals*: rank only proposals whose final review you submitted in your domain. Newly completed reviews start unranked. Rank 1 is the highest priority.
+- Read *Ranking Guidelines*. Each reviewer has a separate list within each domain and set, so Set A and Set B can both start at Rank 1. Do not repeat a rank within the same list.
+- Choose ranks manually, then click *Save Rankings*. Choose - (Unranked) and save to remove a rank. Filtering changes visibility without discarding edits; saving includes edits across sets.
+- *Generate Rankings* replaces and immediately saves ranks independently for each set, ordered by overall score descending and Proposal ID ascending for ties. Overall Score totals the first seven criteria, out of 42; the eighth overall rating is separate. Existing justifications remain.
+- For Justification, click *Add* or *View/Edit*, enter your explanation and click *Submit* in the popup. Then click *Save Rankings* to save it. Clear the text and save to remove it.
+- *Shared Reviews*: read reviews shared by other active LDCs in your domain. Use *View Review* or *Download Selected Reviews*. These are read-only and do not become your assignments.
+- Use *Set* beside *Generate Rankings*. Switching between *Reviewed Proposals* and *Shared Reviews* preserves pending edits. Imported duplicate or out-of-range ranks may appear unranked; ask the administrator to check conflicting entries.
 
-- Select a summary card to display its associated list. Filters narrow results; **Clear filters**, where available, resets the filters. Choose **All sets** to reset a compact Set selector. Card counts can describe the filtered set rather than all records.
-- Use sortable table headings where available. Wide tables can scroll horizontally on smaller screens. Proposal list titles, action buttons, Set selectors and column headings stay visible while you scroll down the page through that list. No click is needed to start scrolling. They leave the screen when you move past the list.
-- **View Proposal** opens the proposal document. **Existing Lab Links**, when supplied, provide relevant existing labs.
-- **View Review** opens a submitted assessment you are authorised to see. It includes the reviewer name, numbered evaluation criteria, recorded ratings and comments. An assistant name is shown separately when available. Showing names does not grant access to otherwise private reviews.
-- Saved drafts use **Updated on**. Completed proposal lists use **Submitted on**. Pending lists omit the date column. Recognised dates show the full formatted timestamp on hover, in Indian Standard Time at minute precision.
-- Submitted final reviews are read-only. Private draft answers are not exposed in monitoring dashboards.
+### *My Selection Dashboard*
 
-## 4. LDC guide
+- *Reviewed Proposals*: see all your completed reviews, including Yes, No, On Hold and undecided (-) choices. This is where you edit Selected and Remarks.
+- Choose Yes, No, On Hold or - in Selected, then click *Submit Selections*. Saved Yes choices appear in the *Selected Proposals* cards. Saving another choice removes the proposal from those cards.
+- For Remarks, click *Add* or *View/Edit*. Click *Submit* in the popup, then *Submit Selections* to save. Remarks are optional and separate from Rank Justification. Clear and submit the text to remove a remark; cancelling the popup discards its changes.
+- *Shared Reviews*: read reviews shared by other active LDCs in your domain. Use *View Review* or *Download Selected Reviews*. These are read-only and do not become your assignments.
+- Use *Set* to narrow the list. Switching cards preserves pending edits. Save your changes before sharing or leaving.
 
-### Review and submit proposals
+### *Domain Dashboard*
 
-1. Open **My Workspace**, then the pending proposals card.
-2. Choose **Start Review** for an available assignment.
-3. Read the proposal and any existing lab links.
-4. Complete the eight rating questions using values from 1 to 6. Comments are optional.
-5. Use **Save as Draft** to save incomplete work. Continue from **Saved Draft Proposals** using **Resume Draft**. Saving a draft reserves the proposal for you, preventing the other assigned reviewer from continuing it.
-6. Check all answers before submitting the final review. Submitted reviews cannot be edited through the portal.
-7. Use **Reviewed Proposals** and **View Review** to inspect the saved assessment.
+- *Reviewed Proposals*: monitor completed reviews, reviewer ranks and saved Selected choices across your domain. Selected is read-only here.
+- *Pending Proposals*: see proposals still awaiting a final review, including proposals with saved drafts. Private draft answers are not shown.
+- *Ranked Proposals*: inspect saved ranks and justifications. To change your own ranks, go to *My Rank Dashboard*.
+- *Selected Proposals*: see domain proposals with saved Yes choices, experiment counts, filtered experiment totals and read-only Remarks. This card does not offer *View Review*.
+- *Shared Reviews*: read reviews shared by other active LDCs in your domain. Use *View Review* or *Download Selected Reviews*. These are read-only and do not become your assignments.
+- Use *Set* at the right of the table action row. Other reviewers’ assessment details remain private unless shared; completion and ranking information does not grant review access.
 
-A confirmation email may follow submission. If email delivery fails, the saved review remains valid; check the portal before attempting another submission.
+### *Summary Dashboard*
 
-### Select reviewed proposals
+- *Domain-wise Summary*: compare proposal and experiment totals across domains.
+- *Institute-wise Summary*: compare the same totals across institutes. Both tables show portal-wide totals for every role, including PIC and Assistant Reviewer.
+- Each table shows Proposals, Experiments, Reviewed Proposals, Pending Proposals, Selected Proposals and Selected Experiments, followed by a Total row.
+- Use the *Set* filter beside either table heading. Each filter works independently: changing one updates only that table and its Total row. Choose All sets to reset that table.
+- Selected totals count saved Yes choices. Pending includes drafts. Missing or invalid experiment counts are marked incomplete. These totals do not grant access to private reviews.
 
-In **My Selection Dashboard**, choose **Yes**, **No**, **On Hold** or **-** in the **Selected** column and click **Submit Selections**. The default is **-** (not decided). Only the review author can edit this choice; records without a detailed completed review are not editable. Saved Yes choices appear in **My Workspace → Selected Proposals** and **Domain Dashboard → Selected Proposals**. Submit No, On Hold or - to remove them. Selection does not change review status or rank, and download checkboxes are separate.
+### *My Assistant Reviewers Dashboard*
 
-Set changes and card changes preserve unsaved selection edits. Save before leaving the dashboard. My Workspace and Domain Dashboard each show five cards in one desktop row; cards stack on small screens.
+- This is the last dashboard tab when assistant assignments are available. Use its table to track assistant submissions; it has no sharing card or sharing actions.
+- *Review Draft* opens the assistant’s submitted answers as your draft. Check and edit them, then submit the final assessment. You remain responsible for the final review.
+- Use *View Review* when the final review is available. The compact *Set* filter sits at the right above the table.
 
-### Work with assistant reviewers
+### Sharing your completed reviews
 
-When assistant assignments exist, open **My Assistant Reviewers Dashboard** to monitor them. Use the compact Set selector at the right above the table, matching My Workspace; choose **All sets** to reset it. **Review Draft** opens an assistant's handed-off answers as your draft. Review and edit those answers before submitting the final assessment. You remain responsible for the final review.
+- In *My Workspace*, *My Rank Dashboard*, *My Selection Dashboard* or *Domain Dashboard*, check your own completed reviews and click *Share*. All other active LDCs in the same domain receive read-only review and PDF access.
+- You can share only final reviews you submitted. Pending proposals, drafts and another reviewer’s work cannot be shared by you. Sharing does not change assignments or summary totals, and sends no notification email.
+- The read-only Shared column shows Yes or No. *Share* is disabled when all checked reviews are already shared; *Revoke Sharing* is disabled when none are shared. Both are available for a mixed selection of your own reviews.
+- Click *Revoke Sharing* on your checked shared reviews to stop future recipient views and downloads. Previously viewed content and downloaded PDFs cannot be recalled. Save or discard pending rank or selection edits before changing sharing.
+- Sharing is not available in *Summary Dashboard* or *My Assistant Reviewers Dashboard*. If you also have PIC access, save your work before changing *Active Role*.
 
-### Rank completed reviews
+### Downloading reviews
 
-1. Open **My Rank Dashboard** and read **Ranking Guidelines**.
-2. Rank only the proposals whose final review you submitted in your domain. New completed reviews remain unranked until ranks are saved or generated.
-3. Enter ranks manually, with **1** as the highest priority. Avoid duplicate ranks within the same set in your list.
-4. Alternatively, select **Generate Rankings**. This replaces and saves ranks independently within each set using overall score descending, then Proposal ID ascending to break ties. The score totals the first seven criteria, out of 42; the eighth overall rating is separate.
-5. Use **Add** or **View/Edit** in Justification to explain a rank. **Submit** in the dialog stages the text; **Save Rankings** persists both ranks and justifications. Cancel or Escape discards dialog edits. Submit blank justification text and save to remove it.
-6. Save manual changes with **Save Rankings**. To remove a rank, choose **- (Unranked)** and save; repeat for every proposal to clear all ranks.
+- Check eligible reviews, then click *Download Selected Reviews*. *Select All* checks eligible visible rows; *Clear* clears those checkboxes without changing saved selections, ranks or sharing.
+- Each review downloads as a separate PDF. Allow multiple downloads if your browser asks, or use the individual filename links shown after downloading.
 
-Each reviewer has an independent ranking list within each domain and set, so different reviewers can use the same rank numbers. You cannot edit another reviewer's rankings. In ascending rank order, unranked entries appear first.
+### Reading completed reviews
 
-### Monitor the domain and download reviews
+- *View Review* shows the reviewer name, numbered ratings, comments and saved rank, justification, Selected status and Remarks when available. Submitted final reviews cannot be edited.
+- If Selected is - or empty, the on-screen Selected label is blank. Yes, No and On Hold are shown as saved. PDFs retain - for an undecided choice. Empty Remarks appears as None.
+- Rank Justification, Remarks and Reviewer Comments are separate fields. Only saved values appear; a previously downloaded PDF does not update when the saved record changes.
 
-**Domain Dashboard** shows Reviewed, Pending, Ranked, Selected and Shared Reviews across your domain. Pending includes saved drafts. Reviewed Proposals displays the saved Selected value (Yes, No, On Hold or -), read-only. Selected Proposals includes experiment counts and a total for the current Set filter, with Submitted on last; missing or invalid experiment counts are flagged as incomplete. It has no Saved Draft card. View Review appears only in Shared Reviews; other reviewers' assessment details remain private unless explicitly shared.
+### Filters, scrolling and returning to your work
 
-To download your own completed reviews, select checkboxes in **My Workspace → Reviewed Proposals** or **My Rank Dashboard**, then choose **Download Selected Reviews**.
+- Use *Set* to show Set A (Proposal IDs beginning A_), Set B (beginning B_) or All sets. IDs without either prefix appear under All sets only. Use *Clear filters*, where available, to reset filters.
+- Click a card to open its list. Card counts and totals may change with the filters. Click sortable column headings to change the row order.
+- Scroll normally: table headings stay visible until the end of the table. On a small screen, scroll wide tables sideways to see more columns. Hover over a date to see its timestamp.
+- Use *Refresh* to load the latest saved data. Your dashboard, active card and filters are remembered in the same tab, separately for each account and role, including after browser reload.
+- Save before refreshing, switching roles or leaving. Unsaved edits and checked rows are not restored after browser reload. Reloading an open review or form returns to its dashboard. If browser storage is blocked, preferences survive in-app refreshes only.
 
-## 5. Assistant Reviewer guide
+### Sign in and get help
 
-1. Open **Assigned Proposals** to view your assignments.
-2. Read the proposal and existing lab links, then fill in the assessment.
-3. Select **Save as Draft** to save incomplete work. Open **Draft Proposals → Resume Draft** to continue.
-4. When ready, select **Submit to LDC**. You cannot edit the assessment after handoff. Handoff is blocked if an LDC draft already exists, protecting the LDC's work; contact the LDC to coordinate.
-5. Under **Submitted to LDC**, select **View Submitted Review** to read your original answers.
-6. After the LDC finalises the assessment, use **View Final Review** to read it. Final-review access is view-only for assistants; PDF download is unavailable.
+- Use your registered, active email address and click *Send verification code*. Check your inbox and spam folder, enter the latest six-digit code in the same tab, then click *Verify and sign in*.
+- Codes expire after ten minutes. Wait for the resend countdown before requesting another code. Use *Use another email* if you entered the wrong address.
+- If your session expires while editing, keep the tab open and sign in with the same account to recover available in-memory work. Closing or reloading the tab loses unsaved edits.
+- If a save cannot be confirmed, use *Refresh* and check the saved result before trying again. If a proposal is reserved or your edit is outdated, coordinate with the assigned reviewer.
+- For a missing proposal or role, ask the administrator to check your account and assignments. Use *Help* or email support@vlabs.ac.in or manager.iitdelhi@gmail.com with the error and action you were performing. Never share OTPs. Select *Sign out* when finished.
 
-Use the Set filter to narrow assignments; Clear filters restores them. Assistants cannot edit final proposal selections or rankings. Summary Dashboard is available for portal-wide aggregate totals (see section 10).
+## Assistant Reviewer guide
 
-Assistant handoff is not the final review submission. The LDC checks the answers and submits the final assessment.
+### *My Workspace*
 
-## 6. PIC guide
+- *Assigned Proposals*: open an assigned proposal with *Start Review*. Read the proposal and any Existing Lab Links, then fill in your assessment.
+- *Draft Proposals*: use *Resume Draft* to continue. Use *Save as Draft* whenever you need to save incomplete work.
+- *Submitted to LDC*: use *View Submitted Review* to read the assessment you handed off. After the LDC finalises it, use *View Final Review* to read the final review.
+- When ready, click *Submit to LDC*. You cannot edit after handoff. If an LDC draft already exists, handoff is blocked; contact the LDC to coordinate.
+- Your handoff is not the final proposal review. The LDC checks your answers and submits the final assessment. Assistants cannot edit final selections or rankings, share reviews or download final-review PDFs.
+- Use *Set* to narrow your assignments, or *Clear filters* to restore the list.
 
-### Monitor institute proposals
+### *Summary Dashboard*
 
-1. Open **PIC Dashboard**. If you also have LDC access, first select PIC under **Active Role**.
-2. Choose **Reviewed Proposals** or **Pending Proposals**. Pending includes saved drafts, without exposing their answers.
-3. Filter using **Domain**, **Status** and **Set**. Institute and Reviewer filters are not shown because this dashboard is scoped to your institute.
-4. Select **View Review** to read submitted assessments and reviewer names.
+- *Domain-wise Summary*: compare proposal and experiment totals across domains.
+- *Institute-wise Summary*: compare the same totals across institutes. Both tables show portal-wide totals for every role, including PIC and Assistant Reviewer.
+- Each table shows Proposals, Experiments, Reviewed Proposals, Pending Proposals, Selected Proposals and Selected Experiments, followed by a Total row.
+- Use the *Set* filter beside either table heading. Each filter works independently: changing one updates only that table and its Total row. Choose All sets to reset that table.
+- Selected totals count saved Yes choices. Pending includes drafts. Missing or invalid experiment counts are marked incomplete. These totals do not grant access to private reviews.
 
-*Domain Progress* and *Reviewer Progress* include totals for their displayed rows after filters are applied. Reviewer totals sum workloads, so assignments shared by multiple reviewers can count more than once.
+### Reading completed reviews
 
-PIC Dashboard includes a read-only Selected Proposals card for its institute. Rank Dashboard has no Selected Proposals card. You can see portal-wide selected counts in Summary Dashboard (section 10).
+- *View Review* shows the reviewer name, numbered ratings, comments and saved rank, justification, Selected status and Remarks when available. Submitted final reviews cannot be edited.
+- If Selected is - or empty, the on-screen Selected label is blank. Yes, No and On Hold are shown as saved. PDFs retain - for an undecided choice. Empty Remarks appears as None.
+- Rank Justification, Remarks and Reviewer Comments are separate fields. Only saved values appear; a previously downloaded PDF does not update when the saved record changes.
 
-### Monitor rankings
+### Filters, scrolling and returning to your work
 
-Open **Rank Dashboard**, then select **Ranked Proposals** or **Unranked Proposals** inside **Reviewer Rankings**. Use Domain, Status and Set filters to narrow results. Status describes proposal review status, not rank state; selecting Pending can produce no results because ranking lists contain completed reviews.
+- Use *Set* to show Set A (Proposal IDs beginning A_), Set B (beginning B_) or All sets. IDs without either prefix appear under All sets only. Use *Clear filters*, where available, to reset filters.
+- Click a card to open its list. Card counts and totals may change with the filters. Click sortable column headings to change the row order.
+- Scroll normally: table headings stay visible until the end of the table. On a small screen, scroll wide tables sideways to see more columns. Hover over a date to see its timestamp.
+- Use *Refresh* to load the latest saved data. Your dashboard, active card and filters are remembered in the same tab, separately for each account and role, including after browser reload.
+- Save before refreshing, switching roles or leaving. Unsaved edits and checked rows are not restored after browser reload. Reloading an open review or form returns to its dashboard. If browser storage is blocked, preferences survive in-app refreshes only.
 
-**Rank / Reviewer Total** compares a saved rank with that reviewer's completed proposals in the same domain and set, including proposals from other institutes. It is not a single institute-wide ranking. PIC access is for monitoring; switch to LDC, if assigned, to submit reviews or edit personal ranks.
+### Sign in and get help
 
-### Download
+- Use your registered, active email address and click *Send verification code*. Check your inbox and spam folder, enter the latest six-digit code in the same tab, then click *Verify and sign in*.
+- Codes expire after ten minutes. Wait for the resend countdown before requesting another code. Use *Use another email* if you entered the wrong address.
+- If your session expires while editing, keep the tab open and sign in with the same account to recover available in-memory work. Closing or reloading the tab loses unsaved edits.
+- If a save cannot be confirmed, use *Refresh* and check the saved result before trying again. If a proposal is reserved or your edit is outdated, coordinate with the assigned reviewer.
+- For a missing proposal or role, ask the administrator to check your account and assignments. Use *Help* or email support@vlabs.ac.in or manager.iitdelhi@gmail.com with the error and action you were performing. Never share OTPs. Select *Sign out* when finished.
 
-Select completed reviews in either dashboard and choose **Download Selected Reviews**, or use **Download Review PDF** inside View Review.
+## PIC guide
 
-## 7. Admin guide
+### *PIC Dashboard*
 
-### Review Dashboard
+- This dashboard shows proposals belonging to your configured institute. If you also have LDC access, choose PIC under *Active Role*.
+- *Reviewed Proposals*: use *View Review* to read submitted assessments and reviewer names, or download eligible reviews.
+- *Pending Proposals*: monitor institute proposals awaiting a final review. Drafts count as pending, but their answers remain private.
+- *Selected Proposals*: view institute proposals with saved Yes choices and read-only Remarks. Overall Score is hidden for PIC. There is no *My Selection Dashboard* for PIC.
+- Use *Domain*, *Status* and *Set* to narrow results. *Clear filters* restores the institute list. Institute and Reviewer filters are not shown.
+- *Domain Progress*: check reviewed and pending counts by domain. The Total row follows the active filters.
+- *Reviewer Progress*: check assigned, open and submitted workloads. Totals can count one proposal more than once when it has multiple reviewers. Accounts with primary roles Admin, PIC or Assistant Reviewer are excluded; an LDC with a secondary PIC role can appear.
+- *Reviewer Progress* includes LDCs assigned to or having submitted reviews for your institute’s filtered proposals, even when the LDC belongs to another institute. LDCs with no assignments or submissions in that filtered list are omitted.
 
-Select Reviewed, Pending or Selected Proposals. Selected Proposals shows saved Yes choices read-only. Filter by **Domain**, **Institute** and **Reviewer**, with the compact **Set** selector at the right of the table toolbar. Domain Progress and Reviewer Progress summarise filtered results. Both tables include a Total row for the displayed numeric columns. Reviewer totals sum reviewer workloads; a proposal assigned to multiple reviewers can contribute more than once. Reviewer Progress excludes Admin, Assistant Reviewer and PIC accounts (based on the primary Role in Users). Pending includes drafts, but their answers remain private. Open **View Review** to inspect completed assessments.
+### *Rank Dashboard*
 
-### Proposal Dashboard
+- *Ranked Proposals*: view saved rankings for your institute. Use *View Review*, *View Proposal* and the justification *View* control to inspect supporting information.
+- *Unranked Proposals*: view completed reviews that do not have a valid saved rank. These are reviewed proposals, not pending reviews.
+- Each reviewer has a separate ranking list within each domain and set. Rank / Reviewer Total compares the rank with that reviewer’s reviewed proposals in the same domain and set, including other institutes. This dashboard is read-only.
+- Use the available filters and *Set* to narrow the list. Download eligible completed reviews with *Download Selected Reviews*.
 
-Browse all proposals using Status, Institute, Domain and Set filters. **View Proposal** opens the supporting document. Clear filters restores the unfiltered list.
+### *Summary Dashboard*
 
-### Rank Dashboard
+- *Domain-wise Summary*: compare proposal and experiment totals across domains.
+- *Institute-wise Summary*: compare the same totals across institutes. Both tables show portal-wide totals for every role, including PIC and Assistant Reviewer.
+- Each table shows Proposals, Experiments, Reviewed Proposals, Pending Proposals, Selected Proposals and Selected Experiments, followed by a Total row.
+- Use the *Set* filter beside either table heading. Each filter works independently: changing one updates only that table and its Total row. Choose All sets to reset that table.
+- Selected totals count saved Yes choices. Pending includes drafts. Missing or invalid experiment counts are marked incomplete. These totals do not grant access to private reviews.
 
-Select Ranked or Unranked proposals and narrow results using Domain, Institute, Reviewer and Set. Use View Review, View Proposal and justification View controls to inspect supporting material. Each reviewer's ranking list is independent within each domain and set. This dashboard does not edit their ranks.
+### Downloading reviews
 
-### Summary Dashboard
+- Check eligible reviews, then click *Download Selected Reviews*. *Select All* checks eligible visible rows; *Clear* clears those checkboxes without changing saved selections, ranks or sharing.
+- Each review downloads as a separate PDF. Allow multiple downloads if your browser asks, or use the individual filename links shown after downloading.
 
-Open Summary Dashboard for portal-wide lab, experiment, review and selected totals. See section 10 for filters and counting rules.
+### Review-view downloads and roles
 
-### User Dashboard
+- Inside *View Review*, you can also use *Download Review PDF*. PIC dashboards are read-only.
+- If you also have the LDC role, switch *Active Role* to LDC to review assigned proposals or edit your own ranks and selections. Save changes before switching.
 
-Use the read-only **Users & roles** table to inspect assignments and filter by Domain, Institutes, Roles and Active/Inactive Status. User accounts, roles and proposal assignments are maintained in Google Sheets, not edited through this dashboard. Coordinate changes with the application administrator/developer and follow the technical guide.
+### Reading completed reviews
 
-### Download
+- *View Review* shows the reviewer name, numbered ratings, comments and saved rank, justification, Selected status and Remarks when available. Submitted final reviews cannot be edited.
+- If Selected is - or empty, the on-screen Selected label is blank. Yes, No and On Hold are shown as saved. PDFs retain - for an undecided choice. Empty Remarks appears as None.
+- Rank Justification, Remarks and Reviewer Comments are separate fields. Only saved values appear; a previously downloaded PDF does not update when the saved record changes.
 
-Select completed reviews in monitoring/ranking lists and choose **Download Selected Reviews**. View Review also offers **Download Review PDF**.
+### Filters, scrolling and returning to your work
 
-## 8. PDF downloads
+- Use *Set* to show Set A (Proposal IDs beginning A_), Set B (beginning B_) or All sets. IDs without either prefix appear under All sets only. Use *Clear filters*, where available, to reset filters.
+- Click a card to open its list. Card counts and totals may change with the filters. Click sortable column headings to change the row order.
+- Scroll normally: table headings stay visible until the end of the table. On a small screen, scroll wide tables sideways to see more columns. Hover over a date to see its timestamp.
+- Use *Refresh* to load the latest saved data. Your dashboard, active card and filters are remembered in the same tab, separately for each account and role, including after browser reload.
+- Save before refreshing, switching roles or leaving. Unsaved edits and checked rows are not restored after browser reload. Reloading an open review or form returns to its dashboard. If browser storage is blocked, preferences survive in-app refreshes only.
 
-Each selected review downloads as a separate PDF. Allow multiple downloads if your browser prompts, or use the individual filename links shown by the portal.
+### Sign in and get help
 
-The PDF includes proposal metadata/link, reviewer, reviewed timestamp, recorded rank/justification, numbered ratings, comments and footer. Long comments can span pages. Historical reviews retain their recorded scale. If non-Latin characters render incorrectly, report the affected review to support; the current PDF fonts have limited language coverage.
+- Use your registered, active email address and click *Send verification code*. Check your inbox and spam folder, enter the latest six-digit code in the same tab, then click *Verify and sign in*.
+- Codes expire after ten minutes. Wait for the resend countdown before requesting another code. Use *Use another email* if you entered the wrong address.
+- If your session expires while editing, keep the tab open and sign in with the same account to recover available in-memory work. Closing or reloading the tab loses unsaved edits.
+- If a save cannot be confirmed, use *Refresh* and check the saved result before trying again. If a proposal is reserved or your edit is outdated, coordinate with the assigned reviewer.
+- For a missing proposal or role, ask the administrator to check your account and assignments. Use *Help* or email support@vlabs.ac.in or manager.iitdelhi@gmail.com with the error and action you were performing. Never share OTPs. Select *Sign out* when finished.
 
-## 9. Saving, errors and help
+## Admin guide
 
-| Situation | What to do |
-|---|---|
-| No OTP arrives | Confirm the registered email, check spam and wait for cooldown before requesting a new code. Contact the administrator if it persists. |
-| Wrong or expired OTP | Use only the newest code; request a new one after cooldown if necessary. |
-| Session expires while editing | Keep the same tab open and sign in with the same account to recover in-memory work. Closing or reloading loses unsaved edits. |
-| Stale-edit or reservation message | Refresh and inspect the latest saved state before editing again; coordinate with the assigned reviewer. |
-| Update could not be confirmed | Refresh and check whether the change saved before retrying. Do not repeatedly submit. |
-| Portal unavailable | Give the administrator the time and operation that failed. Never share OTPs or secrets. |
-| Expected proposal/role missing | Ask the administrator to check your active account, role, domain, institute and assignment in Sheets. |
+### *Review Dashboard*
 
-Save before refreshing, switching roles or leaving. Support contacts shown in the application: support@vlabs.ac.in and manager.iitdelhi@gmail.com.
+- *Reviewed Proposals*: inspect completed assessments with *View Review* and download eligible reviews.
+- *Pending Proposals*: monitor proposals awaiting final review, including saved drafts. Draft answers remain private.
+- *Selected Proposals*: view saved Yes choices, experiment counts, ranks and read-only Remarks. Use *View* to read a remark. Overall Score is out of 42.
+- Use *Domain*, *Institute* and *Reviewer* filters together with the compact *Set* selector at the right of the table toolbar. *Clear filters* restores the full list.
+- *Domain Progress*: check reviewed and pending counts by domain. The Total row follows the active filters.
+- *Reviewer Progress*: check assigned, open and submitted workloads. Totals can count one proposal more than once when it has multiple reviewers. Accounts with primary roles Admin, PIC or Assistant Reviewer are excluded; an LDC with a secondary PIC role can appear.
 
-For developer and configuration details, see the [Technical Guide](technical-guide.md).
+### *Proposal Dashboard*
 
-## 10. Summary Dashboard — all roles
+- Use the proposal table to browse all proposals. *View Proposal* opens the proposal document.
+- Filter by *Status*, *Institute*, *Domain* and *Set*. Status choices are Pending and Reviewed; Pending includes saved drafts. Use *Clear filters* to restore all proposals.
 
-Every signed-in role can open Summary Dashboard. It shows **portal-wide** totals across domains and institutes, including for PIC and Assistant Reviewer accounts. This does not expand access to individual proposals or private reviews.
+### *Rank Dashboard*
 
-Both **Domain-wise Summary** and **Institute-wise Summary** include:
+- *Ranked Proposals*: view saved rankings for all institutes. Use *View Review*, *View Proposal* and the justification *View* control to inspect supporting information.
+- *Unranked Proposals*: view completed reviews that do not have a valid saved rank. These are reviewed proposals, not pending reviews.
+- Each reviewer has a separate ranking list within each domain and set. Rank / Reviewer Total compares the rank with that reviewer’s reviewed proposals in the same domain and set, including other institutes. This dashboard is read-only.
+- Use the available filters and *Set* to narrow the list. Download eligible completed reviews with *Download Selected Reviews*.
 
-- Proposals and Experiments.
-- Reviewed Proposals and Pending Proposals.
-- Selected Proposals and Selected Experiments, based on saved Yes choices.
-- A Total row that follows the Set filter and stays at the bottom when sorting.
+### *User Dashboard*
 
-The compact Set selectors sit at the right of both table headings and stay synchronized. Changing either updates both tables. Choose **All sets** to reset.
+- Use the *Users & roles* table to check names, email addresses, institutes, roles and account status.
+- Filter by *Domain*, *Institutes*, *Roles* or *Status*. Use *Clear filters* to restore the list. This dashboard has no *Set* filter.
+- This table is read-only. User accounts, roles and proposal assignments are maintained in Google Sheets by the administrator/developer.
 
-Each Proposal ID in Proposals counts as one lab. A completed review or Reviewed status counts as reviewed; other proposals, including drafts, count as pending. Experiments use the recorded No. of Experiments. Missing or invalid experiment counts are flagged as incomplete rather than presented as a complete total. Missing domains/institutes appear as Not configured. Reviews without a corresponding proposal row are excluded.
+### *Summary Dashboard*
 
-## 11. Set filters and ranking groups
+- *Domain-wise Summary*: compare proposal and experiment totals across domains.
+- *Institute-wise Summary*: compare the same totals across institutes. Both tables show portal-wide totals for every role, including PIC and Assistant Reviewer.
+- Each table shows Proposals, Experiments, Reviewed Proposals, Pending Proposals, Selected Proposals and Selected Experiments, followed by a Total row.
+- Use the *Set* filter beside either table heading. Each filter works independently: changing one updates only that table and its Total row. Choose All sets to reset that table.
+- Selected totals count saved Yes choices. Pending includes drafts. Missing or invalid experiment counts are marked incomplete. These totals do not grant access to private reviews.
 
-**Set A** matches IDs beginning with A_; **Set B** matches B_. Other IDs appear only under All sets. The User Dashboard has no Set filter.
+### Downloading reviews
 
-| Screen | Set filter location and reset |
-|---|---|
-| LDC My Workspace / Domain Dashboard | Right of the proposal-table action row; choose All sets. |
-| LDC My Rank Dashboard | Beside Generate Rankings; choose All sets. |
-| Admin Review Dashboard | Right of the table action row; choose All sets or Clear filters. |
-| My Assistant Reviewers Dashboard | Right above the table; choose All sets. |
-| Admin Proposal / Rank dashboards, PIC dashboards, Assistant Reviewer workspace | In the filter panel; choose All sets or Clear filters. |
-| Summary Dashboard | Right of both table headings, synchronized; choose All sets. |
+- Check eligible reviews, then click *Download Selected Reviews*. *Select All* checks eligible visible rows; *Clear* clears those checkboxes without changing saved selections, ranks or sharing.
+- Each review downloads as a separate PDF. Allow multiple downloads if your browser asks, or use the individual filename links shown after downloading.
 
-Filters narrow visible rows and card counts. Downloads use visible selected rows. In My Rank Dashboard, filtering preserves edits; Save Rankings includes edits across sets, and Generate Rankings generates each set independently even when only one set is displayed.
+### Review-view downloads
 
-Each reviewer has separate ranks within each domain and set. Set A and Set B can each start at Rank 1; IDs without either prefix form a separate legacy group. Rank choices and Rank / Reviewer Total use that reviewer's reviewed proposals in the same domain/set, including other institutes. Manual duplicate rank choices are rejected. For duplicate spreadsheet entries within a group, the first eligible valid rank remains ranked and later conflicts appear unranked. Ranks above the group's proposal count also appear unranked. Ask the administrator to resolve imported conflicts; viewing a dashboard does not rewrite the sheet.
+- Inside *View Review*, you can also use *Download Review PDF*. Admin access monitors saved selections and rankings; it does not edit an LDC’s selections, remarks or ranks.
 
+### Reading completed reviews
 
-### Selection remarks and table columns
+- *View Review* shows the reviewer name, numbered ratings, comments and saved rank, justification, Selected status and Remarks when available. Submitted final reviews cannot be edited.
+- If Selected is - or empty, the on-screen Selected label is blank. Yes, No and On Hold are shown as saved. PDFs retain - for an undecided choice. Empty Remarks appears as None.
+- Rank Justification, Remarks and Reviewer Comments are separate fields. Only saved values appear; a previously downloaded PDF does not update when the saved record changes.
 
-LDC users can edit Remarks in My Selection Dashboard, then click Submit Selections to save Remarks and Selected together. Remarks are optional (up to 10,000 characters). Admin/PIC and Domain Dashboard display them read-only. Pending and Saved Drafts do not have this field.
+### Filters, scrolling and returning to your work
 
-Selected Proposals columns are S.No., Proposal ID, Proposal Name, Experiments, Action (View Review), Overall Score (out of 42), Rank, Justification, Selected, Remarks, and Submitted on last. Domain Dashboard omits Action. PIC sees only its institute’s selected proposals and does not see Overall Score. Existing View Review permissions remain unchanged. Experiment totals follow the active filters.
+- Use *Set* to show Set A (Proposal IDs beginning A_), Set B (beginning B_) or All sets. IDs without either prefix appear under All sets only. Use *Clear filters*, where available, to reset filters.
+- Click a card to open its list. Card counts and totals may change with the filters. Click sortable column headings to change the row order.
+- Scroll normally: table headings stay visible until the end of the table. On a small screen, scroll wide tables sideways to see more columns. Hover over a date to see its timestamp.
+- Use *Refresh* to load the latest saved data. Your dashboard, active card and filters are remembered in the same tab, separately for each account and role, including after browser reload.
+- Save before refreshing, switching roles or leaving. Unsaved edits and checked rows are not restored after browser reload. Reloading an open review or form returns to its dashboard. If browser storage is blocked, preferences survive in-app refreshes only.
 
-The optional Remarks column in Completed Reviews is created on save; no manual sheet setup is needed. Remarks share Selection Revision concurrency protection, including a check against the original Remarks value.
+### Sign in and get help
 
+- Use your registered, active email address and click *Send verification code*. Check your inbox and spam folder, enter the latest six-digit code in the same tab, then click *Verify and sign in*.
+- Codes expire after ten minutes. Wait for the resend countdown before requesting another code. Use *Use another email* if you entered the wrong address.
+- If your session expires while editing, keep the tab open and sign in with the same account to recover available in-memory work. Closing or reloading the tab loses unsaved edits.
+- If a save cannot be confirmed, use *Refresh* and check the saved result before trying again. If a proposal is reserved or your edit is outdated, coordinate with the assigned reviewer.
+- For a missing proposal or role, ask the administrator to check your account and assignments. Use *Help* or email support@vlabs.ac.in or manager.iitdelhi@gmail.com with the error and action you were performing. Never share OTPs. Select *Sign out* when finished.
 
-### My Selection Dashboard
+## Developer information
 
-Only LDC users can open My Selection Dashboard. LDC sees all their own reviewed proposals, including -, No, On Hold and Yes, and can edit Selected and Remarks there. Admin and PIC have no My Selection Dashboard; they view saved Yes selections in their read-only Selected Proposals cards. Use Set to narrow the list. The columns match Selected Proposals, without Submitted on; PIC’s Selected Proposals card omits Overall Score. LDC can edit Selected and Remarks and save with Submit Selections; Admin/PIC are read-only. View Review retains existing role permissions.
-
-Remarks use Add / View/Edit / View dialogs, separately from Rank Justification. Submit in the dialog stages an edit; Submit Selections saves it. Cancel discards dialog changes. Clear and submit the text to remove Remarks.
-
-Summary headings are Domain (or Institute), Proposals, Experiments, Reviewed Proposals, Pending Proposals, Selected Proposals and Selected Experiments. PIC status options display Reviewed and Pending.
-
-
-LDC dashboard tab order: My Workspace, My Rank Dashboard, My Selection Dashboard, Domain Dashboard, Summary Dashboard, and My Assistant Reviewers Dashboard (when available). My Workspace Reviewed Proposals omits Selected and Remarks; selection and remark editing is available only in My Selection Dashboard. The Selected Proposals card remains read-only. Sheet source headers such as No. of Experiments remain unchanged.
-
-
-### Sharing completed reviews within a domain
-
-LDC authors can use *My Workspace*, *My Rank Dashboard*, *My Selection Dashboard* or *Domain Dashboard*, check their own completed reviews, and click *Share*. This grants all other active LDCs in the same domain read-only access, including PDF downloads, irrespective of institute or Set. Recipients use the *Shared Reviews* card in any of these four dashboards, with *View Review* and *Download Selected Reviews*. Set filters narrow the visible list. The *Shared* column shows read-only Yes/No for all rows. Only successful *Share* or *Revoke Sharing* actions on checked reviews update this status. Mixed selections containing another reviewer’s reviews cannot be shared or revoked.
-
-Recipients cannot change the author’s review, rank, selection, remarks or sharing. Sharing does not add assignments or increase Summary counts. Access is checked on each request against current active accounts, LDC roles, proposal domain, original sharing domain and author identity. Revoke blocks future views/downloads; it cannot recall downloaded PDFs or already viewed content. No notification emails are sent.
-
-Optional Completed Reviews columns are created on first share/revoke: Shared With Domain (Yes/No), Shared Domain, Shared By, Sharing Revision. No manual setup or new environment variables are required. saveReviewSharing uses the existing atomic Sheets batch and lock, validates all rows before mutation, and rejects stale revisions. Existing Admin/PIC access remains scoped as before.
-
-PIC *Reviewer Progress* includes LDCs assigned to or having submitted a review for the PIC institute’s proposals, regardless of the LDC’s own institute. Counts use the same filtered, institute-owned proposals as *Domain Progress*. LDCs with no assignments or submissions in that filtered set are omitted. Primary Admin, PIC and Assistant Reviewer accounts remain excluded. This does not grant access to proposals belonging to other institutes. No Google Sheets configuration changes are needed.
-
-Ranking tables also keep their list title, action toolbar and column headings visible during normal page scrolling. This applies to LDC *My Rank Dashboard* and Admin/PIC *Rank Dashboard*. The LDC toolbar includes *Ranking Guidelines*, *Generate Rankings* and *Set*. The summary and explanatory text scroll with the page; horizontal scrolling keeps the headings aligned with their columns.
-
-*View Review* shows the current saved Selected status and Remarks. If Selected is - or empty, only the bold label Selected: appears; Yes, No and On Hold remain visible. Downloaded PDFs still show - for an undecided selection. In both outputs, Remarks uses a normal-size bold label with a colon and its value starts on the same line, for example Remarks: None. Rank Justification and Reviewer Comments are separate fields. Only saved values appear; existing downloaded PDFs do not update automatically. Assistant handoff views do not show final-review selection fields.
-
-All on-screen tables use sticky column headings for every role, including progress, directories, summary, assistant tables and submitted ratings. Scroll the page normally; headings stay aligned during horizontal scrolling and stop at the table end. Summary table titles and Set selectors, progress titles and directory table titles also stay visible above their headings. Print/PDF layouts are unchanged.
-
-LDC sharing is available in My Workspace, My Rank Dashboard, My Selection Dashboard and Domain Dashboard. Each has a Shared Reviews card with read-only View Review and PDF downloads. Select your own completed reviews and use Share or Revoke Sharing. Pending/draft proposals and other reviewers’ work cannot be shared by you. Save or discard unsaved ranking/selection edits before changing sharing. My Rank Dashboard and My Selection Dashboard have a Reviewed Proposals card to return to your own work; switching to Shared Reviews preserves unsaved edits. Summary and Assistant dashboards do not include these controls or cards. Admin, PIC and Assistant Reviewer views are unchanged. Shared reviews do not increase personal assignment counts.
-
-Use *Select All* to check eligible reviews in the displayed list and *Clear* to clear those checkboxes. *Clear filters* resets filter choices instead; neither action changes saved ranks, selections or sharing. *Shared Reviews* has the description “Reviews shared by other LDCs in the same domain”. The *Reviewed Proposals* card in My Rank Dashboard and My Selection Dashboard shows count / total (for example 30 / 30); shared reviews are counted separately. Admin Proposal Dashboard displays Pending and Reviewed in both the Status filter and table cells.
-
-Share is disabled when all checked reviews are already shared. Revoke Sharing is disabled when none are shared. Both actions are available for a mixed selection of your own shared and unshared reviews.
-
-## Dashboard state after refresh
-
-The portal remembers your current dashboard, active card and filters in the same browser tab, separately for each account and role. Saving, sharing, revoking, using *Refresh* or reloading the browser restores that view. Reloading an open review or review form returns to its dashboard. Unsaved edits and checked rows are not restored after a browser reload; save your work first. If browser storage is unavailable, preferences survive in-app refreshes only.
+For Google Sheets configuration, storage fields and API behaviour, see the [Technical Guide](technical-guide.md).

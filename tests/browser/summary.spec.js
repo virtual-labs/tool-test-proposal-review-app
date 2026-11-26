@@ -21,10 +21,12 @@ test('all roles can view both summary tables and filter by set on desktop and mo
     await table.getByRole('button',{name:/^Proposals/}).click();
     await expect(table.locator('tfoot tr')).toHaveCount(1);
   }
-  await page.getByRole('combobox',{name:'Set',exact:true}).first().selectOption('A');await expect(institutes.locator('tbody tr')).toHaveCount(1);await expect(domain).not.toContainText('incomplete:');
-  for(const table of [domain,institutes])await expect(table.locator('tfoot td')).toHaveText(['1','4','0','1','0','0']);
-  await expect(page.getByRole('combobox',{name:'Set',exact:true}).last()).toHaveValue('A');
-  await page.getByRole('combobox',{name:'Set',exact:true}).last().selectOption('');await expect(institutes.locator('tbody tr')).toHaveCount(2);
+  const domainSet=page.getByRole('combobox',{name:'Set',exact:true}).first(),instituteSet=page.getByRole('combobox',{name:'Set',exact:true}).last();
+  await domainSet.selectOption('A');await expect(domain.locator('tfoot td')).toHaveText(['1','4','0','1','0','0']);await expect(instituteSet).toHaveValue('');await expect(institutes.locator('tbody tr')).toHaveCount(2);await expect(institutes.locator('tfoot td').first()).toHaveText('2');
+  await instituteSet.selectOption('B');await expect(institutes.locator('tfoot td').first()).toHaveText('1');await expect(institutes).toContainText('incomplete: 1');await expect(domainSet).toHaveValue('A');await expect(domain).not.toContainText('incomplete:');
+  for(const reload of [async()=>page.locator('#refreshBtn').click(),async()=>page.reload()]){await reload();await expect(domainSet).toHaveValue('A');await expect(instituteSet).toHaveValue('B');await expect(domain.locator('tfoot td')).toHaveText(['1','4','0','1','0','0']);await expect(institutes.locator('tfoot td').first()).toHaveText('1');}
+  await instituteSet.selectOption('');await expect(institutes.locator('tbody tr')).toHaveCount(2);await expect(domainSet).toHaveValue('A');await expect(domain.locator('tfoot td').first()).toHaveText('1');
+  await domainSet.selectOption('');await expect(domain.locator('tfoot td').first()).toHaveText('2');
   await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.setViewportSize({width:1280,height:900});
   await page.locator('#logoutBtn').click();
  }

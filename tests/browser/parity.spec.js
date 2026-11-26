@@ -62,3 +62,14 @@ test('ranking default/sort order, guidelines, serial numbers, toolbar alignment 
  await page.locator('#rankingEditor').evaluate(e=>e.scrollLeft=200);const after=await page.locator('#autoRankProposalsBtn').boundingBox();expect(after.x).toBe(generate.x);await page.locator('#rankingEditor').evaluate(e=>e.scrollLeft=0);await page.screenshot({path:'test-results/parity-ranking-desktop.png',fullPage:true});
  await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);expect(await page.locator('#rankingEditor').evaluate(e=>e.scrollWidth>e.clientWidth)).toBe(true);await page.locator('#rankingGuidelinesBtn').click();await expect(dialog).toBeVisible();expect(await dialog.evaluate(e=>e.scrollTop)).toBe(0);expect(await dialog.evaluate(e=>e.getBoundingClientRect().width<=innerWidth)).toBe(true);await page.screenshot({path:'test-results/parity-ranking-mobile.png',fullPage:true});
 });
+
+test('role guides group dashboards into headings and card bullets on desktop and mobile',async({page,request})=>{
+ for(const [email,role,heading,card] of [['ldc@example.com','LDC','My Workspace','Saved Draft Proposals'],['assistant@example.com','Assistant Reviewer','My Workspace','Submitted to LDC'],['admin@example.com','Administrator','Review Dashboard','Selected Proposals'],['ldc@example.com','PIC','PIC Dashboard','Pending Proposals']]){
+  await request.post('/__test/reset');await login(page,email);if(role==='PIC')await page.locator('#roleSelector').selectOption('PIC');
+  await page.getByRole('button',{name:role+' User Guide',exact:true}).click();const dialog=page.getByRole('dialog');
+  await expect(dialog.getByRole('heading',{name:heading,exact:true})).toBeVisible();await expect(dialog.locator('section').filter({has:page.getByRole('heading',{name:heading,exact:true})}).locator('li em').filter({hasText:card})).toHaveCount(1);
+  const summary=dialog.getByRole('region',{name:'Summary Dashboard',exact:true});await expect(summary).toContainText('Each filter works independently');await expect(summary.locator('ul > li')).toHaveCount(5);
+  await expect(dialog.locator('h3 em').first()).toHaveCSS('font-style','italic');
+  await page.setViewportSize({width:390,height:844});expect(await dialog.evaluate(e=>e.scrollWidth<=e.clientWidth)).toBe(true);await page.keyboard.press('Escape');await expect(dialog).toHaveCount(0);await page.setViewportSize({width:1280,height:900});await page.locator('#logoutBtn').click();
+ }
+});
