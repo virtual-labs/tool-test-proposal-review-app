@@ -234,3 +234,7 @@ LDC sharing is available in My Workspace, My Rank Dashboard, My Selection Dashbo
 Use *Select All* to check eligible reviews in the displayed list and *Clear* to clear those checkboxes. *Clear filters* resets filter choices instead; neither action changes saved ranks, selections or sharing. *Shared Reviews* has the description “Reviews shared by other LDCs in the same domain”. The *Reviewed Proposals* card in My Rank Dashboard and My Selection Dashboard shows count / total (for example 30 / 30); shared reviews are counted separately. Admin Proposal Dashboard displays Pending and Reviewed in both the Status filter and table cells.
 
 Share is disabled when all checked reviews are already shared. Revoke Sharing is disabled when none are shared. Both actions are available for a mixed selection of your own shared and unshared reviews.
+
+## Dashboard state after refresh
+
+The portal remembers your current dashboard, active card and filters in the same browser tab, separately for each account and role. Saving, sharing, revoking, using *Refresh* or reloading the browser restores that view. Reloading an open review or review form returns to its dashboard. Unsaved edits and checked rows are not restored after a browser reload; save your work first. If browser storage is unavailable, preferences survive in-app refreshes only.

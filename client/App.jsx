@@ -1,3 +1,4 @@
+import {ViewStateContext,useViewState} from './view-state.js';
 import {Summary} from './components/Summary.jsx';
 import React,{useCallback,useEffect,useRef,useState} from 'react';
 import {rpc,initialAnswers} from './api.js';
@@ -11,13 +12,16 @@ import {Ranking,RankMonitor} from './components/Ranking.jsx';
 export function App(){
   const [session,setSession]=useState(null),[checking,setChecking]=useState(true),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
   const [selectionEdits,setSelectionEdits]=useState({});
-  const [view,setView]=useState(null),[revision,setRevision]=useState(0),[help,setHelp]=useState(false),[detail,setDetail]=useState(null),[work,setWork]=useState(null),[dirty,setDirty]=useState(false),[recovery,setRecovery]=useState(null),[rankRestore,setRankRestore]=useState(null),[files,setFiles]=useState([]);
+  const [view,setTransientView]=useState(null),[revision,setRevision]=useState(0),[help,setHelp]=useState(false),[detail,setDetail]=useState(null),[work,setWork]=useState(null),[dirty,setDirty]=useState(false),[recovery,setRecovery]=useState(null),[rankRestore,setRankRestore]=useState(null),[files,setFiles]=useState([]);
   const returnView=useRef('workspace'),urls=useRef([]),lastEmail=useRef('');
   const report=useCallback(err=>{
     setError(err.message||String(err));
-    if(err.status===401||String(err.message).includes('AUTH_REQUIRED:')){setSession(null);setView(null);setDetail(null);setDirty(false);setNotice('Sign in again. Unsaved changes remain available in this tab for the same account.');}
+    if(err.status===401||String(err.message).includes('AUTH_REQUIRED:')){setSession(null);setTransientView(null);setDetail(null);setDirty(false);setNotice('Sign in again. Unsaved changes remain available in this tab for the same account.');}
   },[]);
   const {data:app,loading}=useResource('getInitialData',[],`${revision}:${session?.activeRole||''}:${session?.email||''}`,report,!!session);
+  const identity=session?.email&&app?.user?.role?JSON.stringify([session.email.toLowerCase(),app.user.role]):'';
+  const [savedView,setSavedView]=useViewState('dashboard','',identity);
+  function setView(next){setTransientView(next);if(next&&!['view','review'].includes(next))setSavedView(next);}
   useEffect(()=>{let active=true;rpc('session').then(result=>{if(active&&result.authenticated){lastEmail.current=result.email;setSession(result);}}).catch(err=>{if(active)report(err);}).finally(()=>{if(active)setChecking(false);});return ()=>{active=false;};},[report]);
   useEffect(()=>{const handler=event=>{if(dirty||busy||recovery){event.preventDefault();event.returnValue='';}};window.addEventListener('beforeunload',handler);return ()=>window.removeEventListener('beforeunload',handler);},[dirty,busy,recovery]);
   useEffect(()=>()=>urls.current.forEach(url=>URL.revokeObjectURL(url)),[]);
@@ -32,7 +36,9 @@ export function App(){
     try{const result=await rpc(action,...(publicAction?args:['cookie',...args]));if(action==='requestOtp')setNotice(result.message);return result;}
     catch(err){report(err);return null;}finally{setBusy(false);}
   },[report]);
-  const user=app?.user,isMonitor=['Admin','PIC'].includes(user?.role),activeView=view||(isMonitor?'admin':'workspace');
+  const user=app?.user,isMonitor=['Admin','PIC'].includes(user?.role),defaultView=isMonitor?'admin':'workspace';
+  const allowedViews=user?.role==='Admin'?['admin','proposals','ranking','users','summary']:user?.role==='PIC'?['admin','ranking','summary']:user?.role==='Assistant Reviewer'?['workspace','summary']:['workspace','ranking','selection','domain','summary',...((app?.assistantReviews||[]).length?['assistant']:[])];
+  const activeView=view||(allowedViews.includes(savedView)?savedView:defaultView);
   function canLeave(){return !dirty||window.confirm('You have unsaved changes. Discard them and continue?');}
   function discard(){setSelectionEdits({});setDirty(false);setRecovery(null);setRankRestore(null);}
   function navigate(next){if(busy||!canLeave())return;discard();setView(next);setError('');setNotice('');}
@@ -80,7 +86,7 @@ export function App(){
   }
   const actions={onOpen:openProposal,onView:openReview,onDownload:download,busy};
   const nav=user?.role==='Admin'?[['admin','Review Dashboard'],['proposals','Proposal Dashboard'],['ranking','Rank Dashboard'],['users','User Dashboard']]:user?.role==='PIC'?[['admin','PIC Dashboard'],['ranking','Rank Dashboard']]:user?.role==='Assistant Reviewer'?[['workspace','My Workspace']]:[['workspace','My Workspace'],['ranking','My Rank Dashboard'],['selection','My Selection Dashboard'],['domain','Domain Dashboard']];
-  return <main id="appMain" aria-busy={busy||loading||checking}><header className="card brand"><img src="/logo.png" alt="Virtual Labs logo" width="76" height="68"/><div className="brand-copy"><h1>Virtual Labs — Proposal Review Portal</h1><div className="muted">{session&&user?`${user.role} – ${user.name}${['Admin','PIC'].includes(user.role)?'':` | Domain: ${user.domain}`} | Institute: ${user.institute}`:'A shared workspace for lab proposal reviews'}</div></div><div className="brand-actions">{session&&user&&<button className="link compact" onClick={()=>setHelp('guide')}>{user.role==='Admin'?'Administrator':user.role} User Guide</button>}<button className="secondary compact" onClick={()=>setHelp('help')}>Help</button>{session&&<button id="logoutBtn" className="secondary compact" disabled={busy} onClick={logout}>Sign out</button>}</div></header>
+  return <ViewStateContext.Provider value={identity+':'+activeView}><main id="appMain" aria-busy={busy||loading||checking}><header className="card brand"><img src="/logo.png" alt="Virtual Labs logo" width="76" height="68"/><div className="brand-copy"><h1>Virtual Labs — Proposal Review Portal</h1><div className="muted">{session&&user?`${user.role} – ${user.name}${['Admin','PIC'].includes(user.role)?'':` | Domain: ${user.domain}`} | Institute: ${user.institute}`:'A shared workspace for lab proposal reviews'}</div></div><div className="brand-actions">{session&&user&&<button className="link compact" onClick={()=>setHelp('guide')}>{user.role==='Admin'?'Administrator':user.role} User Guide</button>}<button className="secondary compact" onClick={()=>setHelp('help')}>Help</button>{session&&<button id="logoutBtn" className="secondary compact" disabled={busy} onClick={logout}>Sign out</button>}</div></header>
     {help==='help'&&<Help onClose={()=>setHelp(false)}/>} {help==='guide'&&user&&<UserGuide user={user} onClose={()=>setHelp(false)}/>}{error&&<p id="error" className="message" role="alert">{error}</p>}{notice&&<p id="notice" className="message" role="status">{notice}</p>}{busy&&<p role="status" className="loading-indicator"><span className="loading-spinner" aria-hidden="true"/>Loading, please wait…</p>}
     {checking?<p role="status">Checking session…</p>:!session?<Login run={run} onSignedIn={signedIn} busy={busy}/>:loading||!user?<p role="status">Loading your workspace…</p>:<>
       {user.roles?.length>1&&<label className="role-picker">Active Role<select id="roleSelector" value={user.role} disabled={busy} onChange={e=>switchRole(e.target.value)}>{user.roles.map(role=><option key={role}>{role}</option>)}</select></label>}
@@ -99,5 +105,5 @@ export function App(){
       {!!files.length&&<section className="card"><h2>Your Review Downloads</h2><p className="muted small">If automatic downloads were blocked, use these links.</p>{files.map(file=><p key={file.url}><a href={file.url} download={file.name}>{file.name}</a></p>)}</section>}
     </>}
     <footer className="card muted small">For assistance, email <a href="mailto:support@vlabs.ac.in">support@vlabs.ac.in</a> or <a href="mailto:manager.iitdelhi@gmail.com">manager.iitdelhi@gmail.com</a>.</footer>
-  </main>;
+  </main></ViewStateContext.Provider>;
 }

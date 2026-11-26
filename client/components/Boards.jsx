@@ -1,3 +1,4 @@
+import {useViewState} from '../view-state.js';
 import {matchesSet,filterBoard} from '../../shared/proposal-set.js';
 import React,{useState} from 'react';
 import {Table,Cards,Filters,SetFilter,Link,DisplayDate} from './Common.jsx';
@@ -40,8 +41,9 @@ export function ProposalTable({rows,scope='personal',onOpen,onView,onDownload,bu
 }
 
 export function Board({board:sourceBoard,scope='personal',filterPanel,initialCategory,selectionEditor,toolbarFilter,onCategoryChange,onShare,...props}){
-  const [category,setCategory]=useState(initialCategory||(scope==='personal'?'pending':'reviewed'));
-  const [setFilter,setSetFilter]=useState({});
+  const [savedCategory,setCategory]=useViewState('board:'+scope+':category',scope==='personal'?'pending':'reviewed');
+  const category=initialCategory||savedCategory;
+  const [setFilter,setSetFilter]=useViewState('board:'+scope+':filters',{});
   const board=filterBoard(sourceBoard,setFilter.set);
   const categories=scope==='domain'?['reviewed','pending','ranked','selected','shared']:['reviewed','draft','pending','selected',...(onShare?['shared']:[])];
   const titles={reviewed:'Reviewed Proposals',draft:'Saved Draft Proposals',pending:'Pending Proposals',ranked:'Ranked Proposals',selected:'Selected Proposals',shared:'Shared Reviews'};
@@ -51,19 +53,19 @@ export function Board({board:sourceBoard,scope='personal',filterPanel,initialCat
 }
 
 export function AssistantWorkspace({app,onOpen,onView,busy}){
-  const [category,setCategory]=useState('assigned'),[filters,setFilters]=useState({}),all=(app.assistantProposals||[]).filter(p=>matchesSet(p,filters.set));
+  const [category,setCategory]=useViewState('assistant:category','assigned'),[filters,setFilters]=useViewState('assistant:filters',{}),all=(app.assistantProposals||[]).filter(p=>matchesSet(p,filters.set));
   const groups={assigned:all.filter(p=>!p.sent&&!p.final&&!p.hasDraft),draft:all.filter(p=>!p.sent&&!p.final&&p.hasDraft),submitted:all.filter(p=>p.sent||p.final)};
   return <section id="dashboardPage"><div className="dashboard-intro"><h2 id="dashboardTitle">Assistant Reviewer Dashboard</h2><p className="muted">Save your work as a draft or submit it to the LDC. After handoff, your review is read-only. Final reviews appear under Submitted to LDC.</p></div><Cards selected={category} onSelect={setCategory} items={[['assigned','Assigned Proposals'],['draft','Draft Proposals'],['submitted','Submitted to LDC']].map(([key,label])=>({key,label,count:groups[key].length,total:all.length}))}/><Filters fields={['set']} values={filters} onChange={setFilters} busy={busy}/><section className="card"><Table label="Assistant proposals" rows={groups[category]} columns={[{key:'id',label:'Proposal ID'},{key:'name',label:'Proposal Name'},{key:'ldc',label:'Assigned LDC'},{key:'status',label:'Status'},{key:'actions',label:'Action',sortable:false,render:p=><div className="row-actions">{!p.sent&&!p.final&&<button className="view-action" disabled={busy} onClick={()=>onOpen(p.id)}>{p.hasDraft?'Resume Draft':'Start Review'}</button>}{p.sent&&<button className="view-action" disabled={busy} onClick={()=>onView(p.id,true)}>View Submitted Review</button>}{p.final&&<button className="view-action" disabled={busy} onClick={()=>onView(p.id)}>View Final Review</button>}</div>}]}/></section></section>;
 }
-export function AssistantInbox({rows,onOpen,onView,busy}){const [filters,setFilters]=useState({});return <section id="assistantPage" className="card"><div className="dashboard-intro"><h2>My Assistant Reviewers Dashboard</h2><p>Reviews submitted by your assistants arrive as your drafts. Check the answers, edit where needed, and submit the final review.</p></div><div className="review-download-toolbar"><div className="toolbar-set-filter"><SetFilter value={filters.set} onChange={set=>setFilters({set})} busy={busy}/></div></div><Table label="Assistant submissions" rows={(rows||[]).filter(p=>matchesSet(p,filters.set))} columns={[{key:'id',label:'Proposal ID'},{key:'name',label:'Proposal Name'},{key:'assistant',label:'Assistant Reviewer'},{key:'status',label:'Status'},{key:'actions',label:'Action',sortable:false,render:r=>r.ready?<button disabled={busy} className="view-action" onClick={()=>onOpen(r.id)}>Review Draft</button>:r.ownFinal?<button className="view-action" disabled={busy} onClick={()=>onView(r.id)}>View Review</button>:null}]}/></section>;}
+export function AssistantInbox({rows,onOpen,onView,busy}){const [filters,setFilters]=useViewState('inbox:filters',{});return <section id="assistantPage" className="card"><div className="dashboard-intro"><h2>My Assistant Reviewers Dashboard</h2><p>Reviews submitted by your assistants arrive as your drafts. Check the answers, edit where needed, and submit the final review.</p></div><div className="review-download-toolbar"><div className="toolbar-set-filter"><SetFilter value={filters.set} onChange={set=>setFilters({set})} busy={busy}/></div></div><Table label="Assistant submissions" rows={(rows||[]).filter(p=>matchesSet(p,filters.set))} columns={[{key:'id',label:'Proposal ID'},{key:'name',label:'Proposal Name'},{key:'assistant',label:'Assistant Reviewer'},{key:'status',label:'Status'},{key:'actions',label:'Action',sortable:false,render:r=>r.ready?<button disabled={busy} className="view-action" onClick={()=>onOpen(r.id)}>Review Draft</button>:r.ownFinal?<button className="view-action" disabled={busy} onClick={()=>onView(r.id)}>View Review</button>:null}]}/></section>;}
 
 export function Monitor({user,revision,onError,...props}){
-  const [filters,setFilters]=useState({}),[category,setCategory]=useState('reviewed');const {data,loading}=useResource('getAdminData',[filters],revision,onError);
+  const [filters,setFilters]=useViewState('monitor:filters',{}),[category,setCategory]=useViewState('monitor:category','reviewed');const {data,loading}=useResource('getAdminData',[filters],revision,onError);
   return <section id="adminPage"><div className="dashboard-intro"><h2 id="adminTitle">{user.role==='PIC'?'PIC Dashboard':'Review Dashboard'}</h2><p className="muted">{user.role==='PIC'?'Select a card to view your institute’s proposals. Use the filters to narrow the results, or select View Review to read a submitted review.':'Select a card to view proposals, then use the filters to narrow the results. Select View Review to read a submitted review.'}</p></div>{loading?<p role="status">Loading dashboard…</p>:data&&<><Board toolbarFilter={user.role==='Admin'?<SetFilter value={filters.set} onChange={set=>setFilters({...filters,set})} busy={props.busy}/>:undefined} onCategoryChange={setCategory} filterPanel={<Filters id="adminFilterPanel" help={user.role==='PIC'?'Use Domain, Status and Set to narrow the proposals shown for your institute. Select Clear filters to restore the full list.':'Use one or more filters to narrow the results. Institute refers to the proposal’s institute. Filter by Reviewer, including the person who submitted the final review.'} count={`${data?.all.total||0} proposal(s) match the selected filters. Card totals use this filtered set.`} busy={props.busy} values={filters} onChange={setFilters} options={{...data?.filterOptions,statuses:[{value:'reviewed',label:'Reviewed'},{value:'pending',label:'Pending'}]}} fields={user.role==='PIC'?['domain','status','set']:['domain','institute','reviewer']}/>} initialCategory={filters.status||category} key={JSON.stringify(filters)} board={data.all} scope={user.role==='PIC'?'monitor':'admin'} {...props}/><section className="card proposal-region"><div className="proposal-sticky-tools"><h2>Domain Progress</h2></div><Table label="Domain progress" footer={<tr><th scope="row">Total</th><td>{data.domains.reduce((sum,r)=>sum+r.total,0)}</td><td>{data.domains.reduce((sum,r)=>sum+r.reviewed.length,0)}</td><td>{data.domains.reduce((sum,r)=>sum+r.pending.length+r.draft.length,0)}</td></tr>} rows={data.domains} columns={[{key:'name',label:'Domain'},{key:'total',label:'Total'},{key:'reviewed',label:'Reviewed',sort:r=>r.reviewed.length,render:r=>r.reviewed.length},{key:'pending',label:'Pending',sort:r=>r.pending.length+r.draft.length,render:r=>r.pending.length+r.draft.length}]}/></section><section className="card proposal-region"><div className="proposal-sticky-tools"><h2>Reviewer Progress</h2></div><Table label="Reviewer progress" footer={<tr><th scope="row" colSpan={2}>Total</th>{['assigned','open','reviewed'].map(key=><td key={key}>{data.reviewers.reduce((sum,r)=>sum+r[key],0)}</td>)}</tr>} rows={data.reviewers} getKey={r=>`${r.name}:${r.domain}`} columns={[{key:'name',label:'Reviewer'},{key:'domain',label:'Domain'},{key:'assigned',label:'Assigned'},{key:'open',label:'Open'},{key:'reviewed',label:'Submitted'}]}/></section></>}</section>;
 }
 
 export function Directory({kind,revision,onError,busy}){
-  const [filters,setFilters]=useState({}),users=kind==='users';
+  const [filters,setFilters]=useViewState('directory:'+kind+':filters',{}),users=kind==='users';
   const {data,loading}=useResource(users?'getAdminUsers':'getAdminProposals',[filters],revision,onError);
   const fields=users?['domain','institute','role','status']:['domain','institute','status','set'];
   const columns=users?[{key:'name',label:'User Name (Email ID)',render:r=>`${r.name} (${r.email})`},{key:'institute',label:'Institute'},{key:'status',label:'Status'},{key:'roles',label:'Roles',render:r=>r.roles.join(', ')},{key:'domain',label:'Domain'}]:[{key:'id',label:'Proposal ID'},{key:'name',label:'Proposal Name'},{key:'institute',label:'Institute'},{key:'domain',label:'Domain'},{key:'status',label:'Status',render:r=>({reviewed:'Reviewed',pending:'Pending'})[r.status]||r.status},{key:'link',label:'Proposal Document',sortable:false,render:r=><Link href={r.link}>View Proposal</Link>}];
@@ -71,7 +73,7 @@ export function Directory({kind,revision,onError,busy}){
 }
 
 export function SelectionDashboard({user,revision,onError,selectionEditor,sharedRows=[],onShare,...props}){
- const [set,setSet]=useState('');
+ const [set,setSet]=useViewState('selection:set','');
  const monitor=user.role==='Admin';
  const {data,loading}=useResource(monitor?'getAdminData':'getInitialData',monitor?[{}]:[],revision,onError);
  const rows=(monitor?data?.all.selected:data?.personal.reviewed)||[];
@@ -79,7 +81,7 @@ export function SelectionDashboard({user,revision,onError,selectionEditor,shared
 }
 
 export function SharedReviewPanel({rows=[],ownCount,children,...props}){
- const [category,setCategory]=useState('own'),[set,setSet]=useState('');
+ const [category,setCategory]=useViewState('shared:category','own'),[set,setSet]=useViewState('shared:set','');
  const visible=rows.filter(r=>matchesSet(r,set));
  return <><Cards selected={category} onSelect={setCategory} items={[{key:'own',label:'Reviewed Proposals',count:ownCount,total:ownCount,hint:'Count / Total Proposals',color:'mint'},{key:'shared',label:'Shared Reviews',count:visible.length,total:rows.length,hint:'Reviews shared by other LDCs in the same domain',color:'peach'}]}/><div hidden={category!=='own'}>{children}</div>{category==='shared'&&<section className="card"><ProposalTable title="Shared Reviews" rows={visible} scope="domain" sharedView toolbarFilter={<SetFilter value={set} onChange={setSet} busy={props.busy}/>} {...props}/></section>}</>;
 }

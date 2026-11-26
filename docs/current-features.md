@@ -117,3 +117,7 @@ All tables have sticky column headings with normal page scrolling and aligned ho
 Clear removes checkbox selections; Clear filters resets filters. Proposal Dashboard Status labels and cells display Pending/Reviewed. Shared Reviews is described as “Reviews shared by other LDCs in the same domain”. Reviewed Proposals replaces My Reviewed Proposals in ranking/selection cards and displays count / total. Shared review counts remain separate from personal assignments.
 
 Share is disabled when all checked reviews are already shared. Revoke Sharing is disabled when none are shared. Both actions are available for a mixed selection of your own shared and unshared reviews.
+
+## Dashboard state after refresh
+
+The portal remembers your current dashboard, active card and filters in the same browser tab, separately for each account and role. Saving, sharing, revoking, using *Refresh* or reloading the browser restores that view. Reloading an open review or review form returns to its dashboard. Unsaved edits and checked rows are not restored after a browser reload; save your work first. If browser storage is unavailable, preferences survive in-app refreshes only.

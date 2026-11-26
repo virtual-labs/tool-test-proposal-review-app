@@ -37,6 +37,7 @@ test('LDC submits Yes/No selections and the filtered Domain card reflects saved 
  await page.getByRole('combobox',{name:'Set',exact:true}).selectOption('B');await expect(page.getByRole('table',{name:'Proposals',exact:true}).locator('tbody tr')).toHaveCount(0);
  await expect(domainTable.locator('tfoot td').first()).toHaveText('0');
  await page.locator('#selectionBtn').click();await expect(selected).toHaveValue('Yes');
+ await page.locator('#domainBtn').click();await page.getByRole('combobox',{name:'Set',exact:true}).selectOption('');await page.locator('#selectionBtn').click();
  for(const value of ['On Hold','-']){
   await selected.selectOption(value);await page.getByRole('button',{name:'Submit Selections',exact:true}).click();await expect(page.locator('#notice')).toContainText('Proposal selections saved');
   await page.locator('#domainBtn').click();await page.getByRole('button',{name:/^Reviewed Proposals/}).click();await expect(domainTable.locator('tbody [data-column="Selected"]')).toHaveText(value);

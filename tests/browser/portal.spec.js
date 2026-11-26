@@ -43,7 +43,7 @@ test('React OTP login, drafts, final review, manual and automatic rankings, PDF,
   await expect(page.getByText('Rank Justification: Clear academic value',{exact:true})).toBeVisible();await expect(page.locator('#downloadViewedReview')).toHaveCount(0);
   await page.locator('#viewBackBtn').click();await page.getByRole('checkbox',{name:'Select review P1',exact:true}).check();
   const downloadPromise=page.waitForEvent('download');await page.getByRole('button',{name:'Download Selected Reviews',exact:true}).click();expect((await downloadPromise).suggestedFilename()).toMatch(/\.pdf$/);
-  await page.reload();await expect(page.locator('#dashboardPage')).toBeVisible();await page.locator('#roleSelector').selectOption('PIC');await expect(page.locator('#adminTitle')).toHaveText('PIC Dashboard');
+  await page.reload();await expect(page.locator('#rankingPage')).toBeVisible();await page.locator('#roleSelector').selectOption('PIC');await expect(page.locator('#adminTitle')).toHaveText('PIC Dashboard');
   await page.locator('#logoutBtn').click();await expect(page.locator('#loginCard')).toBeVisible();expect(errors).toEqual([]);
   await page.screenshot({path:'test-results/react-otp-login.png',fullPage:true});
 });

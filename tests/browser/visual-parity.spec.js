@@ -25,7 +25,7 @@ test('original portal layout with restored palette and all role screens at deskt
    if(role==='ldc'){
     await page.locator('#workspaceBtn').click();await page.getByRole('button',{name:'Start Review',exact:true}).click();
     await expect(page.getByRole('heading',{name:'Proposal Review Form'})).toBeVisible();await page.screenshot({path:`test-results/ui-form-${width}.png`,fullPage:true});await page.locator('#backBtn').click();
-    await page.locator('#roleSelector').selectOption('PIC');await expect(page.locator('#adminTitle')).toHaveText('PIC Dashboard');await page.screenshot({path:`test-results/ui-pic-${width}.png`,fullPage:true});await page.locator('#rankingBtn').click();await expect(page.locator('#adminRankingArea')).toBeVisible();await page.screenshot({path:`test-results/ui-pic-ranks-${width}.png`,fullPage:true});
+    await page.locator('#roleSelector').selectOption('PIC');await page.locator('#adminBtn').click();await expect(page.locator('#adminTitle')).toHaveText('PIC Dashboard');await page.screenshot({path:`test-results/ui-pic-${width}.png`,fullPage:true});await page.locator('#rankingBtn').click();await expect(page.locator('#adminRankingArea')).toBeVisible();await page.screenshot({path:`test-results/ui-pic-ranks-${width}.png`,fullPage:true});
    }
    await page.locator('#logoutBtn').click();await expect(page.locator('#loginCard')).toBeVisible();
   }

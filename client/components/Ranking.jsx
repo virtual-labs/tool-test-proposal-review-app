@@ -1,3 +1,4 @@
+import {useViewState} from '../view-state.js';
 import {matchesSet,rankKey,setRankLimit} from '../../shared/proposal-set.js';
 import React,{useState} from 'react';
 import {Table,Filters,SetFilter,Cards,Link,DisplayDate} from './Common.jsx';
@@ -7,7 +8,7 @@ import {SharedReviewPanel} from './Boards.jsx';
 import {useResource} from '../hooks.js';
 
 export function RankMonitor({user,revision,onError,onView,onDownload,busy}){
-  const [filters,setFilters]=useState({}),[category,setCategory]=useState('ranked');
+  const [filters,setFilters]=useViewState('rank-monitor:filters',{}),[category,setCategory]=useViewState('rank-monitor:category','ranked');
   const {data,loading}=useResource('getAdminRankings',[filters],revision,onError);
   const rows=(category==='ranked'?data?.rows:data?.unrankedRows)||[];
   const [selected,setSelected]=useState([]);const allowed=rows.filter(r=>r.downloadable).map(r=>r.id),ids=selected.filter(id=>allowed.includes(id));
@@ -23,7 +24,7 @@ export function Ranking({ownRows=[],sharedRows=[],onShare,revision,onError,run,o
 function editsFor(data){const saved=new Map(data.saved.map(r=>[r.id,r.rank]));return Object.fromEntries(data.proposals.map(p=>[p.id,{rank:String(saved.get(p.id)||''),justification:p.justification||''}]));}
 function RankEditor({ownRows,onShare,data,run,onView,onDownload,onDirty,restored,busy}){
   const [base,setBase]=useState(restored?.data||data),[edits,setEdits]=useState(restored?.edits||editsFor(data)),[selected,setSelected]=useState([]);
-  const [filters,setFilters]=useState({});
+  const [filters,setFilters]=useViewState('rank-editor:filters',{});
   const [notice,setNotice]=useState(''),[guidelines,setGuidelines]=useState(false);
   function edit(id,key,value){const next={...edits,[id]:{...edits[id],[key]:value}};setEdits(next);onDirty(JSON.stringify(next)!==JSON.stringify(editsFor(base)),{type:'ranking',data:base,edits:next});}
   async function save(){
