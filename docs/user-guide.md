@@ -4,6 +4,8 @@ Updated against the application on 26 November 2026.
 
 Welcome to the Virtual Labs Proposal Review portal. Find your role below, then follow the dashboard and card you are using. Button, card, dashboard and control names are shown in italics.
 
+In the in-app guide, use the × button at the top right or press Esc to close the guide. The top close button stays available while you scroll.
+
 ## Choose your role
 
 - [LDC](#ldc-guide): review, rank, select and share your completed reviews.

@@ -1,9 +1,9 @@
 import React,{useEffect,useId,useRef,useState} from 'react';
 
-export function Dialog({title,children,onClose,id,closeLabel='Close',showClose=true}){
+export function Dialog({title,children,onClose,id,closeLabel='Close',showClose=true,topClose=false}){
   const ref=useRef(null),titleId=useId();
   useEffect(()=>{const dialog=ref.current,opener=document.activeElement;dialog.showModal();(dialog.querySelector('textarea')||dialog.querySelector('h2'))?.focus({preventScroll:true});dialog.scrollTop=0;return ()=>{dialog.close();if(opener instanceof HTMLElement&&opener.isConnected)opener.focus();};},[]);
-  return <dialog ref={ref} id={id} aria-labelledby={titleId} onCancel={event=>{event.preventDefault();onClose();}}><h2 id={titleId} tabIndex={-1}>{title}</h2>{children}{showClose&&<button className="secondary compact" onClick={onClose}>{closeLabel}</button>}</dialog>;
+  return <dialog ref={ref} id={id} aria-labelledby={titleId} onCancel={event=>{event.preventDefault();onClose();}}>{topClose?<div className="dialog-guide-header"><div className="dialog-guide-title"><h2 id={titleId} tabIndex={-1}>{title}</h2><button type="button" className="secondary compact dialog-close-icon" aria-label="Close user guide" title="Close user guide" onClick={onClose}><span aria-hidden="true">×</span></button></div><p className="muted small">Press <kbd>Esc</kbd> to close this guide.</p></div>:<h2 id={titleId} tabIndex={-1}>{title}</h2>}{children}{showClose&&<button className="secondary compact" onClick={onClose}>{closeLabel}</button>}</dialog>;
 }
 
 export function Justification({name,value='',onChange,busy=false,label='Rank justification',saveLabel='Save Rankings'}){

@@ -187,3 +187,10 @@ dialog textarea { min-height:180px; }
 .page-sticky-table thead { position:relative; z-index:2; }
 .page-sticky-table th { background:#f0f5f2; }
 @media print { .proposal-sticky-tools { position:static; } .page-sticky-table thead { transform:none !important; } }
+
+/* Keep the user guide close control available while reading. */
+.dialog-guide-header { position:sticky; top:0; z-index:2; background:#fcfdfb; padding-bottom:8px; }
+.dialog-guide-title { display:flex; align-items:flex-start; gap:12px; justify-content:space-between; }
+.dialog-guide-title h2 { margin:0; }
+.dialog-close-icon { flex-shrink:0; min-width:44px; min-height:44px; font-size:24px; line-height:1; }
+.dialog-guide-header p { margin:8px 0 0; }

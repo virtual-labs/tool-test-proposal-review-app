@@ -69,7 +69,8 @@ test('role guides group dashboards into headings and card bullets on desktop and
   await page.getByRole('button',{name:role+' User Guide',exact:true}).click();const dialog=page.getByRole('dialog');
   await expect(dialog.getByRole('heading',{name:heading,exact:true})).toBeVisible();await expect(dialog.locator('section').filter({has:page.getByRole('heading',{name:heading,exact:true})}).locator('li em').filter({hasText:card})).toHaveCount(1);
   const summary=dialog.getByRole('region',{name:'Summary Dashboard',exact:true});await expect(summary).toContainText('Each filter works independently');await expect(summary.locator('ul > li')).toHaveCount(5);
-  await expect(dialog.locator('h3 em').first()).toHaveCSS('font-style','italic');
+  await expect(dialog.locator('h3 em').first()).toHaveCSS('font-style','italic');await expect(dialog).toContainText('Press Esc to close this guide.');
+  await dialog.evaluate(e=>{e.scrollTop=e.scrollHeight;});const close=dialog.getByRole('button',{name:'Close user guide',exact:true});await expect(close).toBeInViewport();await close.click();await expect(dialog).toHaveCount(0);await expect(page.getByRole('button',{name:role+' User Guide',exact:true})).toBeFocused();await page.getByRole('button',{name:role+' User Guide',exact:true}).click();
   await page.setViewportSize({width:390,height:844});expect(await dialog.evaluate(e=>e.scrollWidth<=e.clientWidth)).toBe(true);await page.keyboard.press('Escape');await expect(dialog).toHaveCount(0);await page.setViewportSize({width:1280,height:900});await page.locator('#logoutBtn').click();
  }
 });
