@@ -51,7 +51,7 @@ test('Review Dashboard domain narrows dependent options and clears incompatible 
  await domain.selectOption('ece');await expect(institute).toHaveValue('');await expect(reviewer).toHaveValue('');
  await expect(institute.locator('option')).toHaveText(['All institutes','Other Institute']);await expect(reviewer.locator('option')).toHaveText(['All reviewers','Other']);
  await expect(page.getByRole('table',{name:'Proposals',exact:true})).toContainText('Other Lab');
- await page.reload();await expect(domain).toHaveValue('ece');await expect(institute.locator('option')).toHaveText(['All institutes','Other Institute']);
+ await page.reload();await expect(domain).toHaveValue('');await expect(institute.locator('option')).toHaveText(['All institutes','IIT','Other Institute']);
  await domain.selectOption('');await expect(institute.locator('option')).toHaveText(['All institutes','IIT','Other Institute']);await expect(reviewer.locator('option')).toHaveText(['All reviewers','Other','Reviewer']);
  await domain.selectOption('cse');await page.getByRole('button',{name:'Clear filters',exact:true}).click();await expect(domain).toHaveValue('');await expect(institute.locator('option')).toHaveCount(3);
 });

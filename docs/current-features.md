@@ -120,8 +120,12 @@ Share is disabled when all checked reviews are already shared. Revoke Sharing is
 
 ## Dashboard state after refresh
 
-The portal remembers your current dashboard, active card and filters in the same browser tab, separately for each account and role. Saving, sharing, revoking, using *Refresh* or reloading the browser restores that view. Reloading an open review or review form returns to its dashboard. Unsaved edits and checked rows are not restored after a browser reload; save your work first. If browser storage is unavailable, preferences survive in-app refreshes only.
+The portal remembers your current dashboard and active card in the same browser tab, separately for each account and role. Saving, sharing and revoking preserve filters, but using *Refresh* or reloading the browser resets all filters. Reloading an open review or review form returns to its dashboard. Unsaved edits and checked rows are not restored after a browser reload; save your work first. If browser storage is unavailable, preferences survive in-app refreshes only.
 
 ## Admin Reviewer Dashboard (27 November 2026)
 
-Admin navigation replaces Proposal Dashboard with Reviewer Dashboard. Reviewer Progress moves out of Admin Review Dashboard; PIC retains it. The new dashboard uses getAdminData with Domain, Institute, Reviewer and Set filters, and shows Reviewer, Domain, Assigned, Open, Submitted, Ranked and Selected plus totals. Ranked uses valid ranks under the existing reviewer/domain/set validation; Selected counts the reviewer’s submitted reviews with saved Yes choices. No sheet columns or configuration changes are required.
+Admin navigation replaces Proposal Dashboard with Reviewer Dashboard. Reviewer Progress moves out of Admin Review Dashboard; PIC retains it. The new dashboard uses getAdminData with Domain, Institute, Reviewer and Set filters, and shows Reviewer, Domain, Assigned, Pending, Reviewed, Ranked, Selected, Not Selected and On Hold plus totals. Ranked uses valid ranks under the existing reviewer/domain/set validation; Selected counts the reviewer’s submitted reviews with saved Yes choices. No sheet columns or configuration changes are required.
+
+## Filter reset and selection totals
+
+Refresh and browser reload reset all filters, while retaining the dashboard and card. Filters are held in memory only; saving and sharing preserve them. Reviewer Dashboard lists reviewers alphabetically and shows Assigned, Pending, Reviewed, Ranked, Selected, Not Selected and On Hold. Not Selected means saved No, not undecided. Admin Review Dashboard adds a read-only Selected column and Selection Status filter only to Reviewed Proposals. Both summary tables add On Hold Proposals/Experiments and Not Selected Proposals/Experiments, including totals and missing-experiment warnings.

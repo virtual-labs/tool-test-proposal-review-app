@@ -162,7 +162,7 @@ dialog textarea { min-height:180px; }
 /* Compact filters share dashboard action/header rows. */
 .compact-set-filter { display:flex; align-items:center; gap:8px; margin:0; width:auto; flex:none; font-size:14px; white-space:nowrap; }
 .compact-set-filter select { width:130px; min-width:0; margin:0; padding:8px 10px; font-size:14px; }
-.toolbar-set-filter { margin-left:auto; }
+.toolbar-set-filter { margin-left:auto; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
 .ranking-set-actions { display:flex; align-items:center; gap:12px; margin-left:auto; flex-wrap:wrap; }
 #rankingToolbar .ranking-set-actions #autoRankProposalsBtn { margin-left:0; }
 .summary-table-heading { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:16px; }
@@ -172,7 +172,7 @@ dialog textarea { min-height:180px; }
 .stats.four-stats .stat strong { font-size:30px; }
 @media(max-width:650px){ .ranking-set-actions { margin-left:0; } .summary-table-heading { gap:12px; } }
 
-#summaryPage table { table-layout:fixed; min-width:800px; }
+#summaryPage table { table-layout:fixed; min-width:1200px; }
 #summaryPage th, #summaryPage td { white-space:normal; overflow-wrap:anywhere; }
 #summaryPage [data-column="S.No."] { width:5%; }
 #summaryPage [data-column="Domain"], #summaryPage [data-column="Institute"] { width:20%; }

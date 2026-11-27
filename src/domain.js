@@ -334,16 +334,21 @@ function getSummaryData(token, filters) {
   const reviews=table_(db,CONFIG.REVIEWS_SHEET,HEADERS.Reviews).rows;
   const reviewed=new Set(reviews.map(r=>text_(r['Proposal ID'])).filter(Boolean));
   const selected=new Set(reviews.filter(r=>normalized_(r.Selected)==='yes').map(r=>text_(r['Proposal ID'])));
+  const onHold=new Set(reviews.filter(r=>normalized_(r.Selected)==='on hold').map(r=>text_(r['Proposal ID'])));
+  const notSelected=new Set(reviews.filter(r=>normalized_(r.Selected)==='no').map(r=>text_(r['Proposal ID'])));
   const rows=proposals.filter(p=>matchesSet({id:text_(p['Proposal ID'])},filters?.set));
   const group=column=>{
     const groups=new Map();
     for(const p of rows){
       const label=text_(p[column])||'Not configured',key=normalized_(label);
-      if(!groups.has(key))groups.set(key,{name:label,labs:0,experiments:0,missingExperiments:0,reviewed:0,pending:0,selectedLabs:0,selectedExperiments:0,missingSelectedExperiments:0});
+      if(!groups.has(key))groups.set(key,{name:label,labs:0,experiments:0,missingExperiments:0,reviewed:0,pending:0,selectedLabs:0,selectedExperiments:0,missingSelectedExperiments:0,onHoldLabs:0,onHoldExperiments:0,missingOnHoldExperiments:0,notSelectedLabs:0,notSelectedExperiments:0,missingNotSelectedExperiments:0});
       const row=groups.get(key);row.labs++;
       const raw=text_(p['No. of Experiments']),count=Number(raw);
       if(raw && Number.isSafeInteger(count) && count>=0)row.experiments+=count;else row.missingExperiments++;
       if(selected.has(text_(p['Proposal ID']))){row.selectedLabs++;if(raw && Number.isSafeInteger(count) && count>=0)row.selectedExperiments+=count;else row.missingSelectedExperiments++;}
+      for(const [prefix,missing,statusIds] of [['onHold','missingOnHoldExperiments',onHold],['notSelected','missingNotSelectedExperiments',notSelected]]){
+        if(statusIds.has(text_(p['Proposal ID']))){row[prefix+'Labs']++;if(raw && Number.isSafeInteger(count) && count>=0)row[prefix+'Experiments']+=count;else row[missing]++;}
+      }
       if(reviewed.has(text_(p['Proposal ID']))||normalized_(p.Status)==='reviewed')row.reviewed++;else row.pending++;
     }
     return [...groups.values()].sort((a,b)=>a.name.localeCompare(b.name));
@@ -583,6 +588,8 @@ function getAdminData(token, filters) {
       assigned: assigned.length, reviewed: reviewed,
       ranked: submitted.filter(e=>e.summary.rank!=null).length,
       selected: submitted.filter(e=>e.summary.selected==='Yes').length,
+      notSelected: submitted.filter(e=>e.summary.selected==='No').length,
+      onHold: submitted.filter(e=>e.summary.selected==='On Hold').length,
       open: assigned.filter(e => e.summary.state !== 'reviewed' && (!e.claimEmail || e.claimEmail === who.email)).length};
   });
   // PIC progress follows institute-owned proposals, not the reviewer's institute.

@@ -11,7 +11,7 @@ test('summary exposes only portal-wide aggregates for every role, with sets and 
   const db=new SheetSnapshot(payload(tables)),domain=createDomain(db,{email,activeRole});
   const result=domain.getSummaryData('cookie',{});
   assert.deepEqual(Object.keys(result),['domains','institutes']);
-  assert.deepEqual(result.domains,[{name:'CSE',labs:2,experiments:4,missingExperiments:1,reviewed:1,pending:1,selectedLabs:0,selectedExperiments:0,missingSelectedExperiments:0}]);
+  assert.deepEqual(result.domains,[{name:'CSE',labs:2,experiments:4,missingExperiments:1,reviewed:1,pending:1,selectedLabs:0,selectedExperiments:0,missingSelectedExperiments:0,onHoldLabs:0,onHoldExperiments:0,missingOnHoldExperiments:0,notSelectedLabs:0,notSelectedExperiments:0,missingNotSelectedExperiments:0}]);
   assert.equal(result.institutes.length,2);
   assert.equal(domain.getSummaryData('cookie',{set:'A'}).domains[0].labs,1);
   assert.equal(domain.getSummaryData('cookie',{set:'B'}).domains[0].pending,1);
@@ -39,4 +39,12 @@ test('selected summary totals follow saved Yes choices, set and missing experime
  tables['Completed Reviews'][1][rh.indexOf('Selected')]='No';
  assert.equal(createDomain(new SheetSnapshot(payload(tables)),{email:'admin@example.com',activeRole:'Admin'}).getSummaryData('cookie',{}).domains[0].selectedLabs,1);
  assert.ok(ph.includes('No. of Experiments'));
+});
+
+test('summary counts No and On Hold separately, including filtered experiments and missing counts',()=>{
+ const tables=fixtureTables(),rh=[...tables['Completed Reviews'][0],'Selected'];tables.Proposals[1][0]='A_1';tables.Proposals[2][0]='B_1';
+ tables['Completed Reviews']=[rh,...[['A_1','No'],['B_1','On Hold']].map(([id,status])=>rh.map(h=>h==='Proposal ID'?id:h==='Selected'?status:''))];
+ const domain=createDomain(new SheetSnapshot(payload(tables)),{email:'admin@example.com',activeRole:'Admin'});
+ for(const rows of Object.values(domain.getSummaryData('cookie',{}))){assert.equal(rows.reduce((n,r)=>n+r.notSelectedLabs,0),1);assert.equal(rows.reduce((n,r)=>n+r.notSelectedExperiments,0),4);assert.equal(rows.reduce((n,r)=>n+r.onHoldLabs,0),1);assert.equal(rows.reduce((n,r)=>n+r.missingOnHoldExperiments,0),1);}
+ const a=domain.getSummaryData('cookie',{set:'A'}).domains[0];assert.equal(a.onHoldLabs,0);assert.equal(a.notSelectedLabs,1);
 });

@@ -5,9 +5,9 @@ import {useResource} from '../hooks.js';
 
 function TotalRow({rows,columns}){
   const total=rows.reduce((sum,row)=>{
-    for(const key of ['labs','experiments','missingExperiments','reviewed','pending','selectedLabs','selectedExperiments','missingSelectedExperiments'])sum[key]+=row[key]||0;
+    for(const key of ['labs','experiments','missingExperiments','reviewed','pending','selectedLabs','selectedExperiments','missingSelectedExperiments','onHoldLabs','onHoldExperiments','missingOnHoldExperiments','notSelectedLabs','notSelectedExperiments','missingNotSelectedExperiments'])sum[key]+=row[key]||0;
     return sum;
-  },{labs:0,experiments:0,missingExperiments:0,reviewed:0,pending:0,selectedLabs:0,selectedExperiments:0,missingSelectedExperiments:0});
+  },{labs:0,experiments:0,missingExperiments:0,reviewed:0,pending:0,selectedLabs:0,selectedExperiments:0,missingSelectedExperiments:0,onHoldLabs:0,onHoldExperiments:0,missingOnHoldExperiments:0,notSelectedLabs:0,notSelectedExperiments:0,missingNotSelectedExperiments:0});
   return <tr><th scope="row" colSpan={2}>Total</th>{columns.map(c=><td key={c.key}><strong>{c.render?c.render(total):total[c.key]}</strong></td>)}</tr>;
 }
 
@@ -15,6 +15,7 @@ function SummaryTable({tableKey,title,label,revision,onError,busy}){
   const [filters,setFilters]=useViewState('summary:'+tableKey+':filters',{});
   const {data,loading}=useResource('getSummaryData',[filters],revision,onError);
   const columns=[{key:'labs',label:'Proposals'},{key:'experiments',label:'Experiments',render:r=><>{r.experiments}{r.missingExperiments>0&&<span className="muted small"> (incomplete: {r.missingExperiments} lab(s) missing a valid count)</span>}</>},{key:'reviewed',label:'Reviewed Proposals'},{key:'pending',label:'Pending Proposals'},{key:'selectedLabs',label:'Selected Proposals'},{key:'selectedExperiments',label:'Selected Experiments',render:r=><>{r.selectedExperiments}{r.missingSelectedExperiments>0&&<span className="muted small"> (incomplete: {r.missingSelectedExperiments} selected lab(s) missing a valid count)</span>}</>}];
+  for(const [prefix,label,missing] of [['onHold','On Hold','missingOnHoldExperiments'],['notSelected','Not Selected','missingNotSelectedExperiments']])columns.push({key:prefix+'Labs',label:label+' Proposals'},{key:prefix+'Experiments',label:label+' Experiments',render:r=><>{r[prefix+'Experiments']}{r[missing]>0&&<span className="muted small"> (incomplete: {r[missing]} lab(s) missing a valid count)</span>}</>});
   return <section className="card proposal-region"><div className="proposal-sticky-tools"><div className="summary-table-heading"><h2>{title}</h2><SetFilter value={filters.set} onChange={set=>setFilters({set})} busy={busy}/></div></div>{loading?<p role="status">Loading summary…</p>:data&&<Table serialNumbers label={title} rows={data[tableKey]} footer={<TotalRow rows={data[tableKey]} columns={columns}/>} columns={[{key:'name',label},...columns]}/>}</section>;
 }
 
