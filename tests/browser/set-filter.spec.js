@@ -8,10 +8,10 @@ test('Admin set filters narrow cards, progress and directory; User Dashboard sta
  await page.getByRole('button',{name:/Pending Proposals/}).click();
  await expect(page.getByRole('table',{name:'Proposals',exact:true})).toContainText('A_P1');
  await expect(page.getByRole('table',{name:'Proposals',exact:true})).not.toContainText('B_P2');
- await page.locator('#proposalDashboardBtn').click();await page.getByRole('combobox',{name:'Set',exact:true}).selectOption('B');
- await expect(page.getByRole('table',{name:'Proposal directory'})).toContainText('B_P2');
- await expect(page.getByRole('table',{name:'Proposal directory'})).not.toContainText('A_P1');
- await page.getByRole('button',{name:'Clear filters',exact:true}).click();await expect(page.getByRole('table',{name:'Proposal directory'})).toContainText('A_P1');
+ await page.locator('#reviewerDashboardBtn').click();await page.getByRole('combobox',{name:'Set',exact:true}).selectOption('B');
+ await expect(page.getByRole('table',{name:'Reviewer progress'}).locator('tbody tr')).toHaveCount(1);
+ await expect(page.getByRole('table',{name:'Reviewer progress'}).locator('tbody')).toContainText('Other');
+ await page.getByRole('button',{name:'Clear filters',exact:true}).click();await expect(page.getByRole('table',{name:'Reviewer progress'}).locator('tbody')).toContainText('Reviewer');
  await page.locator('#rankingBtn').click();await expect(page.getByRole('combobox',{name:'Set',exact:true})).toBeVisible();
  await page.locator('#usersBtn').click();await expect(page.getByRole('combobox',{name:'Set',exact:true})).toHaveCount(0);
 });
@@ -39,4 +39,19 @@ test('ranking edits survive filtering and save both sets without renumbering',as
  await page.getByRole('combobox',{name:'Set',exact:true}).selectOption('');
  await expect(page.getByRole('combobox',{name:'Rank for Test Lab',exact:true})).toHaveValue('1');await expect(page.getByRole('combobox',{name:'Rank for Other Lab',exact:true})).toHaveValue('1');
  await page.locator('#refreshBtn').click();await expect(page.getByRole('combobox',{name:'Rank for Test Lab',exact:true})).toHaveValue('1');await expect(page.getByRole('combobox',{name:'Rank for Other Lab',exact:true})).toHaveValue('1');
+});
+
+test('Review Dashboard domain narrows dependent options and clears incompatible choices',async({page,request})=>{
+ await request.post('/__test/reset?domains=true');await login(page,'admin@example.com');
+ const domain=page.getByRole('combobox',{name:'Domain',exact:true}),institute=page.getByRole('combobox',{name:'Institute',exact:true}),reviewer=page.getByRole('combobox',{name:'Reviewer',exact:true});
+ await expect(page.getByRole('button',{name:/^Reviewed Proposals/})).toHaveAttribute('aria-pressed','true');
+ await institute.selectOption('iit');await reviewer.selectOption('reviewer');await domain.selectOption('cse');
+ await expect(institute).toHaveValue('iit');await expect(reviewer).toHaveValue('reviewer');
+ await expect(institute.locator('option')).toHaveText(['All institutes','IIT']);await expect(reviewer.locator('option')).toHaveText(['All reviewers','Reviewer']);
+ await domain.selectOption('ece');await expect(institute).toHaveValue('');await expect(reviewer).toHaveValue('');
+ await expect(institute.locator('option')).toHaveText(['All institutes','Other Institute']);await expect(reviewer.locator('option')).toHaveText(['All reviewers','Other']);
+ await expect(page.getByRole('table',{name:'Proposals',exact:true})).toContainText('Other Lab');
+ await page.reload();await expect(domain).toHaveValue('ece');await expect(institute.locator('option')).toHaveText(['All institutes','Other Institute']);
+ await domain.selectOption('');await expect(institute.locator('option')).toHaveText(['All institutes','IIT','Other Institute']);await expect(reviewer.locator('option')).toHaveText(['All reviewers','Other','Reviewer']);
+ await domain.selectOption('cse');await page.getByRole('button',{name:'Clear filters',exact:true}).click();await expect(domain).toHaveValue('');await expect(institute.locator('option')).toHaveCount(3);
 });

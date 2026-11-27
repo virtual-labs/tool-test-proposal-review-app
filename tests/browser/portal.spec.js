@@ -50,7 +50,7 @@ test('React OTP login, drafts, final review, manual and automatic rankings, PDF,
 
 test('admin directories, filters, sorting and mobile layout run as React components',async({page})=>{
   const errors=[];page.on('pageerror',error=>errors.push(error.message));await login(page,'admin@example.com');await expect(page.locator('#adminPage')).toBeVisible();
-  for(const [button,target] of [['proposalDashboardBtn','proposalDashboardPage'],['usersBtn','usersPage'],['rankingBtn','rankingPage'],['adminBtn','adminPage']]){
+  for(const [button,target] of [['reviewerDashboardBtn','reviewerDashboardPage'],['usersBtn','usersPage'],['rankingBtn','rankingPage'],['adminBtn','adminPage']]){
     await page.locator(`#${button}`).click();await expect(page.locator(`#${target}`)).toBeVisible();
   }
   await page.locator('#usersBtn').click();await expect(page.getByRole('table',{name:'Users & roles',exact:true})).toBeVisible();

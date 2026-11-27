@@ -547,6 +547,11 @@ function getAdminData(token, filters) {
     institutes: uniqueOptions(source.map(e => e.summary.institute)),
     reviewers: uniqueOptions(source.flatMap(reviewerNames))
   };
+  // Keep dependent option lists independent of current institute/reviewer selections.
+  options.byDomain = Object.fromEntries(options.domains.map(({value})=>{
+    const matching=source.filter(e=>normalized_(e.summary.domain)===value);
+    return [value,{institutes:uniqueOptions(matching.map(e=>e.summary.institute)),reviewers:uniqueOptions(matching.flatMap(reviewerNames))}];
+  }));
   filters = filters && typeof filters === 'object' ? filters : {};
   const domain = normalized_(filters.domain), institute = normalized_(filters.institute),
     status = normalized_(filters.status), reviewer = normalized_(filters.reviewer);
@@ -571,10 +576,13 @@ function getAdminData(token, filters) {
   const reviewers = roster.filter(r=>!['Admin','Assistant Reviewer','PIC'].includes(role_(r.Role))).map(r => {
     const who = {email: normalized_(r.Email), name: text_(r.Name), assignmentNameUnique: roster.filter(other => normalized_(other.Name) === normalized_(r.Name)).length === 1};
     const assigned = entries.filter(e => assigned_(e.proposal, who));
-    const reviewed = entries.filter(e => e.summary.state === 'reviewed' &&
-      normalized_((e.review || e.proposal)['Reviewer Email']) === who.email).length;
+    const submitted = entries.filter(e => e.summary.state === 'reviewed' &&
+      normalized_((e.review || e.proposal)['Reviewer Email']) === who.email);
+    const reviewed = submitted.length;
     return {name: who.name, role: role_(r.Role) || 'Not configured', domain: text_(r.Domain), status: text_(r.Status),
       assigned: assigned.length, reviewed: reviewed,
+      ranked: submitted.filter(e=>e.summary.rank!=null).length,
+      selected: submitted.filter(e=>e.summary.selected==='Yes').length,
       open: assigned.filter(e => e.summary.state !== 'reviewed' && (!e.claimEmail || e.claimEmail === who.email)).length};
   });
   // PIC progress follows institute-owned proposals, not the reviewer's institute.

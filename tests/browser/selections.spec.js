@@ -68,7 +68,6 @@ test('Admin selected card is read-only and its compact Set filter preserves the 
  await page.getByRole('combobox',{name:'Institute',exact:true}).selectOption('other institute');await expect(table.locator('tbody tr')).toHaveCount(0);
  await page.getByRole('button',{name:'Clear filters',exact:true}).click();await expect(filter).toHaveValue('');await expect(table).toContainText('A_P1');
  await expect(page.locator('#selectionBtn')).toHaveCount(0);await expect(page.locator('#selectionPage')).toHaveCount(0);await expect(page.getByRole('button',{name:'Submit Selections'})).toHaveCount(0);
- await page.locator('#proposalDashboardBtn').click();await expect(page.getByRole('table',{name:'Proposal directory'}).locator('tbody [data-column="Status"]')).toHaveText(['Reviewed','Pending']);
  await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
 

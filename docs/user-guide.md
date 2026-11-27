@@ -209,14 +209,16 @@ In the in-app guide, use the × button at the top right or press Esc to close th
 - *Reviewed Proposals*: inspect completed assessments with *View Review* and download eligible reviews.
 - *Pending Proposals*: monitor proposals awaiting final review, including saved drafts. Draft answers remain private.
 - *Selected Proposals*: view saved Yes choices, experiment counts, ranks and read-only Remarks. Use *View* to read a remark. Overall Score is out of 42.
-- Use *Domain*, *Institute* and *Reviewer* filters together with the compact *Set* selector at the right of the table toolbar. *Clear filters* restores the full list.
+- Use *Domain*, *Institute* and *Reviewer* filters together with the compact *Set* selector at the right of the table toolbar. *Clear filters* restores the full list. Selecting a *Domain* limits *Institute* and *Reviewer* options to that domain. A choice that no longer applies resets to All; compatible choices remain selected. Choosing All domains restores all options.
 - *Domain Progress*: check reviewed and pending counts by domain. The Total row follows the active filters.
+
+### *Reviewer Dashboard*
+
+- Use the *Reviewer Progress* table to monitor each reviewer’s Domain, Assigned, Open and Submitted counts, alongside Ranked and Selected.
 - *Reviewer Progress*: check assigned, open and submitted workloads. Totals can count one proposal more than once when it has multiple reviewers. Accounts with primary roles Admin, PIC or Assistant Reviewer are excluded; an LDC with a secondary PIC role can appear.
-
-### *Proposal Dashboard*
-
-- Use the proposal table to browse all proposals. *View Proposal* opens the proposal document.
-- Filter by *Status*, *Institute*, *Domain* and *Set*. Status choices are Pending and Reviewed; Pending includes saved drafts. Use *Clear filters* to restore all proposals.
+- Ranked counts submitted reviews with a valid saved rank. Selected counts submitted reviews with Selected saved as Yes; No, On Hold and undecided choices do not count.
+- Use *Domain*, *Institute*, *Reviewer* and *Set* filters. The Total row follows these filters; *Clear filters* restores the full list. Your filter choices are preserved after refresh.
+- This dashboard is available only to Admin users. PIC users retain *Reviewer Progress* in *PIC Dashboard*. The Admin *Proposal Dashboard* has been removed.
 
 ### *Rank Dashboard*
 

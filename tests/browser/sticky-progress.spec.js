@@ -14,7 +14,7 @@ test('proposal controls and column headers follow page scrolling and release at 
   await expect(tools.getByRole('heading',{name:'Pending Proposals'})).toBeVisible();await expect(tools.getByRole('combobox',{name:'Set'})).toBeVisible();
   await page.screenshot({path:`test-results/sticky-proposals-${width}.png`});
  }
- await page.getByRole('heading',{name:'Reviewer Progress',exact:true}).scrollIntoViewIfNeeded();
+ await page.getByRole('heading',{name:'Domain Progress',exact:true}).scrollIntoViewIfNeeded();
  expect((await tools.boundingBox()).y+(await tools.boundingBox()).height).toBeLessThanOrEqual((await region.boundingBox()).y+(await region.boundingBox()).height+2);
 });
 test('Admin and PIC progress footers total the displayed rows',async({page,request})=>{
@@ -22,6 +22,7 @@ test('Admin and PIC progress footers total the displayed rows',async({page,reque
  for(const email of ['admin@example.com','ldc@example.com']){
   await login(page,email);if(email.startsWith('ldc'))await page.locator('#roleSelector').selectOption('PIC');
   for(const name of ['Domain progress','Reviewer progress']){
+   if(email==='admin@example.com'&&name==='Reviewer progress')await page.locator('#reviewerDashboardBtn').click();
    const table=page.getByRole('table',{name,exact:true});await expect(table.locator('tfoot')).toContainText('Total');
    const values=await table.evaluate(t=>{const start=t.getAttribute('aria-label')==='Domain progress'?1:2;return {sums:[...t.tBodies[0].rows].reduce((s,r)=>{[...r.cells].slice(start).forEach((c,i)=>s[i]=(s[i]||0)+Number(c.textContent));return s;},[]),totals:[...t.tFoot.rows[0].cells].slice(1).map(c=>Number(c.textContent))};});expect(values.totals).toEqual(values.sums);
   }
@@ -62,7 +63,7 @@ test('all roles get sticky summary headings and every visible table opts in',asy
  for(const role of ['Admin','LDC','PIC','Assistant Reviewer']){
   await request.post('/__test/reset?many=true');await login(page,role==='Admin'?'admin@example.com':role==='Assistant Reviewer'?'assistant@example.com':'ldc@example.com');if(role==='PIC')await page.locator('#roleSelector').selectOption('PIC');
   await expect(page.locator('table').first()).toBeVisible();expect(await page.locator('table').evaluateAll(t=>t.every(e=>e.parentElement.classList.contains('page-sticky-table')))).toBe(true);
-  if(role==='Admin')for(const id of ['usersBtn','proposalDashboardBtn']){await page.locator('#'+id).click();await expect(page.locator('.page-sticky-table table')).toBeVisible();}
+  if(role==='Admin')for(const id of ['usersBtn','reviewerDashboardBtn']){await page.locator('#'+id).click();await expect(page.locator('.page-sticky-table table')).toBeVisible();}
   await page.locator('#summaryBtn').click();await expect(page.getByRole('table',{name:'Domain-wise Summary'}).locator('tbody tr')).toHaveCount(40);
   for(const width of [1440,390]){
    await page.setViewportSize({width,height:900});

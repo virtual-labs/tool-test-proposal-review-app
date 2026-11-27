@@ -25,6 +25,12 @@ const server=await createPortalServer(handler,{beforeRequest:async(req,res)=>{
         rows[2].values[index]={effectiveValue:{stringValue:'Reviewer'}};
       }
     }
+    if(url.searchParams.get('domains')==='true'){
+      const rows=sheets.data.sheets.find(s=>s.properties.title==='Proposals').data[0].rowData;
+      const col=name=>rows[0].values.findIndex(v=>v.effectiveValue.stringValue===name);
+      rows[2].values[col('Domain')]={effectiveValue:{stringValue:'ECE'}};
+      for(const row of rows.slice(1))row.values[col('Status')]={effectiveValue:{stringValue:'Reviewed'}};
+    }
     if(url.searchParams.get('many')==='true'){
       const rows=sheets.data.sheets.find(s=>s.properties.title==='Proposals').data[0].rowData;
       for(let i=3;i<=40;i++){const row=structuredClone(rows[1]);row.values[0]={effectiveValue:{stringValue:'A_P'+i}};rows.push(row);}

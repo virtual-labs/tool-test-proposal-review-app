@@ -36,3 +36,11 @@ test('manual save and generation use independent set ranges and preserve other r
  assert.equal(saved.get('A_DUP'),1);assert.equal(saved.get('A_BTBE05'),2);assert.equal(saved.get('B_BTBE01'),1);
  const monitor=await call('getAdminRankings',{},'Admin');assert.equal(monitor.rows.find(r=>r.id==='A_OTHER').rank,1);
 });
+
+test('reviewer progress counts only valid saved ranks within the filtered set',async()=>{
+ const {call}=setup();const all=await call('getAdminData',{},'Admin');
+ const owner=all.reviewers.find(r=>r.name==='Reviewer'),other=all.reviewers.find(r=>r.name==='Other');
+ assert.equal(owner.reviewed,3);assert.equal(owner.ranked,2);assert.equal(other.ranked,1);
+ const filtered=await call('getAdminData',{set:'A'},'Admin');assert.equal(filtered.reviewers.find(r=>r.name==='Reviewer').ranked,1);
+ assert.equal((await call('getAdminData',{set:'B'},'Admin')).reviewers.find(r=>r.name==='Reviewer').ranked,1);
+});

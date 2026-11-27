@@ -28,6 +28,7 @@ test('LDC selections persist, reject unauthorized/stale writes, and can be remov
   const before=(await call('getInitialData')).personal.reviewed[0];
   await call('saveProposalSelections',[{id:'P1',selected,expectedSelected:before.selected,version:before.selectionVersion}]);
   const after=await call('getInitialData');assert.equal(after.personal.reviewed[0].selected,selected);assert.equal(after.domain.selected.length,selected==='Yes'?1:0);
+  const progress=await call('getAdminData',{},admin);assert.equal(progress.reviewers.find(r=>r.name==='Reviewer').selected,selected==='Yes'?1:0);assert.equal(progress.reviewers.find(r=>r.name==='Other').selected,0);
   const review=await call('getReview','P1');assert.equal(review.selected,selected);assert.equal(review.remarks,'Ready for selection');
   const summary=await call('getSummaryData',{});assert.equal(summary.domains.reduce((n,r)=>n+r.selectedLabs,0),selected==='Yes'?1:0);
  }
